@@ -1,0 +1,47 @@
+{% extends 'index.html' %}
+{%load static %}
+
+{% block content %}
+<div class="container-fluid box1">
+    <div class="row">
+        <div class="col-md-12 logbigbox">
+    <div class="col-md-5  logbox">
+        <div class="col-md-11 sublogbox">
+            <div class="row">
+                <div class="col-12 mb-3 d-flex justify-content-center">
+                    <span class="adminpanelsubhead">
+                        REGISTER HERE
+                    </span>
+                </div>
+            </div>
+            <form action=" " method="POST" id="regform">
+                {% csrf_token %}
+                <input type="text" name="firstname" id="firstname_id" placeholder="First name" class="form-control" onkeyup="validateFName()">
+                <span id="fname-error"></span><br>
+                <input type="text" name="lastname" id="lastname_id" placeholder="Last name" class="form-control" onkeyup="validateLName()">
+                <span id="lname-error"></span><br>
+                <input type="number" name="phone" id="phone_id" placeholder="Phone" class="form-control" onkeyup="validatePhone()">
+                <span id="phone-error"></span><br>
+                <input type="email" name="email" id="email_id" placeholder="Email"  class="form-control" onkeyup="validateEmail()">
+                <span id="email-error"></span><br>
+                <input type="password" name="password1" id="password1_id" placeholder="Password" class="form-control" onkeyup="validatePass1()">
+                <span id="password1-error"></span><br>
+
+                <input type="password" name="password2" id="password2_id" placeholder="Conform Password" class="form-control" onfocusout="validatePass2()" onfocus="validatePass2focus()"  >
+                <span id="password2-error"></span><br>
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center">
+                <button type="submit" class="btn border border-warning bg-secondary text-warning" onclick="return validateForm()">Sign in</button>
+                <span id="btn-Error"></span>
+                </div>
+            </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<script src="{% static 'script.js' %}"></script>
+{% endblock %}

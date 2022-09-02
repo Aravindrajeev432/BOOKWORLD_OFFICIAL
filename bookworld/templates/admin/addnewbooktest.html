@@ -1,0 +1,135 @@
+{% extends 'admin/adminindex.html' %}
+{% load static %}
+
+
+{% block status %}
+
+
+    <div class="col-md-9 col-sm-12">
+        <div class="row">
+            <div class="col-md-12">
+              <span class="adminheadstatus fs-1 text-secondary">Add new Book</span>
+              {% for msg in messages %}
+              <span clas="adminheadstatus fs-4">{{msg}}</span>
+                {% endfor %}
+            </div>
+        <div class="row d-flex justify-content-center">
+        <div class="col-md-8 col-sm-10 bg-light d-flex justify-content-center">
+    <form action=" " method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        
+        {{form.as_p}}
+
+
+        <input type="submit" class="btn btn-outline-sucsess bg-secondary text-warning" onclick=" return validate()">
+    </form>
+    </div>
+</div>
+    </div>
+</div>
+</div>
+<script>
+    function validateCat(){
+        c = document.getElementById("id_cat").value
+        if(c == ""){
+            document.getElementById("id_cat").style.border="solid 1px red"
+            return false
+        }
+       else{
+        document.getElementById("id_cat").style.border="solid 1px green"
+        return true
+       }
+
+    }
+    function validateP(){
+        p = document.getElementById("id_price").value
+        if(Number(p)<=0){
+            document.getElementById("id_price").style.border="solid 1px red"
+            return false
+        }
+        document.getElementById("id_price").style.border="solid 1px green"
+       return true
+    }
+    function validateC(){
+        count = document.getElementById("id_book_count").value
+        if(Number(count)<=0){
+            document.getElementById("id_book_count").style.border="solid 1px red"
+            return false
+        }
+        document.getElementById("id_book_count").style.border="solid 1px green"
+        return true
+
+    }
+    function validate(){
+        if(!validateCat() || !validateP() || !validateC()){
+            return false
+        }
+    }
+
+</script>
+<script src="{% static 'js/cropper.min.js' %}"></script><!-- Cropper.js is required -->
+    <script src="{% static 'js/jquery-cropper.min.js' %}"></script>
+
+    <script type="text/javascript">
+
+    $(function(){
+
+    	/* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+		$("#id_image").change(function (e) {
+		  if (this.files && this.files[0]) {
+		    var reader = new FileReader();
+		    reader.onload = function (e) {
+		      $("#image").attr("src", e.target.result);
+		      $("#modalCrop").modal("show");
+		    }
+		    reader.readAsDataURL(this.files[0]);
+		  }
+		});
+
+		/* SCRIPTS TO HANDLE THE CROPPER BOX */
+		var $image = $("#image");
+		var cropBoxData;
+		var canvasData;
+		$("#modalCrop").on("shown.bs.modal", function () {
+		  $image.cropper({
+		    viewMode: 1,
+		    aspectRatio: 1/1,
+		    minCropBoxWidth: 200,
+		    minCropBoxHeight: 200,
+		    ready: function () {
+		      $image.cropper("setCanvasData", canvasData);
+		      $image.cropper("setCropBoxData", cropBoxData);
+		    }
+		  });
+		}).on("hidden.bs.modal", function () {
+		  cropBoxData = $image.cropper("getCropBoxData");
+		  canvasData = $image.cropper("getCanvasData");
+		  $image.cropper("destroy");
+		});
+
+		// Enable zoom in button
+		$(".js-zoom-in").click(function () {
+		  $image.cropper("zoom", 0.1);
+		});
+
+		// Enable zoom out button
+		$(".js-zoom-out").click(function () {
+		  $image.cropper("zoom", -0.1);
+		});
+
+		/* SCRIPT TO COLLECT THE DATA AND POST TO THE SERVER */
+		$(".js-crop-and-upload").click(function () {
+		  var cropData = $image.cropper("getData");
+		  $("#id_x").val(cropData["x"]);
+		  $("#id_y").val(cropData["y"]);
+		  $("#id_image_height").val(cropData["height"]);
+		  $("#id_image_width").val(cropData["width"]);
+		  $("#formUploadButton").click();
+		});
+
+	})
+	</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,328 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load app_tags %}
+{% block authlogin %}{% endblock %}
+
+
+{% block banner %}
+
+
+    <div class="container-fluid banner">
+        <div class="row">
+        <img src="{% static 'Blog-Banner-Image-1000x300-Arapahoe-Libraries-3.png' %}" class="img-fluid img_banner" alt="...">
+    </div>
+        </div>
+
+    {% endblock %}
+    {% block cate %}
+        <br>
+            <div class="container-fluid genre_selection">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 gen">
+                        <ul>
+                        {% if not cat_active %}
+                            <li class="">
+                                <a href="{% url 'index' %}" class="text-decoration-none
+                                                                text-warning">
+                                    <span class="litext">SEE ALL</span>
+                                </a>
+                            </li>
+                            
+                            {% for cat in category %}
+                           
+                                <li class="text-secondary">
+                                    
+                                    <a href="{% url 'cate_view' %}{{ cat.category_name }}" class="text-decoration-none text-secondary">
+                                        <span class="litext ">{{ cat.category_name }}</span>
+                                    </a>
+                                </li>
+                            
+                                
+                            {% endfor %}
+                            
+
+
+                        {% else %}
+                            <li class="">
+                                <a href="{% url 'index' %}" class="text-decoration-none text-secondary
+                                                                ">
+                                    <span class="litext">SEE ALL</span>
+                                </a>
+                            </li>
+                            {% for i in cat_active %}
+                            {% for cat in category %}
+                            {%if i.id is cat.id %}
+                                <li class="text-secondary">
+                                    
+                                    <a href="{% url 'cate_view' %}{{ cat.category_name }}" class="text-decoration-none text-secondary">
+                                        <span class="litext text-warning">{{ cat.category_name }}</span>
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="text-secondary">
+                                    
+                                    <a href="{% url 'cate_view' %}{{ cat.category_name }}" class="text-decoration-none text-secondary">
+                                        <span class="litext">{{ cat.category_name }}</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                            
+                       
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        {% endblock %}
+        {% block content %}
+            <div class="container-fluid p-4">
+                <div class="row d-flex">
+                    {% if pro %}
+
+                        {% for product in pro %}
+
+                            <div class="col-md-4 mb-3 col-sm-6 mb-4">
+                                <div class="col-sm-12 onecard">
+
+                                    <div class="row onecardrow">
+                                        <div class="col-4 align-content-center">
+
+                                            <div class="row overflow-hidden d-flex
+                                                                                justify-content-center align-content-center">
+
+                                                {% if product.book_count == 0 %}
+                                                    <img class="productimg outofstock" src="{{ product.image.url }}" alt="image not found">
+                                                        <div class="position-absolute col-12 h-100 d-flex
+                                                                                            justify-content-center align-items-center
+                                                                                            text-light text-center">Out of Stock</div>
+                                                    {% else %}
+                                                        <img class="productimg" src="{{ product.image.url }}" alt="image not found">
+                                                        {% endif %}
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-8">
+                                                    <div class="row h-25 align-content-center">
+                                                        <div class="col-8">
+                                                            <span class="authorhead lh-sm fs-6">
+                                                                {{ product.author }}</span>
+                                                        </div>
+                                                        <div class="col-4">
+                      
+
+                                                                    <span class="text-warning">
+                                                                        <sub>
+
+                                                                            <a href="{% url 'cate_view' %}{{ product.category.category_name }}" class="text-decoration-none
+                                                                                                                                text-warning">
+             
+
+                                                                                {{ product.category.category_name }}
+                                                                            </a>
+
+                                                                        </sub>
+                                                                        <sub class="text-muted">
+                                                                        {% if product.category.id in category_offer_details %}
+                                                              
+                                                                        {% for key,value in category_offer_details.items %}
+                                                                        {% ifequal key product.category.id  %}
+                                                                        {{value}}%*OFF 
+                                                                        {% endifequal %}
+                                                                        {% endfor %}
+                                                                        
+                                                                        {% else %}
+                                                                        <sub>*No Category offer</sub>
+                                                                        {% endif %}
+                                                                        <sub>
+                                                                    </span>
+                                                                
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row h-25 align-content-center">
+                                                        <div class="col-12">
+                                                            {% for i in category %}
+                                                                {% if product.category_id == i.id %}
+
+
+                                                                    <!-- <a href="product/category/{{ i.category_name }}/{{ product.book_name|slugify }}" class="text-decoration-none"> -->
+                                                                    <a href="{% url 'cate_view' %}{{ i.category_name }}/{{ product.book_name|slugify }}" class="text-decoration-none">
+
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                                <span class="producthead lh-sm fs-5">{{ product.book_name }}</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row h-25 align-content-center">
+
+                                                        <div class="col-12 d-flex justify-content-center
+                                                                                                align-content-center">
+                                                            <span class="productprice">₹{{ product.price }}</span>&nbsp<span class="text-secondary">
+                                                                <sub>
+
+                                                                    {% if product.id in product_offer_details %}
+                                                              
+                                                                    {% for key,value in product_offer_details.items %}
+                                                                    {% ifequal key product.id %}
+                                                                    {{value}}%*OFF On this product
+                                                                    {% endifequal %}
+                                                                    {% endfor %}
+                                                                 
+                                                                    {% else %}
+                                                                    <sub>*No product offer</sub>
+                                                                    {% endif %}
+
+
+
+                                                                </sub>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row col-12 h-25 position-absolute bottom-0
+                                                                                        start-50 translate-middle-x">
+                                                        <div class="col-12">
+                                                            <div class="row d-flex flex-wrap">
+
+                                                                {% if product.book_count <= 0 %}
+
+                                                                    <div
+                                                                        class="col-12 col-sm-12 col-md-12
+                                                                                                                    d-flex justify-content-center">
+                                                                        <!-- <span class="productsvgs">
+                                                                                                                                                                                                            <i class="fa-solid fa-cart-plus"></i>
+                                                                                                                                                                                                        </span> -->
+                                                                        
+                                                                            <button class="btn pbtn border
+                                                                                                                                bg-transparent border-warning
+                                                                                                                                disabled rounded-0">Out Of 
+                                                                                                                                Stock<span class="">
+                                                                                    <i class="fa-solid
+                                                                                                                                                fa-cart-plus"></i>
+                                                                                </span>
+                                                                            </button>
+                                                                        
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div
+                                                                        class="col-12 col-sm-12 col-md-12 d-flex justify-content-center">
+
+
+                                                                        {% if product.id in user_cart_product_ids%}
+                                                                        <a class="text-decoration-none" href="{% url 'cart' %}">
+                                                                        <button class="btn pbtn border bg-transparent border-warning rounded-0" >
+                                                                            <span >Already in Cart</span><span class="">
+                                                                                <i class="fa-solid fa-cart-plus"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    </a>
+                                                                    {% else %}
+                                                                      {% comment %} <a class="text-decoration-none" href="{% url 'add_cart' product.id %}"> {% endcomment %}
+                                                                        <button class="btn pbtn border bg-transparent border-warning rounded-0" value="{{product.id}}" onclick="addtoCart(this.value)">
+                                                                            <span id="buttontext{{product.id}}">Add to Cart</span><span class="">
+                                                                                <i class="fa-solid fa-cart-plus"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    {% comment %} </a> {% endcomment %}
+                                                                        {% endif %}
+
+
+                                                                        
+                                                                      
+                                                                    </div>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <span class="adminhead">NOTHING FOUND &nbsp;<i class="fa-solid
+                                                                    fa-face-frown"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 d-flex justify-content-end">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            {% if not pro.has_previous %}
+                                                {% else %}
+                                                    {% if 'search' in request.GET %}
+                                                        <li class="page-item text-center">
+
+                                                            <a class="page-link text-secondary border-warning" href="{% url_add_query page=pro.previous_page_number %}">Previous</a>
+                                                        </li>
+                                                    {% else %}
+
+                                                        <li class="page-item text-center">
+
+                                                            <a class="page-link text-secondary border-warning" href="?page={{ pro.previous_page_number }}">Previous</a>
+                                                        </li>
+                                                    {% endif %}
+                                            {% endif %}
+
+                                            <li class="page-item text-secondary border-warning
+                                                                                disabled">
+                                                <a class="page-link text-secondary
+                                                                                    border-warning border-warning text-center " href="#" >{{ pro.number }}
+                                                    of
+                                                    {{ pro.paginator.num_pages }}</a>
+                                            </li>
+                                            {% if pro.has_next %}
+
+                                                {% if 'search' in request.GET %}
+                                                    <li class="page-item border-warning">
+                                                        <a class="page-link text-secondary border-warning" href="{% url_add_query page=pro.next_page_number %}">Next</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="page-item border-warning">
+                                                        <a class="page-link
+                                                                                            text-secondary border-warning" href="?page={{ pro.next_page_number }}">Next</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                        <script>
+                            function addtoCart(pid){
+                                // pid -product id
+
+                                xhttp.onload = function () {
+                        document.getElementById("buttontext"+pid).innerHTML = "Already in Cart";
+                        var re = this.responseText
+
+                    }
+                    {% comment %} {% url 'add_cart' product.id %} {% endcomment %}
+                    xhttp.open("GET", "cart/add_cart/" + pid);
+                    xhttp.send();
+
+
+                            }
+                            const xhttp = new XMLHttpRequest();
+                        </script>
+
+
+                    {% endblock %}

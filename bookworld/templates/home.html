@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid banner">
+    <img src="{% static 'Blog-Banner-Image-1000x300-Arapahoe-Libraries-3.png' %}" class="img-fluid img_banner" alt="...">
+</div>
+
+
+{% endblock %}
+{% block book %}
+<div class="container-fluid genre_selection">
+    <div class="row">
+        <div class="gen">
+        <ul>
+            <li class="active">SEE ALL</li>
+            <li>Sci-Fi</li>
+            <li>Folktale</li>
+            <li>Fiction</li>
+        </ul>
+</div>
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block login %}
+<div class="lbox">
+    <a href="account/logout" class="text-decoration-none text-white" >
+    <i class="fa-solid fa-user"></i>&nbsp;&nbsp; Log Out
+    </a>
+</div>
+{% endblock %}
+{% block register %}
+<div class="lbox">
+    <a href="#" class="text-decoration-none text-white" >
+    <i class="fa-solid fa-user"></i>&nbsp;&nbsp; {{request.session.first_name}}
+    {% if 'first_name' not in request.session %}
+    <h1>hello</h1>
+    {% else %}
+    <h1>go</h1>
+    {% endif %}
+    </a>
+</div>
+
+{% endblock %}

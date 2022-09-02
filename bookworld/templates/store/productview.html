@@ -1,0 +1,190 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+
+
+
+
+
+
+
+
+{% block content %}
+{% for pro in product_detail %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-12">
+            <div class="row">
+                <div class="col-md-4 col-sm-12  bg-light">
+
+
+
+
+
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-content-center">
+                            <div id="img-container">
+                                <div id="lens"></div>
+                            <img id="featured" src="{{ pro.image.url }}" style="width:360px;height:460px">
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8  col-sm-12 bg-light">
+                    <div class="row">
+                        <div class="col-12">
+                            <span class="text-warning">
+                                                    
+                                {% for i in cat %}
+                                {% if pro.category_id == i.id %}
+                                    {{ i.category_name }}
+
+                                {% endif %}
+                            {% endfor %}</span>
+                        </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <span class="producthead fs-1 text-secondary">{{pro.book_name}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <span>by</span>
+                            <span class="authorhead">{{pro.author}}</span>
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="text-secondary">
+                                    Description :                    
+                                    </span>
+                            </div>
+                            </div>
+                        <div class="row pr-5">
+                            <div class="col-12 pr-5">
+                                <span class="text-secondary productdescription">
+                                        {{pro.description}}                 
+                                    </span>
+                            </div>
+                            </div>
+                            <div class="row h-25 ">
+                                <div class="col-3 d-flex align-items-center fs-3">
+                                    <span class="text-secondary">
+                                        ₹ {{pro.price}}  /              
+                                        </span><sub class="text-secondary">piece</sub>
+                                       
+                                </div>
+                                <div class="col-4 d-flex align-items-center">
+                                    <div class="input-group-prepend">
+                                        <!-- <a href="{% url 'remove_cart' pro.id %}" class="btn text-danger" type="button" id="button-minus">
+                                            <i class="fa fa-minus"></i>
+                                        </a>
+                                        {% comment %} <input type="text" step="1" min="0" max="3" name="cart" value="{{ cart_item.quantity }}" title="Qty" class="form-control qty pe-none" size="4"> {% endcomment %}
+                                        <input type="text" step="1" min="0" max="3" name="cart" value="1" title="Qty" class="form-control qty pe-none" size="4">
+                                            <a href="{% url 'add_cart' pro.id %}" class="btn text-warning" type="button" id="button-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </a> -->
+
+
+                                        </div>
+
+                                </div>
+                           
+                                <!-- <div class="row">
+                                    <div class="col-12">
+                                        <span class="text-secondary ">
+                                            Quantity:<input type="number" class="form-control w-25" value="1">
+                                            </span>
+                                    </div> -->
+                                    <!-- </div> -->
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                   
+                                                {% if pro.book_count <= 0 %}
+                                                <a class="text-decoration-none" href="{% url 'add_cart' pro.id %}">
+                                                    <button class="btn pbtn disabled">Add to Cart<span class="">
+                                                     <i class="fa-solid fa-cart-plus"></i>
+                                                 </span></button>
+                                                 </a>
+                                                <a href="#" class="text-decoration-none ">
+                                                    <button class="btn pbtn disabled">Buy Now <span class="">
+                                                     <i class="fa-solid fa-bag-shopping"></i>
+                                                 </span></button>
+                                                 </a>
+                         
+                                                {% else %}
+                                                {% if in_cart%}
+                                               
+                                                    <button class="btn pbtn  rounded-0">Already in Cart<span class="">
+                                                     <i class="fa-solid fa-cart-plus"></i>
+                                                 </span></button>
+                                                 <a href="{% url 'cart' %}" class="text-decoration-none ">
+                                                    <button class="btn pbtn  rounded-0">Buy Now <span class="">
+                                                     <i class="fa-solid fa-bag-shopping"></i>
+                                                 </span></button>
+                                                 </a>
+                                                 
+                                                {% else %}
+                                                <button class="btn pbtn border bg-transparent border-warning rounded-0" value="{{pro.id}}" onclick="addtoCart(this.value)">
+                                                    <span id="buttontext{{pro.id}}">Add to Cart</span><span class="">
+                                                        <i class="fa-solid fa-cart-plus"></i>
+                                                    </span>
+                                                </button>
+                                                 </a>
+                                               
+                                                 <a href="{% url 'cart' %}" class="text-decoration-none ">
+                                                    <button class="btn pbtn  rounded-0" style="width:0px;opacity:0;transition-duration:.5s;"  id="cart_button_id">Buy Now <span class="">
+                                                     <i class="fa-solid fa-bag-shopping"></i>
+                                                 </span></button>
+                                                 </a>
+                                               
+                                                {% endif %}
+                                               
+                                              
+                                                {% endif %}
+                                                   <button class="btn pbtn rounded-0">Add to Wishlist <span class="">
+                                                    <i class="fa-solid fa-heart"></i>
+                                                    </span></button>
+                                                </div>
+                                            </div>               
+                                                </span>
+                                        </div>
+                                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'scriptzoom.js' %}">
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    function addtoCart(pid){
+        // pid -product id
+
+        xhttp.onload = function () {
+document.getElementById("buttontext"+pid).innerHTML = "Already in Cart";
+var re = this.responseText
+document.getElementById("cart_button_id").style.transitionDuration = "1s";
+document.getElementById("cart_button_id").style.width="140px";
+document.getElementById("cart_button_id").style.opacity="1";
+
+}
+
+// xhttp.open("GET", "cart/add_cart/" + pid);
+xhttp.open("GET", "{% url 'add_cart' pro.id %}");
+xhttp.send();
+
+
+    }
+    const xhttp = new XMLHttpRequest();
+</script>
+
+{% endfor %}
+{% endblock %}

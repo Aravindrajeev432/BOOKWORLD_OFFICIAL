@@ -1,0 +1,232 @@
+{% extends 'admin/adminindex.html' %}
+
+{% block status %}
+    <div class="col-md-9 col-sm-12 col-sm-12 border">
+        <div class="row mb-3">
+            <div class="col-md-12 d-flex justify-content-center border-0
+                                                                        border-bottom ">
+                <span class="adminheadstatus fs-1 text-secondary">
+                    Return
+                </span>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12 col-sm-12 col-12 ">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center align-items-center">
+
+                        
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="row mb-3 border">
+            <div class="col-12 col-sm col-md-12">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 d-flex justify-content-center align-items-center">
+                        <span class="text-muted">Billing Address</span>
+                    </div>
+                    <div class="col-md-8 col-sm-6 d-flex border justify-content-center align-items-center">
+                        <span class="lh-lg fs-4 text">
+                            {{return_product_details.return_product.id }}
+                            {{ return_product_details.return_product.order.first_name|title }}
+                            &nbsp;
+                            {{ return_product_details.return_product.order.last_name|title }},
+                            <br>
+                                {{ return_product_details.return_product.order.address_line_1|title }}
+                                &nbsp;
+                                {{ return_product_details.return_product.order.address_line_2|title }},
+
+                                <br>
+                                    {{ return_product_details.return_product.order.city|title }}&nbsp;-
+                                                            &nbsp;
+                                    {{ return_product_details.return_product.order.zipcode }},
+                                    <br>
+                                        {{ return_product_details.return_product.order.country|title }}
+                                        &nbsp;
+                                        {{ return_product_details.return_product.order.state|title }}
+
+                                    </span>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 border">
+                        <div class="col-12 col-sm col-md-12">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 d-flex justify-content-center align-items-center">
+
+                                    <span class="text-muted">
+                                        Order - Details
+                                    </span>
+
+                                </div>
+                                <div class="col-md-8 col-sm-6 d-flex  align-items-center">
+   
+                                    <div class="row w-100 ">
+                                        <div class="col-4 col-md-4 col-sm-4 text-center border-left">
+                                            <span>Delivery Date</span>
+                                            <br>
+                                            <br>
+                                            <span>Order Number</span>
+                                            <br>
+                                            <br>
+                                            <span>Payment Method</span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                Total Amount Paid
+                                            </span>
+
+                                        </div>
+                                        <div class="col-8 col-sm-8 sol-md-8 text-center ">
+                                           <span>{{return_product_details.return_product.updated_at}}</span>
+                                           <br>
+                                           <br>
+                                            <span>
+                                                {{return_product_details.return_product.order.order_number}}
+                                            </span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                {{return_product_details.return_product.order.payment.payment_method}}
+                                            </span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                {{return_product_details.return_product.order.order_total}}
+                                                
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm col-md-12">
+                            <div class="row">
+                                 
+                                 <div class="col-md-12 col-sm-12 col-12">
+
+                                    <table class="table table-bordered table-hover" >
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">No</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Reson</th>
+                                            <th scope="col">Comment</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody class=" table-group-divider">
+                                        
+
+                                          <tr>
+                                            <th scope="row"></th>
+                                            <td>{{ return_product_details.return_product.product.book_name }}</td>
+                                            <td>{{ return_product_details.reson }}</td>
+                                            <td>{{ return_product_details.comment}}</td>
+                                          </tr>
+                                  
+                                      <tr>
+                                        <th>Change Status </th>
+                                        <td colspan="2">
+
+                                            <form>
+                                                {% csrf_token %}
+                                                <!-- <select class="form-control" onchange="ChangeStatus(this.value)" id="select_status_id"> -->
+                                                    <select class="form-control"  id="select_status_id">
+                                                    {% if return_product_details.returnstatus == "Waiting" %}
+                                                        <option value="Waiting" selected>Waiting</option>
+                                                        <option value="Approved">Approved</option>
+                                                        
+                                                    {% elif return_product_details.returnstatus == "Approved" %}
+                                                        <option value="Approved" selected>Approved</option>
+                                      
+                                               
+                                                    {% endif %}
+                                                 
+                                                    
+
+
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td><button class="btn bg-secondary text-warning rounded-0" id="retsub">Confirm</button></td>
+                                      </tr>
+                                        </tbody>
+                                      </table>
+                                 </div>
+
+
+                                </div>
+                                </div>
+
+
+                    </div>
+      
+
+
+                </div>
+                <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                <script>
+                    
+
+    $(document).on('click','#retsub',function(e){
+        e.preventDefault();
+        var returnstatus= $('#select_status_id').val()
+     
+
+           //Code 
+           $.ajax({
+            type:'POST',
+            dataType: 'json',
+           url: '',
+           data: {
+            'returnstatus':returnstatus,
+        
+             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+           },
+           
+           success: (response) => {
+             if (response) {
+                swal("Return Requested successfully", {
+           icon: "success",
+           button:false,
+           timer: 2000,
+         })
+            //    location.reload();
+             setTimeout(function(){
+                location.reload();
+       
+    
+
+    },2000)
+             }
+             console.log(response)
+           },
+         }); 
+
+
+
+        });
+
+
+
+                </script>
+            {% endblock %}

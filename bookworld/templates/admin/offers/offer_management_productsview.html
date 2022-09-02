@@ -1,0 +1,152 @@
+{% extends 'admin/adminindex.html' %}
+{% load mathfilters %}
+{% block status %}
+
+
+<div class="col-md-9 col-sm-12">
+    <div clas="row mb-5">
+    <div class="col-md-12">
+        <div class="row">
+            
+            <div class="col-md-1 col-sm-1 col-1 d-flex justify-content-center align-items-center border border-warning rounded-circle" style="width:50px;height: 50px;">
+                <a href="{% url 'offer_management' %}"  class="text-decoration-none text-warning">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            </div>
+            
+            <div class="col-md-10 col-sm-10 col-10 d-flex justify-content-center align-items-center">
+                <span class="adminheadstatus fs-1 text-secondary">Offer 
+                                        Management</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <span class="text-muted fs-3">Select a Product</span>
+        </div>
+    </div>
+</div>
+<!-- row -->
+<div class="row mt-3 mb-3">
+    <div class="col-md-12 col-sm-12 col-12">
+        <div class="row p-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No:</th>
+                        <th scope="col">Book Name</th>
+                        <th scope="col">Gross Amount</th>
+                        <th scope="col">Discount(%)</th>
+                        <th scope="col">Discount </th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Status</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>
+                                <a href="{% url 'offer_management_product' p.id %}">
+                                <span class="text-warning">{{ p.book_name }}</span>
+                                    </a>
+                            </td>
+                            <td>{{ p.price }}</td>
+                            <td>
+                                {% if p.discount %}
+                                {{p.discount}}
+                                {% else %}
+                                0
+                                {% endif %}
+                            </td>
+                            <td>
+                               {% with pricediscount=p.discount price=p.price  %}
+                              
+                               
+                                    
+                                    {% with d=pricediscount|div:100 %}
+                                    {% with t=price|mul:d  %}
+                                    
+                                    {% if t %}
+                                    {{t}}
+                                    {% else %}
+                                    0
+                                    {% endif %}
+                            </td>
+                            <td>
+                        
+                               {% with p=price|sub:t %}
+                               {% if p %}
+                               {{p}}
+                               {% else %}
+                               0
+                               {% endif %}
+                                {% endwith %}
+                               {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+                                {% comment %} {% with total as widthratio p.discount 100 p.price %}
+                                {{total}}
+                                {% endwith %} {% endcomment %}
+                            </td>
+                            <td>
+                               
+                                {% if p.active %}
+                                Active
+                                {% else %}
+                                Disabled
+                                {% endif %}
+                                
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 d-flex justify-content-end">
+        <div class="row d-flex justify-content-end">
+            <div class="col-md-8 col-sm-8 d-flex justify-content-end">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if not products.has_previous %}
+                    {% else %}
+                    <li class="page-item text-center text-center"><a class="page-link text-secondary border-warning" href="?page={{products.previous_page_number}}">Previous</a></li>
+
+                    {% endif %}
+                
+                  <li class="page-item text-secondary border-warning disabled text-center"><a class="page-link text-secondary border-warning border-warning" href="#">{{products.number}} of {{products.paginator.num_pages}}</a></li>
+                    {% if products.has_next %}
+         
+
+                    <li class="page-item border-warning text-center"><a class="page-link text-secondary border-warning" href="?page={{products.next_page_number}}">Next</a></li>
+
+                    {% endif %}
+
+                  
+                  
+                </ul>
+              </nav>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

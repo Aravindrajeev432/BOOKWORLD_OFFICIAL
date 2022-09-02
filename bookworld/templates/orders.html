@@ -1,0 +1,293 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10  ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">ORDER HISTORY</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+    {% block content %}
+    <section class="h-100 gradient-custom">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-10 col-xl-8">
+              <div class="card" style="border-radius: 10px;">
+                <div class="card-header px-4 py-5">
+                  <h5 class="text-muted mb-0">Thanks for your Order, <span style="color: #F1AA09;">{{request.session.first_name}}</span>!</h5>
+                </div>
+                <div class="card-body p-4">
+                 
+                    {% if not order_history %}
+                    <div class="container  mt-5">
+                        <div class=" row d-flex justify-content-center ">
+                            <div class="col-12 text-center">
+                                <span class="adminhead">NO ORDERS YET
+                                    <i class="fa-solid fa-face-frown"></i>
+                                </span>
+                            </div>
+    
+                        </div>
+                    {% else %}
+                      
+                  {% for order_history in order_history %}
+                        {% with n=forloop.counter %}
+                  <div class="card shadow-0 border mb-4">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-2 d-flex justify-content-center">
+                          <img src=" {{ order_history.product.image.url }}"
+                            class="img-fluid" alt="Not Found!">
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <a href="{% url 'orders_page_user' order_history.order.order_number %}" class="text-decoration-none">
+                          <p class=" mb-0 text-warning">{{ order_history.product.book_name }}</p>
+                          </a>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small">Orderd Date:{{order_history.created_at}}
+                    
+                          </p>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small">Payment Method:{{order_history.payment.payment_method}}</p>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small">Qty: {{order_history.quantity}}</p>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small">₹&nbsp{% widthratio order_history.product_price 1 order_history.quantity %}</p>
+                        </div>
+                      </div>
+                      <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                      <div class="row d-flex align-items-center">
+                        <div class="col-md-2">
+                          <p class="text-muted mb-0 small">Track Order</p>
+                        </div>
+                        <div class="col-md-10">
+                            {% if order_history.status == "Processing" %}
+                          <div class="progress" style="height: 6px; border-radius: 16px;" id="pbar">
+                            
+                            <div class="progress-bar" role="progressbar"
+                              style="width: 25%; border-radius: 16px; background: #F1AA09;" aria-valuenow="20"
+                              aria-valuemin="0" aria-valuemax="100" id="pbar"></div>
+                           
+                             
+                           
+                          </div>
+                         
+
+                          <div class="d-flex justify-content-around mb-1">
+                            <p class=" mt-1 mb-0 small ms-xl-5 text-warning pdet" id="pdet1/{{order_history.id}}">Processing</p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5 pdet" id="pdet2/{{order_history.id}}">Out for delivary</p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5 pdet" id="pdet3{{order_history.id}}">Delivered</p>
+                            <p class="text-danger mt-1 mb-0 small ms-xl-5" style="display:none ;" id="pshow">This Order is Cancelled</p>
+                          </div>
+                          {% elif order_history.status == "Shipped"  %}
+
+                          <div class="progress" style="height: 6px; border-radius: 16px;">
+                            
+                            <div class="progress-bar" role="progressbar"
+                              style="width: 50%; border-radius: 16px; background-color: #F1AA09;" aria-valuenow="20"
+                              aria-valuemin="0" aria-valuemax="100" ></div>
+
+                            
+
+                          </div>
+                          <div class="d-flex justify-content-around mb-1">
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5 " id="pdet1">Processing</p>
+                            <p class=" mt-1 mb-0 small ms-xl-5 text-warning" id="pdet2">Out for delivary</p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5" id="pdet3">Delivered</p>
+                            <p class="text-danger mt-1 mb-0 small ms-xl-5 " style="display:none ;" id="pshow">This Order is Cancelled</p>
+                          </div>
+                          
+                          {% elif order_history.status == 'Deliverd' %}
+
+                          <div class="progress" style="height: 6px; border-radius: 16px;">
+                            
+                            <div class="progress-bar" role="progressbar"
+                              style="width: 100%; border-radius: 16px; background-color: #F1AA09;" aria-valuenow="20"
+                              aria-valuemin="0" aria-valuemax="100" id="progressbar"></div>
+
+                            
+
+                          </div>
+                          <div class="d-flex justify-content-around mb-1">
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5 " >Processing</p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5 ">Out for delivary</p>
+                            <p class=" mt-1 mb-0 small ms-xl-5 text-warning">Delivered</p>
+                          </div>
+
+                          {% elif order_history.status == 'Cancelled' %}
+
+                          <div class="d-flex justify-content-around mb-1">
+                            <p class="text-danger mt-1 mb-0 small ms-xl-5 ">This Order is Cancelled</p>
+                            
+                          </div>
+                          {% elif order_history.status == 'Returned' %}
+
+                          <div class="d-flex justify-content-around mb-1">
+                            <p class="text-danger mt-1 mb-0 small ms-xl-5 ">Return Accepted  </p>
+                            <a href="return_order/{{order_history.id}}" class="text-decoration-none border-1">
+                            <p class="text-danger mt-1 mb-0 small ms-xl-5 ">View Return Details </p>
+                          </a>
+                          </div>
+
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="row d-flex align-items-center">
+                        <div class="col-md-4 col-sm-4 col-6">
+                        {% if order_history.status == 'Deliverd' or order_history.status == 'Cancelled' %}
+                          {% if order_history.status == 'Deliverd' %}
+                        
+                       
+                         
+                          
+            
+                            {% for key, value in  returndate.items %}
+                         
+                            {% ifequal key order_history.id %}
+                            
+                            {% if value %}
+
+
+                            <a class="text-decoration-none"  >
+                              <!-- <button class="btn   text-warning" onclick="ChangeStatus(Number(this.value))" value={{order_history.id}}>Cancell This Order</button>
+                               -->
+                              <button class="btn   text-warning"   disabled>Return Period is Over</button>
+                              
+                              </a>
+                              
+                            {% else %}
+                            <a class="text-decoration-none" href="return_order/{{order_history.id}}">
+                              <!-- <button class="btn   text-warning" onclick="ChangeStatus(Number(this.value))" value={{order_history.id}}>Cancell This Order</button>
+                               -->
+                              <button class="btn   text-warning"  value={{order_history.id}}>Return This Order</button>
+                              
+                              </a>
+                           
+                            {% endif %}
+                            {% endifequal %}
+                             {% endfor %}
+                       
+                          {% endif %}
+                        {% else  %}
+
+                        {% if order_history.status == 'Returned'%}
+                        {% else %}
+                            <a class="text-decoration-none" href="cancel_order/{{order_history.id}}">
+                        <!-- <button class="btn   text-warning" onclick="ChangeStatus(Number(this.value))" value={{order_history.id}}>Cancell This Order</button>
+                         -->
+                        <button class="btn   text-warning" onclick="ChangeStatus(Number(this.value))" value={{order_history.id}}>Cancell This Order</button>
+                        
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if order_history.status == 'Returned'%}
+                    {% else %}
+
+                    <div class="col-6 col-sm-8 col-md-8">
+                      <a href="{% url 'invoice_admin'  order_history.order.order_number  %} ">
+                        <span class="text-warning">
+                            Download Pdf
+                     
+                        
+                        </span>
+                    </a>
+                      </div>
+                      {% endif %}
+
+                    </div>
+                  </div>
+                  </div>
+                  {% endwith %}
+                  {% endfor %}
+                  
+
+                  {% endif %}
+    
+      
+                  
+      
+      
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <script>
+        function ChangeStatus(str) {
+            const xhttp = new XMLHttpRequest();
+            console.log(typeof(str))
+        
+           
+
+            xhttp.onload = function () {
+                    document.getElementById("pbar/").style.display = "none";
+                    document.getElementById("pdet1").style.display = "none";
+                    document.getElementById("pdet2").style.display = "none";
+                    document.getElementById("pdet3").style.display = "none";
+                    document.getElementById("pshow").style.display="block";
+                    document.getElementById("progressbarcan").style.display="block";
+
+                    console.log("onload")
+
+                }
+                xhttp.open("GET", "cancel_order/"+str);
+                xhttp.send();
+           
+            }
+        //     if (st[0] == "Shipped") {
+
+        //         console.log(st[0])
+
+        //         xhttp.onload = function () {
+        //             document.getElementById("orders_pending").innerHTML = this.responseText;
+        //             var re = this.responseText
+
+        //         }
+        //         xhttp.open("GET", "change_order_status/" + str);
+        //         xhttp.send();
+        //     }
+        //     else if(st[0]=="Deliverd"){
+        //         xhttp.onload = function () {
+        //             document.getElementById("orders_pending").innerHTML = this.responseText;
+        //             var op = parseInt("{{orders_deliverd}}")+1
+        //             document.getElementById('orders_deliverd').innerHTML = op
+        //             var re = this.responseText
+
+        //         }
+        //         xhttp.open("GET", "change_order_status/" + str);
+        //         xhttp.send();
+        //     }
+        //     else if(st[0]=="Cancelled"){
+               
+        //         xhttp.open("GET", "change_order_status/" + str);
+        //         xhttp.send();
+        //     }
+        // }
+        // const xhttp = new XMLHttpRequest();
+        // // xhttp.onload = function() {
+        // //     document.getElementById("txtHint").innerHTML = this.responseText;
+        // // }
+    </script>
+                    {% endblock %}

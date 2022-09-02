@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10  ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">ORDER HISTORY</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+    {% block content %}
+    <div class="container  mt-5">
+        
+            <div class="container  mt-5">
+                <div class=" row d-flex justify-content-center ">
+                    <div class="col-12 text-center">
+                        <span class="adminhead">PLEASE LOGIN TO USE THIS FEATURE
+                            <i class="fa-solid fa-face-frown"></i>
+                        </span>
+                    </div>
+
+                </div>
+                </div>
+        
+                    {% endblock %}

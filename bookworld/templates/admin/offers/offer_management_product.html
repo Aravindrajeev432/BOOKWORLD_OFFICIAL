@@ -1,0 +1,187 @@
+{% extends 'admin/adminindex.html' %}
+{% block script %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock %}
+{% block status %}
+
+<div class="col-md-9 col-sm-12">
+    <div clas="row mb-5">
+        <div class="col-md-12">
+            <div class="row">
+                
+                <div class="col-md-1 d-flex justify-content-center align-items-center border border-warning rounded-circle" style="width:50px;height: 50px;">
+                    <a href="{% url 'offer_management_productsview' %}?page={{request.session.backtopage}}"  class="text-decoration-none text-warning">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                </div>
+                
+                <div class="col-md-11 d-flex justify-content-center align-items-center">
+                    <span class="adminheadstatus fs-1 text-secondary">Offer 
+                                            Management</span>
+                </div>
+            </div>
+    
+            <div class="row">
+                <span class="text-muted fs-3">Add Offer Details</span>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+
+<div class="row">
+
+    
+</div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row mt-3">
+
+
+<div class="col-md-12 col-sm-12 col-12 d-flex justify-content-center">
+    <div class="row" style="width:600px ;"> 
+        <div class="col-md-12 col-sm-12 col-12 border d-flex justify-content-center">
+            <table>
+<tr>
+    {% csrf_token %}
+    <td>Product Name :</td><td>{{book_details.book_name}}</td>
+</tr>
+<tr>
+    <td>Current Price :</td><td>{{book_details.price}}</td>
+</tr>
+<tr>
+    <td>Discount Rate(%) :</td><td><input type="number" id="discount_rate_id" class="form-control" min="1" max="100" value="{{offer_details.discount}}" placeholder="0" onkeyup="DicountCalculator()"></td>
+</tr>
+<tr>
+    <td> Discount :</td><td><span id="discount_id">0</span></td>
+</tr>
+<tr>
+    <td> Total :</td><td><span id="price_after_discount_id">0</span></td>
+</tr>
+<tr>
+    <td>Make Active :</td><td><input type="checkbox" class="" id="make_active_id"></td>
+</tr>
+<tr>
+    <td colspan="2"><input type="button" class="btn rounded-0 bg-secondary text-warning" value="Submit" onclick="submitOffer()"></td>
+</tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    var discount_rate=0;
+    var current_price;
+    var price_after_discount=0;
+    var offer_active
+    function offerActiveChecker(){
+        console.log("**")
+        console.log("{{offer_details.active}}")
+        if("{{offer_details.active}}"=="True"){
+            document.getElementById("make_active_id").checked=true;
+        }
+        else{
+            document.getElementById("make_active_id").checked=false;
+        }
+    }
+    offerActiveChecker()
+
+
+    function DicountCalculator(){
+
+        discount_rate = document.getElementById("discount_rate_id").value
+        console.log("99")
+        console.log(discount_rate)
+        if(discount_rate==""){
+            discount_rate=0
+            console.log("hel")
+        }
+        current_price ="{{book_details.price}}"
+        console.log(current_price)
+        if(discount_rate>100 || discount_rate<0 ){
+            document.getElementById("discount_rate_id").style.borderColor="red";
+            document.getElementById("discount_rate_id").value=""
+        }
+        else{
+            document.getElementById("discount_rate_id").style.borderColor="";
+            discount_rate=parseInt(discount_rate)
+            current_price=parseInt(current_price)
+            multiplier= (discount_rate/100)
+            console.log(multiplier)
+            
+            discount=multiplier*current_price
+            discount=Math.trunc( discount )
+   
+            price_after_discount=current_price-discount
+            price_after_discount=Math.trunc( price_after_discount )
+            document.getElementById("discount_id").innerHTML=discount
+            document.getElementById("price_after_discount_id").innerHTML=price_after_discount
+            console.log(typeof(discount_rate))
+        }
+
+    }
+    DicountCalculator()
+    function submitOffer(){
+        console.log("******")
+        console.log(discount_rate)
+        console.log(price_after_discount)
+        console.log("******")
+        offer_active=document.getElementById("make_active_id")
+        if(offer_active.checked == true){
+            offer_active=true
+        }
+        else{
+            offer_active=false
+        }
+        console.log(offer_active)
+        $.ajax({
+                        type:'POST',
+                        dataType: 'json',
+                       url: "{% url 'offer_management_product' book_details.id  %}",
+                       data: {
+                         'discount_rate':discount_rate,
+                         'offer_active':offer_active,
+                       
+                         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                       },
+
+                       success: (response) => {
+                         if (response) {
+                            swal("Offer Added successfully", {
+                       icon: "success",
+                       button:false,
+                       timer: 2000,
+                     })
+                        //    location.reload();
+                        setTimeout(function(){
+                            location.reload();
+                   
+                
+
+                },2000)
+
+            }
+
+    }
+
+    })
+  
+}
+</script>
+{% endblock %}
+</div>
+</div>

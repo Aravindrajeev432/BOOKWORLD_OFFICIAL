@@ -1,0 +1,282 @@
+{% extends 'admin/adminindex.html' %}
+{% load mathfilters %}
+{% block status %}
+    <div class="col-md-9 col-sm-12 col-sm-12 border">
+        <div class="row mb-3">
+            <div class="col-md-12 d-flex justify-content-center border-0
+                                                                        border-bottom ">
+                <span class="adminheadstatus fs-1 text-secondary">
+                    Order Details
+                </span>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12 col-sm-12 col-12 ">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center align-items-center">
+
+                        
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="row mb-3 border">
+            <div class="col-12 col-sm col-md-12">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 d-flex justify-content-center align-items-center">
+                        <span class="text-muted">Billing Address</span>
+                    </div>
+                    <div class="col-md-8 col-sm-6 d-flex border justify-content-center align-items-center">
+                        <span class="lh-lg fs-4 text">
+                            {{ order_details.first_name|title }}
+                            &nbsp;
+                            {{ order_details.last_name|title }},
+                            <br>
+                                {{ order_details.address_line_1|title }}
+                                &nbsp;
+                                {{ order_details.address_line_2|title }},
+
+                                <br>
+                                    {{ order_details.city|title }}&nbsp;-
+                                                            &nbsp;
+                                    {{ order_details.zipcode }},
+                                    <br>
+                                        {{ order_details.country|title }}
+                                        &nbsp;
+                                        {{ order_details.state|title }}
+
+                                    </span>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 border">
+                        <div class="col-12 col-sm col-md-12">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 d-flex justify-content-center align-items-center">
+
+                                    <span class="text-muted">
+                                        Order - Details
+                                    </span>
+
+                                </div>
+                                <div class="col-md-8 col-sm-6 d-flex  align-items-center">
+   
+                                    <div class="row w-100 ">
+                                        <div class="col-4 col-md-4 col-sm-4 text-center border-left">
+                                            <span>Created Date</span>
+                                            <br>
+                                            <br>
+                                            <span>Order Number</span>
+                                            <br>
+                                            <br>
+                                            <span>Payment Method</span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                Total Amount Paid
+                                            </span>
+
+                                        </div>
+                                        <div class="col-8 col-sm-8 sol-md-8 text-center ">
+                                           <span>{{order_details.created_at}}</span>
+                                           <br>
+                                           <br>
+                                            <span>
+                                                {{order_details.order_number}}
+                                            </span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                {{order_details.payment.payment_method}}
+                                            </span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                {{order_details.order_total}}
+                                                
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm col-md-12">
+                            <div class="row">
+                                 
+                                 <div class="col-md-12 col-sm-12 col-12">
+
+                                    <table class="table table-bordered table-hover" >
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">No</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Quantity</th>
+                                           <th scope="col">Discount</th>
+                                           <th scope="col">Total</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody class=" table-group-divider">
+                                            {% for ordered_product in order_product_details %}
+
+                                          <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{ ordered_product.product.book_name }}</td>
+                                            <td>{{ ordered_product.product_price }}</td>
+                                            <td>{{ ordered_product.quantity }}</td>
+                                           <td>{{ ordered_product.discount}}</td>
+                                           <td>{{ ordered_product.total_after_discount }}</td>
+                                          </tr>
+                                      {% endfor %}
+                                      <tr>
+                                        <th>Change Status </th>
+                                        <td colspan="2">
+
+                                            <form>
+
+                                                <!-- <select class="form-control" onchange="ChangeStatus(this.value)" id="select_status_id"> -->
+                                                    <select class="form-control"  id="select_status_id">
+                                                    {% if order_details.status == "Processing" %}
+                                                        <option value="{{ order_id}}/Processing" selected>Processing</option>
+                                                        <option value="{{ order_id}}/Shipped">Shipped</option>
+                                                        <option value="{{order_id}}/Deliverd">Deliverd</option>
+                                                        <option value="{{order_id}}/Cancelled">Cancelled</option>
+                                                    {% elif order_details.status == "Shipped" %}
+                                                        <option value="{{ order_id}}/Shipped" selected>Shipped</option>
+                                      
+                                                        <option value="{{order_id}}/Deliverd">Deliverd</option>
+                                                        <option value="{{order_id}}/Cancelled">Cancelled</option>
+                                                    {% elif order_details.status == "Deliverd" %}
+                     
+                                                        <option value="{{order_id}}/Deliverd" selected>Deliverd</option>
+                                                        <option value="{{order_id}}/Cancelled">Cancelled</option>
+                                                    {% elif order_details.status == "Cancelled" %}
+                                   
+                                                        <option value="{{order_id}}/Cancelled" selected>Cancelled</option>
+                                                    {% endif %}
+                                                 
+                                                    
+
+
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td><button class="btn bg-secondary text-warning rounded-0" onclick="ChangeStausConfrom()">Confirm</button></td>
+                                      </tr>
+                                        </tbody>
+                                      </table>
+                                 </div>
+
+
+                                </div>
+                                </div>
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm col-md-12">
+                            <div class="row">
+                                <a href="{% url 'invoice_admin'  order_details.order_number %} ">
+                                <span class="text-warning">
+                                    Download Pdf
+                                </span>
+                            </a>
+                                </div>
+                                </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+            </div>
+                <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                <script>
+                    function ChangeStatus(str) {
+                        st = str.split("/");
+                        console.log(st)
+                        if (st[1] == "Shipped") {
+                            console.log("Shipededded")
+                            console.log(st[1])
+                            
+                            xhttp.onload = function () {
+                                // document.getElementById("orders_pending").innerHTML = this.responseText;
+                                var re = this.responseTexts
+        
+                            }
+                            xhttp.open("GET", "change_order_status/" + st[0]+'/'+st[1]);
+                            xhttp.send();
+                        }
+                        else if(st[0]=="Deliverd"){
+                            xhttp.onload = function () {
+                                document.getElementById("orders_pending").innerHTML = this.responseText;
+                                var op = parseInt("{{orders_deliverd}}")+1
+                                document.getElementById('orders_deliverd').innerHTML = op
+                                var re = this.responseText
+        
+                            }
+                            xhttp.open("GET", "change_order_status/" + str);
+                            xhttp.send();
+                        }
+                        else if(st[0]=="Cancelled"){
+                           
+                            xhttp.open("GET", "change_order_status/" + str);
+                            xhttp.send();
+                        }
+                    }
+                    const xhttp = new XMLHttpRequest();
+                    // xhttp.onload = function() {
+                    //     document.getElementById("txtHint").innerHTML = this.responseText;
+                    // }
+
+
+                        function ChangeStausConfrom(){
+                            status= document.getElementById("select_status_id").value
+                            console.log(status)
+                            st=status.split("/")
+                            console.log(st[0])
+                            console.log(st[1])
+                            xhttp.onload = function () {
+                                // document.getElementById("orders_pending").innerHTML = this.responseText;
+                                swal("Order Status Updated Succesfully", {
+                                    icon: "success",
+                                    timer: 2000,
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    buttons: false
+                                  })
+                                  setTimeout(function(){
+                                    location.reload();
+                           
+                        
+        
+                        },2000)
+        
+                            }
+                            xhttp.open("GET", "change_order_status/" + st[0]+'/'+st[1]);
+                            xhttp.send();
+
+                            
+                        }
+
+
+
+                </script>
+            {% endblock %}

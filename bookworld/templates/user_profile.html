@@ -1,0 +1,419 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block script %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10  ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">PROFILE</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+    {% block content %}
+
+        <div class="container  mt-5 mb-5">
+            <div class="row d-flex justify-content-center p-3">
+                <div class="col-md-4 col-sm-12 co-12 p-3 bg-light border border-1">
+                    <br>
+                    <div class="row mt-1 mb-1">
+                        <div class="col-12 d-flex justify-content-center">
+                            <span class="display-1">
+                            <i class="fa-solid fa-user"></i>
+                            </span>
+                        </div>
+                        </div>
+                    <br>
+                    <form action=" " method="POST">
+                        {% csrf_token %}
+                    <div class="row mt-1 mb-1">
+                        <div class="col-12">
+                        <input type="text" name="fname" id="firstname_id" class="form-control  rounded-0 border-0 border-bottom" placeholder="First Name" id="fname" value="{{user.first_name}}" onkeyup="validateFName()" required>
+                        <sub><span id="fname-error" class="robotothin"></span></sub><br>
+                    </div>
+                        
+                    </div>
+                    
+                    <div class="row mt-1 mb-1">
+                        <div class="col-12">
+                        <input type="text" name="lname" id="lastname_id" class="form-control rounded-0 border-0 border-bottom" placeholder="Last Name" id="lname" value="{{user.last_name}}" onkeyup="validateLName()" required>
+                        <sub> <span id="lname-error" class="robotothin"></span><br></sub>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-1 mb-1">
+                        <div class="col-12">
+                        <input type="email" name="email" id="email_id" class="form-control rounded-0 border-0 border-bottom" id="email" placeholder="Email" value="{{user.email}}" onkeyup="validateEmail()" required>
+                    <sub> <span id="email-error" class="robotothin"></span><br></sub>    
+                    </div>
+                    </div>
+                    
+                    <div class="row mt-1 mb-1">
+                        <div class="col-12">
+                        <input type="number" name="phone" id="phone_id" class="form-control rounded-0 border-0 border-bottom" id="phone" placeholder="Phone" value="{{user.Phone_number}}" onkeyup="validatePhone()" required>
+                        <span id="phone-error" class="robotothin"></span>    
+                    </div>
+                    </div>
+
+                    <div class="row mt-4 mb-1 d-flex justify-content-center">
+                        <div class="col-6 d-flex justify-content-center">
+                            <div class="row">
+                                
+                        <input type="button" class=" btn bg-secondary  rounded-0 border-0 h-100 text-warning" value="Edit Profile" onclick="editP()" id="ep" >
+                        </div>
+                        
+                        
+                    </div>
+                        </div>
+                        <div class="row mb-1 d-flex justify-content-center">
+                            <div class="col-6 d-flex justify-content-center">
+                                <div class="row">
+                                    <input type="button" class=" btn bg-secondary text-warning rounded-0 border-0 h-100" value="S u b m i t" id="sub" onclick="validateForm()" >
+                                    <span id="btn-Error" class="robotothin text-danger"></span>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+
+                    </div>
+                  
+
+                    <div class="col-md-8 col-sm-12 co-12 p-3 bg-light border border-1">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 col-12 text-center d-flex justify-content-center flex-column flex-md-column flex-sm-column">
+                                <div class="row">
+                                <div class="col-md-6 col-sm-12 col-12 text-center d-flex justify-content-center align-items-center"> 
+                                     <span class="roboto text-muted">Favorate Category </span>
+                                    </div>
+                              <div class="col-md-6 col-sm-12 col-12 text-center">
+                                 <div class="text-warning  " style="font-size:3vw;">{{fav_category}}</div></div>
+                               </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-12 text-center d-flex justify-content-center flex-column flex-md-column flex-sm-column">
+                                <div class="row">
+                                <div class="col-md-6 col-sm-12 col-12 text-center d-flex justify-content-center align-items-center"> 
+                                     <span class="roboto text-muted">No: Books Buyed </span>
+                                    </div>
+                              <div class="col-md-6 col-sm-12 col-12 text-center">
+                                 <div class="text-warning  " style="font-size:3vw;">{{books_buyed}}</div></div>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3 p-3">
+                            <div class="col-12 col-sm-12 col-md-12 p-3">
+
+                                                        <!-- Text input -->
+                                                        <div class="form-outline text-center  mb-4">
+                                                           <span class="text-muted"> Default Home Address</span>
+
+                                                        </div>
+                                                        
+                                                    <form action=" " method="POST">
+                                                        {% csrf_token %}
+                        <div class="form-outline mb-2">
+                            <label class="form-label text-muted" for="form7Example4">Address Line 1</label>
+                            <input type="text" value="{{user_address.address_line_1}}" name="address_line_1" id="address_line_1_id" class="form-control rounded-0"  required/>
+                            
+                          </div>
+                          <div class="form-outline mb-2">
+                            <label class="form-label text-muted" for="form7Example4">Address Line 2</label>
+                            <input type="text" value="{{user_address.address_line_2}}" name="address_line_2" id="address_line_2_id" class="form-control rounded-0"  required/>
+                            
+                          </div>
+                          <!-- <div class="form-outline mb-2">
+                            <input type="text" name="country" id="country_id" class="form-control rounded-0" required/>
+                            <label class="form-label" for="form7Example6">Country</label>
+                          </div>
+                          
+                          <div class="form-outline mb-2">
+                            <input type="text" name="state" id="state_id" class="form-control rounded-0" required/>
+                            <label class="form-label" for="form7Example6">State</label>
+                          </div>
+                          <div class="form-outline mb-2">
+                            <input type="text" name="city" id="city_id" class="form-control rounded-0" required/>
+                            <label class="form-label" for="form7Example6">City</label>
+                          </div>
+                          <div class="form-outline mb-2">
+                            <input type="number" name="zipcode" id="zipcode_id" class="form-control rounded-0" required/>
+                            <label class="form-label" for="form7Example6">Zipcode</label>
+                          </div> -->
+                          <div class="form-row">
+                            <div class=" form-group col-md-4 col-sm-12">
+                                <label class="form-label text-muted" for="form7Example6">Country</label>
+                                <input type="text" value="{{user_address.country}}" name="country" id="country_id" class="form-control rounded-0" required/>
+                           
+                            </div>
+                            <div class=" form-group col-md-4 col-sm-12">
+                                <label class="form-label text-muted" for="form7Example6">State</label>
+                                <input type="text" value="{{user_address.state}}" name="state" id="state_id" class="form-control rounded-0" required/>
+                                
+                            </div>
+                            <div class=" form-group col-md-4 col-sm-12">
+                                <label class="form-label text-muted" for="form7Example6">City</label>
+                                <input type="text" value="{{user_address.city}}" name="city" id="city_id" class="form-control rounded-0" required/>
+                               
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-3 col-sm-4 col-12">
+                                <label class="form-label text-muted" for="form7Example6">Zipcode</label>
+                                <input type="number" value="{{user_address.zipcode}}" name="zipcode" id="zipcode_id" class="form-control rounded-0" required/>
+                           
+                            </div>
+                          </div>
+                          <div class="form-outline text-center  mb-4">
+                            <input type="button" class="btn rounded-0 text-warning bg-secondary" onclick="checkAddress()" value="S u b m i t">
+                        </form>
+                         </div>
+                          
+                            </div>
+                        </div>
+
+                        </div>
+                    
+
+
+                </div>
+            </div>
+                        </div>
+
+                        <script src="{% static 'script.js' %}"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+<script>
+
+function checkAddress(){
+    var address_line_1 = $('#address_line_1_id').val()
+    var address_line_2 = $('#address_line_2_id').val()
+    var country = $('#country_id').val()
+    var state = $('#state_id').val()
+    var city = $('#city_id').val()
+    var zipcode = $('#zipcode_id').val()
+    if(address_line_1.length ==0 ||address_line_2.length == 0 || country.length == 0 || state.length == 0 || city.length == 0 || zipcode.length == 0 ){
+
+
+        swal("Please fill all fields", {
+                       icon: "warning",
+                       timer: 2000,
+                     })
+    }
+    else{
+        addAddress()
+    }
+
+
+}
+
+function addAddress(){
+    var address_line_1 = $('#address_line_1_id').val()
+    var address_line_2 = $('#address_line_2_id').val()
+    var country = $('#country_id').val()
+    var state = $('#state_id').val()
+    var city = $('#city_id').val()
+    var zipcode = $('#zipcode_id').val()
+
+    swal({
+            title: "Are you sure?",
+            text: "Wants to Update Home Address" ,
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+                 }).then((willDelete) => {
+                   if (willDelete) {
+                    //  swal("Home Address Updated successfully", {
+                    //    icon: "success",
+                    //    timer: 2000
+                    //  })
+                     
+                     
+                      $.ajax({
+                        type:'POST',
+                        dataType: 'json',
+                       url: "{% url 'add_address' user.id  %}",
+                       data: {
+                         'address_line_1':address_line_1,
+                         'address_line_2':address_line_2,
+                         'country':country,
+                         'state':state,
+                         'city':city,
+                         'zipcode':zipcode,
+                         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                       },
+                       
+                       success: (response) => {
+                         if (response) {
+                            swal("Home Address Updated successfully", {
+                       icon: "success",
+                       button:false,
+                       timer: 2000,
+                     })
+                        //    location.reload();
+                        setTimeout(function(){
+                            location.reload();
+                   
+                
+
+                },2000)
+                         }
+                         console.log(response)
+                       },
+                     }); 
+                       
+                   } else {
+                    swal("Home Address Updated successfully", {
+                       icon: "success",
+                       timer: 2000,
+                     })
+                     console.log("failed")
+                   }
+                 });
+               
+        
+
+
+
+
+}
+
+
+
+
+
+    var submitError = document.getElementById('btn-Error')
+    function deP(){
+        console.log("show")
+
+        document.getElementById("firstname_id").disabled = true;
+        document.getElementById("lastname_id").disabled = true;
+        document.getElementById("email_id").disabled = true;
+        document.getElementById("phone_id").disabled = true;
+        document.getElementById("sub").style.opacity="0";
+        document.getElementById("ep").style.opacity = "1";
+        document.getElementById("sub").style.transitionDuration = "1s";
+    }
+
+    deP()
+    function editP(){
+        console.log("editp")
+        document.getElementById("sub").style.opacity="1";
+        document.getElementById("ep").style.opacity="0";
+       
+       
+        document.getElementById("sub").style.transitionDuration = "1s";
+        document.getElementById("firstname_id").disabled = false;
+        document.getElementById("lastname_id").disabled = false;
+        document.getElementById("email_id").disabled = false;
+        document.getElementById("phone_id").disabled = false;
+        let Y =-3
+            function myLoop(){
+                setTimeout(function(){
+                    document.getElementById("sub").style.transform = "translateY("+Y+"px)";
+                    Y = Y-3;
+                if(Y>-39){ myLoop(); }
+
+                },10)
+
+            }
+            myLoop();
+          
+            
+        
+    }
+
+
+function validateForm(){
+    if(!validateFName() || !validateLName() || !validatePhone() || !validateEmail()  ){
+        submitError.style.display = 'block';
+        submitError.innerHTML = 'Please fix error to submit'
+        setTimeout(function(){submitError.style.display = 'none';}, 3000);
+        return false;
+    }
+    else{
+        profileSub()
+    }
+}
+
+    function profileSub(){
+
+
+
+        var fname = $('#firstname_id').val()
+        var lname = $('#lastname_id').val()
+        var email = $('#email_id').val()
+        var phone = $('#phone_id').val()
+        console.log(fname)
+        
+        swal({
+                   title: "Are you sure?",
+                   text: "Wants to Edit Profile  " ,
+                   icon: "warning",
+                   buttons: true,
+                   dangerMode: true,
+                 }).then((willDelete) => {
+                   if (willDelete) {
+                     swal("Profile Updated Succesfully", {
+                       icon: "success",
+                       timer: 2000,
+                     })
+                     
+                     console.log("peofile");
+                      $.ajax({
+                        type:'POST',
+                        dataType: 'json',
+                       url: "{% url 'editprofile' user.id %}",
+                       data: {
+                         'fname':fname,
+                         'lname':lname,
+                         'email':email,
+                         'phone':phone,
+                         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                       },
+                       
+                       success: (response) => {
+                         if (response) {
+                          swal("Profile Updated Succesfully", {
+                            icon: "success",
+                            timer: 2000,
+                          })
+                           {% comment %} location.reload(); {% endcomment %}
+                           setTimeout(function(){
+                            location.reload();
+                   
+                
+
+                },2500)
+
+                         }
+                         console.log(response)
+                       },
+                     }); 
+                       
+                   } else {
+                     // swal("");
+                     console.log("failed")
+                   }
+                 });
+               
+                 
+                    }
+
+
+
+</script>
+                    {% endblock %}

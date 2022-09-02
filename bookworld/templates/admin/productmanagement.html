@@ -1,0 +1,288 @@
+{% extends 'admin/adminindex.html' %}
+{% block script %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock %}
+{% block status %}
+
+
+    <div class="col-md-9 bg-white">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4 col-12">
+                    <a href="addnewbook" class="text-decoration-none text-warning">
+                        <span class="adminhead">Add new Book</span>
+                    </a>
+
+                </div>
+                <div class="col-md-4 col-12">
+                    <a href="category_management" class="text-decoration-none text-warning">
+                        <span class="adminhead">Category Management</span>
+                    </a>
+                </div>
+                <div class="col-md-4 col-12">
+                    <form action=" " method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+
+                            <input type="text" name="search" class="form-control rounded-0" placeholder="Search by book name" aria-label="search" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-sucsess bg-secondary text-warning rounded-0" type="submit" id="button-addon2">Search</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-12">
+                        <div class="row">
+                            {% comment %} <div class="col-md-3 col-6">
+                                <span class="adminheadstatus">Total Book Selled:<strong>{{book_selled_count}}</strong></span>
+                            </div> {% endcomment %}
+
+                            <div class="col-md-3 col-sm-4  admin_status_box d-flex justify-content-center align-items-center mb-3">
+                                <div class=" h-100 w-75 border  border-2 border-warning">
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center align-items-center p-2">
+                                        <span class="Roboto text-warning text-center">
+                                            <i class="fa-solid fa-book"></i>
+                                            &nbsp;Total Books Selled
+                                            
+                                        </span>
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center align-items-center" >
+                                        
+                                        <span class="adminheadstatus display-3" >{{ book_selled_count }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                 
+                                </div>
+                                
+                            </div>
+
+                            {% comment %} <div class="col-md-3 col-6">
+                                <span class="adminheadstatus">Total Books in Stock:&nbsp<strong>{{ p_count }}</strong>
+                                </span>
+                            </div> {% endcomment %}
+                            <div class="col-md-3 col-sm-4  admin_status_box d-flex justify-content-center align-items-center mb-3">
+                                <div class=" h-100 w-75 border  border-2 border-warning">
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center align-items-center p-2">
+                                        <span class="Roboto text-warning text-center">
+                                            <i class="fa-solid fa-book"></i>
+                                            Total Books In Stock
+                                            
+                                        </span>
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center align-items-center" >
+                                        
+                                        <span class="adminheadstatus display-3" >{{ p_count }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                 
+                                </div>
+                                
+                            </div>
+                            {% comment %} <div class="col-md-3 col-6">
+                                <span class="adminheadstatus">New Orders:<strong>{{new_orders}}</strong></span>
+                            </div> {% endcomment %}
+                            <div class="col-md-3 col-sm-4  admin_status_box d-flex justify-content-center align-items-center mb-3">
+                                <div class=" h-100 w-75 border  border-2 border-warning">
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center align-items-center p-2">
+                                        <span class="Roboto text-warning text-center">
+                                            <i class="fa-solid fa-book"></i>
+                                            New Orders
+                                            
+                                        </span>
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center align-items-center" >
+                                        
+                                        <span class="adminheadstatus display-3" >{{ new_orders }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                 
+                                </div>
+                                
+                            </div>
+                            {% comment %} <div class="col-md-3 col-6">
+                                <span class="adminheadstatus">Out of Stock&nbsp<strong>{{ outofstock }}</strong>
+                                </span>
+                            </div> {% endcomment %}
+                            <div class="col-md-3 col-sm-4  admin_status_box d-flex justify-content-center align-items-center mb-3">
+                                <div class=" h-100 w-75 border  border-2 border-warning">
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center align-items-center p-2">
+                                        <span class="Roboto text-warning text-center">
+                                            <i class="fa-solid fa-book"></i>
+                                            outofstock
+                                            
+                                        </span>
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center align-items-center" >
+                                        
+                                        <span class="adminheadstatus display-3" >{{ outofstock }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                 
+                                </div>
+                                
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 col-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No:</th>
+                                    <th scope="col">Book Name</th>
+                                    <th scope="col">Author's Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Stock left</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in pro %}
+
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ p.book_name }}</td>
+                                        <td>{{ p.author }}</td>
+                                        <td>{{ p.price }}</td>
+                                        <td>
+                                            {% for i in cat %}
+                                                {% if p.category_id == i.id %}
+                                                    {{ i.category_name }}
+
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{ p.book_count }}</td>
+                                        <td>
+
+                                            <a href="edit_book/{{ p.id }}" class="text-decoration-none">
+                                                <button class="btn btn-secondary btn-sm rounded-0">Edit</button>
+                                            </a>
+
+                                            {% if p.is_active %}
+                                                <a href="block_book/{{ p.id }}" class="text-decoration-none">
+                                                    <button type="button" class="btn btn-warning btn-sm rounded-0">Deactivate</button>
+                                                </a>
+                                            {% else %}
+                                                <a href="unblock_book/{{ p.id }}" class="text-decoration-none">
+                                                    <button type="button" class="btn btn-success btn-sm rounded-0">Make Active</button>
+                                                </a>
+
+                                            {% endif %}
+
+                                            {% comment %} <a href="delete_book/{{ p.id }}" class="text-decoration-none"> {% endcomment %}
+                                                <button type="button" class="btn btn-danger btn-sm rounded-0" onclick="deleteBook('{{p.id}}')">Delete </button>
+                                            {% comment %} </a> {% endcomment %}
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 d-flex justify-content-end">
+                        <div class="row d-flex justify-content-end">
+                            <div class="col-md-8 col-sm-8 d-flex justify-content-end">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    {% if not pro.has_previous %}
+                                    {% else %}
+                                    <li class="page-item text-center text-center"><a class="page-link text-secondary border-warning" href="?page={{pro.previous_page_number}}">Previous</a></li>
+
+                                    {% endif %}
+                                
+                                  <li class="page-item text-secondary border-warning disabled text-center"><a class="page-link text-secondary border-warning border-warning" href="#">{{pro.number}} of {{pro.paginator.num_pages}}</a></li>
+                                    {% if pro.has_next %}
+                         
+
+                                    <li class="page-item border-warning text-center"><a class="page-link text-secondary border-warning" href="?page={{pro.next_page_number}}">Next</a></li>
+
+                                    {% endif %}
+
+                                  
+                                  
+                                </ul>
+                              </nav>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+            </div>
+       
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script type="text/javascript">
+         
+             function deleteBook(book_id) {
+                 console.log(typeof(book_id))
+                 swal({
+                   title: "Are you sure?",
+                   text: "Do you want to Delete this Book  " ,
+                   icon: "warning",
+                   buttons: true,
+                   dangerMode: true,
+                 }).then((willDelete) => {
+                   if (willDelete) {
+                     swal("Book Deleted successfully", {
+                       icon: "success",
+                     })
+                     
+                     console.log("block user ajax");
+                      $.ajax({
+                       url: 'block_user/'+book_id,
+                       data: {
+                         
+                       },
+                       method: "GET",
+                       success: (response) => {
+                         if (response) {
+                           location.reload();
+                         }
+                         console.log(response)
+                       },
+                     }); 
+                       
+                   } else {
+                     // swal("");
+                   }
+                 });
+               
+                 
+                    }
+                </script>         
+
+{% endblock %}

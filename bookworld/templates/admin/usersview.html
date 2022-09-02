@@ -1,0 +1,243 @@
+{% extends 'admin/adminindex.html' %}
+{% block script %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock %}
+{% block css %}
+th{
+    text-align:center;
+}
+{% endblock %}
+{% block status %}
+
+
+    <div class="col-md-9 col-sm-12 ">
+        <div class="col-md-12 ">
+            <div class="row">
+                <div class="col-md-12">
+                  <span class="adminheadstatus fs-1 text-secondary">User Management</span>
+                </div>
+                </div>
+          
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="adminheadstatus">Total No of User:&nbsp<b>{{ usercount }}</b></span>
+                </div>
+                <div class="col-md-4">
+                    <span class="adminheadstatus">Active Users:&nbsp<b>{{ active_users_count }}</b></span>
+                </div>
+                <div class="col-md-4">
+                    <span class="adminheadstatus">Users Blocked:&nbsp<b>{{ blocked_users_count }}</b></span>
+                </div>
+            </div>
+
+
+        </div>
+        <br><div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <form action=" "  method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            
+                            <input type="text" name ="search" class="form-control rounded-0" placeholder="Search by firstname" aria-label="search" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-sucsess bg-secondary text-warning rounded-0" type="submit" id="button-addon2">Search</button>
+                        </div>
+                </form>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td scope="col text-center d-flex justify-content-center"><b>No:</b></td>
+                            
+                            <td scope="col text-center d-flex justify-content-center"><b>First Name</b></td>
+                            
+                            <td scope="col text-center d-flex justify-content-center"><b>Last Name</b></td>
+                            <td scope="col text-center d-flex justify-content-center"><b>No:Books Buyed</b></td>
+                            <td scope="col text-center d-flex justify-content-center"><b>Total money spent</b></td>
+                            <td scope="col text-center d-flex justify-content-center"><b>Actions</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for acc in account %}
+
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{{ acc.first_name }}</td>
+                                <td>{{ acc.last_name }}</td>
+                                <td class="text-center">
+
+                                    {% for n in no_books_buyed %}
+                                    {% if acc.id == n.user_id %}
+
+                                    {{n.sum}}
+                                    
+                                    
+                                    0
+
+                                    {% endif %}
+
+                                   
+                                    {% endfor %}
+
+                                </td>
+                                <td>{% for m in total_money_spent %}
+                                    {% if acc.id == m.user_id%}
+                                    {{m.sum}}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+
+                                    <a href="edit_user/{{ acc.id }}" class="text-decoration-none">
+                                        <button class="btn btn-secondary rounded-0">View</button>
+                                    </a>
+
+                                    {% if acc.is_blocked %}
+                                        <a href="unblock_user/{{ acc.id }}" class="text-decoration-none">
+                                            <button type="button" class="btn btn-success rounded-0">UnBlock</button>
+                                        </a>
+                                    {% else %}
+                                        {% comment %} <a href="block_user/{{ acc.id }}" class="text-decoration-none"> {% endcomment %}
+                                            <button type="button" class="btn btn-secondary rounded-0 block" value="{{acc_id}}" onclick="blockUser('{{acc.id}}')">Block </button>
+                                        {% comment %} </a> {% endcomment %}
+                                    {% endif %}
+<!-- 
+                                    <a href="delete_user/{{ acc.id }}" class="text-decoration-none"> -->
+                                        {% comment %} <button type="button" class="btn btn-danger rounded-0" onclick="deleteUser('{{acc.id}}')" >Delete </button> {% endcomment %}
+                                    <!-- </a> -->
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 d-flex justify-content-end">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-md-8 col-sm-8 d-flex justify-content-end">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                {% if not account.has_previous %}
+                                    {% else %}
+                                        <li class="page-item text-center text-center">
+                                            <a class="page-link text-secondary
+                                                                                        border-warning" href="?page={{ account.previous_page_number }}">Previous</a>
+                                        </li>
+                                {% endif %}
+
+                                <li class="page-item text-secondary
+                                                                            border-warning disabled text-center">
+                                    <a class="page-link
+                                                                                text-secondary border-warning
+                                                                                border-warning" href="#">{{ account.number }}
+                                        of
+                                        {{ account.paginator.num_pages }}</a>
+                                </li>
+                                {% if account.has_next %}
+
+
+                                    <li class="page-item border-warning text-center">
+                                        <a class="page-link text-secondary
+                                                                                    border-warning" href="?page={{ account.next_page_number }}">Next</a>
+                                    </li>
+                                {% endif %}
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script type="text/javascript">
+
+    function blockUser(acc_id) {
+        console.log(acc_id)
+        swal({
+          title: "Are you sure?",
+          text: "Do you want to Block this User  " ,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willDelete) => {
+          if (willDelete) {
+            // swal("User Blocked successfully", {
+            //   icon: "success",
+            //   timer: 2000,
+            // })
+            
+            console.log("block user ajax");
+             $.ajax({
+              url: 'block_user/'+acc_id,
+              data: {
+                
+              },
+              method: "GET",
+              success: (response) => {
+                if (response) {
+                  location.reload();
+                }
+                console.log(response)
+              },
+            }); 
+              
+          } else {
+            // swal("");
+          }
+        });
+      
+        
+           }
+
+           function deleteUser(acc_id) {
+        console.log(typeof(acc_id))
+        swal({
+          title: "Are you sure?",
+          text: "Do you want to Delete this User  "+ acc_id ,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willDelete) => {
+          if (willDelete) {
+            swal("User Deleted successfully", {
+              icon: "success",
+            })
+            
+            console.log("delete user ajax");
+             $.ajax({
+              url: 'delete_user/'+acc_id,
+              data: {
+                
+              },
+              method: "GET",
+              success: (response) => {
+                if (response) {
+                  location.reload();
+                }
+                console.log(response)
+              },
+            }); 
+              
+          } else {
+            // swal("");
+          }
+        });
+      
+        
+           }
+    
+
+
+
+
+    </script>
+{% endblock %}

@@ -1,0 +1,277 @@
+{% extends 'admin/adminindex.html' %}
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+    <script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
+{% endblock %}
+
+{% block status %}
+
+
+    <div class="col-md-9 col-sm-12">
+        <div class="row">
+            <div class="col-md-4 col-sm-4  admin_status_box d-flex justify-content-center align-items-center">
+                <div class=" h-100 w-75 border  border-2 border-warning">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center p-2">
+                            <span class="Roboto text-warning text-center">
+                                <i class="fa-solid fa-users"></i>
+                                &nbsp;Total No of User:&nbsp
+
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center">
+
+                            <span class="adminheadstatus display-3">{{ usercount }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4  admin_status_box d-flex justify-content-center align-items-center">
+                <div class=" h-100 w-75 border  border-2 border-warning">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center p-2">
+                            <span class="Roboto text-warning text-center">
+                                <i class="fa-solid fa-book-open"></i>
+                                &nbsp;Total Books in Stock :&nbsp
+
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center">
+
+                            <span class="adminheadstatus display-3">{{ no_books }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4  admin_status_box d-flex justify-content-center align-items-center">
+                <div class=" h-100 w-75 border  border-2 border-warning">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center p-2">
+                            <span class="Roboto text-warning text-center">
+                                <i class="fa-solid fa-coins"></i>
+                                &nbsp;Total  Sales:&nbsp
+
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center">
+
+                            <span class="adminheadstatus display-3">{{ total_sales }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12 col-sm-12 col-12">
+                <canvas id="myChart" width="100px" height="40px"></canvas>
+
+
+            </div>
+
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-4 col-sm-4 col-12 text-center">
+                <span class="text-warning Roboto">
+                    Order Status</span>
+                <canvas id="myChartPie" style="width:100px;height:100px;" class="mb-3"></canvas>
+            </div>
+            <div class="col-md-8 col-sm-8 col-12 text-center">
+                <span class="text-warning Roboto">
+                    Total Amount Through diff Gateways</span>
+                <canvas id="myChartbar" style="width:100px;height40px" class="mb-3"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+</div></div>{% comment %}
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for g in order_total_graph %} '{{ g.created_at__date }}', {% endfor %}],
+        datasets: [{
+            label: 'Sales by last 7 Days',
+            data: [{% for g in order_total_graph %} {{ g.sum }}, {% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: { ticks: {
+          stepSize: 50
+        }
+            }
+        }
+    }
+});
+</script>{% endcomment %}<script>
+var xValues = [{% for g in order_total_graph %}'{{ g.created_at__date }}',{% endfor %}];
+var yValues = [{% for g in order_total_graph %}{{ g.sum }},{% endfor %}];
+
+new Chart("myChart", {
+    type: "line",
+    label: 'Sales by last 7 Days',
+    data: {
+        labels: xValues,
+
+        datasets: [
+            {
+                label: 'Sales by  Day',
+                pointRadius: 10,
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgb(92 93 93)",
+                borderColor: "rgb(255 192 8)",
+                data: yValues
+            }
+        ]
+    },
+    options: {
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [
+                {
+                    ticks: {
+                        min: 50,
+                        max: 1500
+                    }
+                },
+            ],
+            y: {
+                ticks: {
+                    stepSize: 300
+                }
+            }
+
+        }
+    }
+
+});{% comment %}
+    PIE
+{% endcomment %}
+
+
+var barColors = ["#b91d47", "#00aba9", "#2b5797", "#F1AA09",];
+
+new Chart("myChartPie", {
+    type: "pie",
+
+    data: {
+        labels: [{% for g in order_status_graph %}'{{ g.status }}',{% endfor %}],
+        datasets: [
+            {
+                backgroundColor: barColors,
+                data: [{% for g in order_status_graph %}{{ g.count }},{% endfor %}]
+            }
+        ]
+    },
+    options: {
+
+        title: {
+            display: true,
+            text: "Order Status"
+        },
+        plugins: {
+            labels: [
+                {
+                    render: 'label',
+                    position: 'outside',
+                    arc: false
+                }, {
+                    render: 'percentage'
+                }
+            ]
+        }
+    }
+});
+
+
+var barColors = ["#0070ba", "green", "blue"];
+
+new Chart("myChartbar", {
+    type: "bar",
+    data: {
+        labels: ['Paypal','Cash On Delivery','Razor Pay'],
+        datasets: [
+            {
+                backgroundColor: barColors,
+                data: [{{amount_paypal}},{{amount_cod}},0]
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        legend: {
+            display: true,
+            legendText: "Hello"
+        },
+        title: {
+            display: true,
+            text: "dgfgdg"
+        },
+        plugins: {
+            labels: {
+                render: 'value'
+
+            },
+            legend: {
+                display: false,
+                labels: {
+                    color: 'red'
+                }
+            }
+
+        },
+        scales: {
+            yAxes: [
+                {
+                    ticks: {
+                        min: 500,
+                        max: 2000
+                    }
+                },
+            ],
+            y: {
+                ticks: {
+                    stepSize: 100
+                }
+            }
+
+        }
+    }
+});</script>{% endblock %}

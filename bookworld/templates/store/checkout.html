@@ -1,0 +1,246 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10  ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">CHECKOUT</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+    {% block content %}
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center mt-5 robotothin">
+        <div class="col-md-8 col-sm-12 col-12">
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              {% if user_address_status %}
+
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onchange="handleChange(this);" value="1"  checked>
+                <label class="form-check-label" for="flexRadioDefault1">
+                  Use Default Home Address
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" onchange="handleChange(this);" value="2"  id="flexRadioDefault2" >
+                <label class="form-check-label" for="flexRadioDefault2">
+                  Use Another Address
+                </label>
+              </div>
+              {% else %}
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                <label class="form-check-label" for="flexRadioDefault1">
+                  Default Home Address not availble
+                </label>
+              </div>
+              {% endif %}
+            </div>
+            
+          </div>
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                  <div class="card mb-4">
+                    <div class="card-header py-3">
+                      <h5 class="mb-0">Biling details</h5>
+                    </div>
+                    <div class="card-body">
+                      <form method="POST" action="{% url 'place_order' %}">
+                        {% csrf_token %}
+                        <!-- 2 column grid layout with text inputs for the first and last names -->
+                        <div class="row mb-4">
+                          <div class="col">
+                            <div class="form-outline">
+                              <input type="text" name="first_name" id="form7Example1" class="form-control" value="{{user_details.first_name}}" required/>
+                              <label class="form-label" for="form7Example1">First name</label>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-outline">
+                              <input type="text" name="last_name" id="form7Example2" class="form-control" value="{{user_details.last_name}}"  required />
+                              <label class="form-label" for="form7Example2">Last name</label>
+                            </div>
+                          </div>
+                        </div>
+              
+                        <!-- Text input -->
+                        <div class="form-outline mb-4">
+                          <input type="number"  name="phone" id="form7Example3" class="form-control" value="{{user_details.Phone_number}}"  required/>
+                          <label class="form-label" for="form7Example3">Phone</label>
+                        </div>
+              
+                        <!-- Text input -->
+                        <div class="form-outline mb-4">
+                          <input type="text" name="address_line_1" id="add_line_1_id" class="form-control" value="{{user_address.address_line_1}}" required/>
+                          <label class="form-label" for="form7Example4">Address Line 1</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                          <input type="text" name="address_line_2" id="add_line_2_id" class="form-control" value="{{user_address.address_line_2}}"  required/>
+                          <label class="form-label" for="form7Example4">Address Line 2</label>
+                        </div>
+              
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                          <input type="email" name="email" id="form7Example5" class="form-control" value="{{user_details.email}}"  required/>
+                          <label class="form-label" for="form7Example5">Email</label>
+                        </div>
+              
+                        <!-- Number input -->
+                        <div class="form-outline mb-4">
+                          <input type="text" name="country" id="country_id" class="form-control" value="{{user_address.country}}"  required/>
+                          <label class="form-label" for="form7Example6">Country</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                          <input type="text" name="state" id="state_id" class="form-control" value="{{user_address.state}}"  required/>
+                          <label class="form-label" for="form7Example6">State</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                          <input type="text" name="city" id="city_id" class="form-control" value="{{user_address.city}}"  required/>
+                          <label class="form-label" for="form7Example6">City</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                          <input type="number" name="zipcode" id="zipcode_id" class="form-control" value="{{user_address.zipcode}}"  required/>
+                          <label class="form-label" for="form7Example6">Zipcode</label>
+                        </div>
+
+                        
+                        <!-- Message input -->
+                        
+              
+                        <!-- Checkbox -->
+                        
+                      
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="col-md-4 mb-4">
+                  <div class="card mb-4">
+                    <div class="card-header py-3">
+                      <h5 class="mb-0">Summary</h5>
+                    </div>
+                    <div class="card-body">
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item w-100 d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                            <div>
+                              <strong>Total amount</strong>
+                              <strong>
+                                <p class="mb-0"></p>
+                              </strong>
+                            </div>
+                            <span><strong>{{total}}&nbsp ₹</strong></span>
+                          </li>
+                        <li class="list-group-item w-100 d-flex justify-content-between align-items-center px-0">
+                          
+                          <span>Shipping Charge</span>
+                          <span class="mb-0"> 0 ₹</span>
+                        </li>
+                        <li class="list-group-item w-100 d-flex justify-content-between align-items-center px-0">
+                          
+                          <span>Coupon Discount</span>
+                          <span class="mb-0"> -{{coupon_discount}} ₹</span>
+                        </li>
+                        <li class="list-group-item w-100 d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                          <div>
+                            <strong>Total amount</strong>
+                            <strong>
+                              <p class="mb-0">(including Shipping charge)</p>
+                            </strong>
+                          </div>
+                          <span><strong>{{total_after_coupon}}&nbsp ₹</strong></span>
+                        </li>
+                      </ul>
+                      <div class="card">
+                        <h5 class="card-header">Payment Method</h5>
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Paypal" id="flexRadio" >
+                                <label class="form-check-label" for="flexRadioDisabled">
+                                  Paypal
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Cod" id="flexRadioChecked" checked >
+                                <label class="form-check-label" for="flexRadioCheckedDisabled">
+                                  Cash On Delivery
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Razorpay" id="flexRadioChecked" >
+                                <label class="form-check-label" for="flexRadioCheckedDisabled">
+                                  Razor Pay
+                                </label>
+                              </div>
+    
+                        </div>
+                    </div>
+              <div class="col-12 mt-3 d-flex justify-content-center">
+
+                <button type="submit" class="btn pbtn rounded-0">
+                  CheckOut
+                </button>
+              </div>
+                     
+
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+    
+</div>
+<script>
+  var address_line_1 = document.getElementById("add_line_1_id").value
+  var address_line_2 = document.getElementById("add_line_2_id").value
+  var country = document.getElementById("country_id").value
+  var state = document.getElementById("state_id").value
+  var city = document.getElementById("city_id").value
+  var zipcode = document.getElementById("zipcode_id").value
+  
+  function handleChange(src) {
+    radio_value=src.value;
+    if(radio_value==1){
+      //default saved home address
+      document.getElementById("add_line_1_id").value=address_line_1;
+      document.getElementById("add_line_2_id").value=address_line_2;
+      document.getElementById("country_id").value=country;
+      document.getElementById("state_id").value=state;
+      document.getElementById("city_id").value=city;
+      document.getElementById("zipcode_id").value=zipcode;
+    }
+    else{
+      document.getElementById("add_line_1_id").value=""
+      document.getElementById("add_line_2_id").value=""
+      document.getElementById("country_id").value=""
+      document.getElementById("state_id").value=""
+      document.getElementById("city_id").value=""
+      document.getElementById("zipcode_id").value=""
+     
+
+
+    }
+
+    }
+</script>
+
+  
+            {% endblock %}

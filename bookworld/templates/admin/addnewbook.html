@@ -1,0 +1,100 @@
+{% extends 'admin/adminindex.html' %}
+
+
+{% block status %}
+
+
+    <div class="col-md-9 col-sm-12">
+        <div class="row">
+            <div class="col-md-12">
+              <span class="adminheadstatus fs-1 text-secondary">Add new Book</span>
+              {% for msg in messages %}
+              <span clas="adminheadstatus fs-4">{{msg}}</span>
+                {% endfor %}
+            </div>
+        <div class="row d-flex justify-content-center">
+        <div class="col-md-8 col-sm-10 bg-light d-flex justify-content-center">
+    <form action=" " method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        
+        {{form.as_p}}
+
+
+        <input type="submit" class="btn btn-outline-sucsess bg-secondary text-warning" onclick=" return validate()">
+    </form>
+    <!-- MODAL TO CROP THE IMAGE -->
+	<div class="modal fade" id="modalCrop">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Crop the photo</h4>
+            </div>
+            <div class="modal-body">
+              <img src="" id="image" style="max-width: 100%;">
+            </div>
+            <div class="modal-footer">
+              <div class="btn-group pull-left" role="group">
+                <button type="button" class="btn btn-default js-zoom-in">
+                  <span class="glyphicon glyphicon-zoom-in"></span>
+                </button>
+                <button type="button" class="btn btn-default js-zoom-out">
+                  <span class="glyphicon glyphicon-zoom-out"></span>
+                </button>
+              </div>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Nevermind</button>
+              <button type="button" class="btn btn-primary js-crop-and-upload">Crop and upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- CONTAINER TO DISPLAY THE CROPPED IMAGES -->
+      
+</div>
+    </div>
+</div>
+</div>
+<script defer src="https://cdn.crop.guide/loader/l.js?c=FSMNSD"></script>
+<script>
+    function validateCat(){
+        c = document.getElementById("id_cat").value
+        if(c == ""){
+            document.getElementById("id_cat").style.border="solid 1px red"
+            return false
+        }
+       else{
+        document.getElementById("id_cat").style.border="solid 1px green"
+        return true
+       }
+
+    }
+    function validateP(){
+        p = document.getElementById("id_price").value
+        if(Number(p)<=0){
+            document.getElementById("id_price").style.border="solid 1px red"
+            return false
+        }
+        document.getElementById("id_price").style.border="solid 1px green"
+       return true
+    }
+    function validateC(){
+        count = document.getElementById("id_book_count").value
+        if(Number(count)<=0){
+            document.getElementById("id_book_count").style.border="solid 1px red"
+            return false
+        }
+        document.getElementById("id_book_count").style.border="solid 1px green"
+        return true
+
+    }
+    function validate(){
+        if(!validateCat() || !validateP() || !validateC()){
+            return false
+        }
+    }
+
+</script>
+{% endblock %}

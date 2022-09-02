@@ -1,0 +1,119 @@
+{% extends 'admin/adminindex.html' %}
+
+{% block status %}
+    <div class="col-md-9 col-sm-12 col-sm-12 border">
+        <div class="row mb-3">
+            <div class="col-md-12 d-flex justify-content-center border-0
+                                                    border-bottom ">
+                <span class="adminheadstatus fs-1 text-secondary">Sales
+                                                        Report</span>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12 col-sm-12 col-12 ">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center align-items-center"></div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 col-sm-12 col-md-12">
+                <div class="row d-flex justify-content-center">
+                
+                    <div class="col-md-6 col-8 col-sm-8">
+                        <form action='' method="POST">
+                            {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 col-12 col-sm-4  d-flex justify-content-center align-items-center">
+                                <span class="text-muted">By Date</span>
+                            </div>
+
+                          
+                            <div class="col-md-6 col-12 col-sm-4">
+                                <input type="date" name="salesdate" id="salesdate_id" class="datechk form-control" value="{{current_date}}" min="{{dates.0}}" max="{{dates_max}}">
+                           
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12 mt-sm-2 mt-3 mt-md-0 col-sm-12  d-flex justify-content-center align-items-center">
+                        <input type="submit" class="btn rounded-0 bg-secondary text-warning" value="Submit">
+                    </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row m-3 mt-3 mb-3">
+            {% include 'includes/sales_table.html' %}
+
+
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12">
+               
+                <form action="{% url 'create-pdf' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="date" id="salesdate_pdf_id" name="salesdate_pdf_id" style="display: none;" class="datechk form-control" value="{{current_date}}" >
+                    <button type="submit" class="btn bg-transparent text-warning rounded-0 " >
+                        <span class="text-warning">
+                            Download as Pdf
+        
+                        </span>
+                    </button>
+                    </form>
+          
+
+                    <form action="{% url 'export_excel' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="date" id="salesdate_pdf_id" name="salesdate_excel" style="display: none;" class="datechk form-control" value="{{current_date}}" >
+                        <button type="submit" class="btn bg-transparent text-warning rounded-0 " >
+                            <span class="text-warning">
+                                Download as Excel file
+            
+                            </span>
+                        </button>
+                        </form>
+            
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var dateClass = '.datechk';
+        $(document).ready(function () {
+            if (document.querySelector(dateClass).type !== 'date') {
+                var oCSS = document.createElement('link');
+                oCSS.type = 'text/css';
+                oCSS.rel = 'stylesheet';
+                oCSS.href = '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css';
+                oCSS.onload = function () {
+                    var oJS = document.createElement('script');
+                    oJS.type = 'text/javascript';
+                    oJS.src = '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js';
+                    oJS.onload = function () {
+                        $(dateClass).datepicker();
+                    }
+                    document.body.appendChild(oJS);
+                }
+                document.body.appendChild(oCSS);
+            }
+        });
+
+
+
+
+        
+    </script>
+
+{% endblock %}

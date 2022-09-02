@@ -1,0 +1,172 @@
+{% load static %}
+{% load mathfilters %}
+<html>
+<head>
+<style>
+
+body{
+    font-family: sans-serif;
+}
+.addbigbox{
+    display: flex;
+    flex-direction:row;
+}
+.addbox{
+    width: 400px;
+    height: 400px;
+
+    
+}
+table td {
+    text-align: center;
+  paddding:8px;
+}
+table th{
+    paddding-top:10px;
+}
+table {
+  border:1px solid black;
+}
+
+</style>
+
+</head>
+<body>
+<div style="margin:30px;">
+
+<div style="    text-align: center; ">
+    <h1>Invoice</h1>
+</div>
+<hr>
+<div >
+    <table>
+        <tr>
+            <td><b>Order Date </b></td> <td>{{order_details.created_at}}</td>
+            </tr>
+            <td><b>Order Number </b></td> <td> {{order_details.order_number}}</td>
+            </tr>
+            
+            <tr>
+            <td><b>Payment id </b></td> <td> {{order_details.payment.payment_id}}</td>
+            </tr>
+            <tr>
+            <td><b>Payment Method </b></td> <td> {{order_details.payment.payment_method}}</td>
+            
+        </tr>
+
+
+    </table>
+   
+
+    </div>
+    
+<table style="border:0px" >
+    <tr>
+        <td>    <div class="addbox">
+            <div >
+                <h2>Sold By</h2>
+                <div >
+                    BookWorld Inc.
+                    <br>
+                    <br>
+                    BookWorld Store Kerala ,
+                    <br>
+                    <br>
+                    Cochin-657565.
+
+                </div>
+
+            </div>
+
+        </div></td>
+        <td><div >
+            <h2>Shippign Address</h2>
+            <div>
+                {{ order_details.first_name|title }}
+                &nbsp;
+                {{ order_details.last_name|title }},
+                <br>
+                <br>
+                    {{ order_details.address_line_1|title }}
+                    &nbsp;
+                    {{ order_details.address_line_2|title }},
+
+                    <br>
+                    <br>
+                        {{ order_details.city|title }}&nbsp;-
+                                                &nbsp;
+                        {{ order_details.zipcode }},
+                        <br>
+                        <br>
+                            {{ order_details.country|title }}
+                            &nbsp;
+                            {{ order_details.state|title }}
+            </div>
+            
+        </div></td>
+    </tr>
+</table>
+
+
+
+
+    <div style="width: 100% ; display: flex; justify-content: center; margin-top: 30px;">
+        <table class="table table-bordered table-hover" style="width: 60%;">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+               <th scope="col">Discount</th>
+               <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody class=" table-group-divider">
+                {% for ordered_product in order_product_details %}
+
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{ ordered_product.product.book_name }}</td>
+                <td>{{ ordered_product.product_price }}</td>
+                <td>{{ ordered_product.quantity }}</td>
+               <td>{{ ordered_product.discount }}%</td>
+               <td>{{ordered_product.total_after_discount}}</td>
+              </tr>
+          {% endfor %}
+         <tr>
+            <td><b> Net QTY :&nbsp;{{net_qty.quantity__sum}}</b></td>
+            <td colspan="2"><b> Total </b></td>
+            <td colspan="3"> <b>{{order_details.order_total}}</b></td>
+         </tr>
+            </tbody>
+          </table>
+
+    </div>
+
+
+    <div style="width: 100%;">
+    <h5>Declaration<br>
+        <sub>        The goods sold are intended for end user consumption and not for resale.</sub>
+    </div>
+</h5>
+
+
+    <div style="width:100%; display: flex; align-items: end; flex-direction: column; right:0px;">
+        <div style="border:solid 1px black;  width: 200px ; height: 200px; display: flex; justify-content: center; align-items: center;">
+            <img src="http://127.0.0.1:8000{% static 'BookworldStamp.png' %}" width="200px" height="200px">
+            
+
+        </div>
+        <div >
+           <b> BOOKWORLD Inc.</b><br>
+            <sub>Authorized Signature</sub>
+        </div>
+
+
+    </div>
+
+</div>
+</body>
+
+</html>

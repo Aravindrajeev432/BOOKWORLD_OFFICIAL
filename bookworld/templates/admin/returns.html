@@ -1,0 +1,120 @@
+{% extends 'admin/adminindex.html' %}
+
+{% block status %}
+    <div class="col-md-9 col-sm-12 col-sm-12 border">
+        <div class="row mb-3">
+            <div class="col-md-12 d-flex justify-content-center border-0
+                                                                        border-bottom ">
+                <span class="adminheadstatus fs-1 text-secondary">
+                   Returns
+                </span>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12 col-sm-12 col-12 ">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center align-items-center">
+
+                        
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="row mb-3 border">
+            <div class="col-12 col-sm col-md-12">
+                <div class="row">
+                    <table class="table">
+                        <thead>
+                            <tr>     <td scope="col"><b>No:</b></td>
+                                <td scope="col"><b>Order ID</b>
+                           
+
+                                <td scope="col">
+                                   <b> Name</b></td>
+
+                                
+                                </th>
+                                <td scope="col"><b>Delivered Date</b></td>
+                                <td scope="col"><b>Product Name</b></td>
+                                <td scope="col"><b>Payment Method</b></td>
+                                <td scope="col"><b>Status</b></td>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for returns in returnproduct %}
+
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+
+                                    <td>
+                                        <a href="{% url 'return_order_admin' returns.returnid %}" class="text-warning text-decoration-none">
+                                        {{ returns.order.order_number }}
+                                    </a>
+                                    </td>
+                                    <td>{{ returns.user.first_name }}&nbsp;{{returns.user.last_name}} &nbsp;
+                                     
+                                    </td>
+                                  
+                                    <td>{{ returns.order.updated_at|date:"M d, Y" }}</td>
+                                    <td>{{ returns.product.book_name }}</td>
+                                    <td class="text-center">{{ returns.payment.payment_method }}</td>
+
+                                    <td>
+                                       {{ returns.returnstatus }}
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 d-flex justify-content-end">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-md-8 col-sm-8 d-flex justify-content-end">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                {% if not returnproduct.has_previous %}
+                                    {% else %}
+                                        <li class="page-item text-center text-center">
+                                            <a class="page-link text-secondary
+                                                                                        border-warning" href="?page={{ returnproduct.previous_page_number }}">Previous</a>
+                                        </li>
+                                {% endif %}
+
+                                <li class="page-item text-secondary
+                                                                            border-warning disabled text-center">
+                                    <a class="page-link
+                                                                                text-secondary border-warning
+                                                                                border-warning" href="#">{{ returnproduct.number }}
+                                        of
+                                        {{ returnproduct.paginator.num_pages }}</a>
+                                </li>
+                                {% if returnproduct.has_next %}
+
+
+                                    <li class="page-item border-warning text-center">
+                                        <a class="page-link text-secondary
+                                                                                    border-warning" href="?page={{ returnproduct.next_page_number }}">Next</a>
+                                    </li>
+                                {% endif %}
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+            {% endblock %}

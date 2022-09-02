@@ -1,0 +1,142 @@
+{% extends 'admin/adminindex.html' %}
+{% block script %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock %}
+{% block status %}
+
+<div class="col-md-9 col-sm-12">
+    <div clas="row mb-5">
+        <div class="col-md-12">
+            <div class="row">
+                
+                <div class="col-md-1 d-flex justify-content-center align-items-center border border-warning rounded-circle" style="width:50px;height: 50px;">
+                    <a href="{% url 'offer_management_categoryview' %}"  class="text-decoration-none text-warning">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                </div>
+                
+                <div class="col-md-11 d-flex justify-content-center align-items-center">
+                    <span class="adminheadstatus fs-1 text-secondary">Offer 
+                                            Management</span>
+                </div>
+            </div>
+    
+            <div class="row">
+                <span class="text-muted fs-3">Add Offer Details</span>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+
+<div class="row">
+
+    
+</div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row mt-3">
+
+
+<div class="col-md-12 col-sm-12 col-12 d-flex justify-content-center">
+    <div class="row" style="width:600px ;"> 
+        <div class="col-md-12 col-sm-12 col-12 border d-flex justify-content-center">
+            <table>
+<tr>
+    {% csrf_token %}
+    <td>Category Name :</td><td>{{cat_details.category_name}}</td>
+</tr>
+
+<tr>
+    <td>Discount Rate(%) :</td><td><input type="number" id="discount_rate_id" class="form-control" min="1" max="100" value="{{offer_details.discount}}" placeholder="0" ></td>
+</tr>
+
+
+<tr>
+    <td>Make Active :</td><td><input type="checkbox" class="" id="make_active_id"></td>
+</tr>
+<tr>
+    <td colspan="2"><input type="button" class="btn rounded-0 bg-secondary text-warning" value="Submit" onclick="submitOffer()"></td>
+</tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    function offerActiveChecker(){
+        console.log("**")
+        console.log("{{offer_details.active}}")
+        if("{{offer_details.active}}"=="True"){
+            document.getElementById("make_active_id").checked=true;
+        }
+        else{
+            document.getElementById("make_active_id").checked=false;
+        }
+    }
+    offerActiveChecker()
+
+
+   
+
+    function submitOffer(){
+        discount_rate = document.getElementById("discount_rate_id").value
+        offer_active=document.getElementById("make_active_id")
+        if(offer_active.checked == true){
+            offer_active=true
+        }
+        else{
+            offer_active=false
+        }
+        console.log(offer_active)
+        $.ajax({
+                        type:'POST',
+                        dataType: 'json',
+                       url: "{% url 'offer_management_category' cat_details.id  %}",
+                       data: {
+                         'discount_rate':discount_rate,
+                         'offer_active':offer_active,
+                       
+                         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                       },
+
+                       success: (response) => {
+                         if (response) {
+                            swal("Offer Added successfully", {
+                       icon: "success",
+                       button:false,
+                       timer: 2000,
+                     })
+                        //    location.reload();
+                        setTimeout(function(){
+                            location.reload();
+                   
+                
+
+                },2000)
+
+            }
+
+    }
+
+    })
+  
+}
+</script>
+{% endblock %}
+</div>
+</div>

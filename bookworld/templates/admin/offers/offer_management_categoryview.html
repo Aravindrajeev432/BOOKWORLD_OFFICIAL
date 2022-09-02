@@ -1,0 +1,92 @@
+{% extends 'admin/adminindex.html' %}
+{% load mathfilters %}
+{% block status %}
+
+
+<div class="col-md-9 col-sm-12">
+    <div clas="row mb-5">
+    <div class="col-md-12">
+        <div class="row">
+            
+            <div class="col-md-1 col-sm-1 col-1 d-flex justify-content-center align-items-center border border-warning rounded-circle" style="width:50px;height: 50px;">
+                <a href="{% url 'offer_management' %}"  class="text-decoration-none text-warning">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            </div>
+            
+            <div class="col-md-10 col-sm-10 col-10 d-flex justify-content-center align-items-center">
+                <span class="adminheadstatus fs-1 text-secondary">Offer 
+                                        Management</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <span class="text-muted fs-3">Select a Category</span>
+        </div>
+    </div>
+</div>
+<!-- row -->
+<div class="row mt-3 mb-3">
+    <div class="col-md-12 col-sm-12 col-12">
+        <div class="row p-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td scope="col"><b>No:</b></td>
+                        <td scope="col"><b>Category</b></td>
+                   
+                        <td scope="col"><b>Discount(%)</b></td>
+                       
+                      <td><b>Status</b></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in category %}
+
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>
+                                <a href="{% url 'offer_management_category' cat.id %}" class="text-decoration-none">
+                                <span class="text-warning">{{ cat.category_name }}</span>
+                            </a>
+                            </td>
+                            <td>
+                                {%if cat.discount is None %}
+                                0
+                                {% else %}
+                                {{ cat.discount }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if cat.active %}
+                                Active
+                                {% else %}
+                                Disabled
+                                {% endif %}
+                            </td>
+                   
+                         
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

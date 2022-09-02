@@ -1,0 +1,391 @@
+{% extends 'index.html' %}
+{% load mathfilters %}
+{% load static %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class=" ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">SHOPPING CART</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+    {% block content %}
+
+        <div class="container  mt-5">
+            {% if not cart_items %}
+                <div class="container  mt-5">
+                    <div class=" row d-flex justify-content-center ">
+                        <div class="col-12 text-center">
+                            <span class="adminhead">YOUR <i class="fa-solid fa-cart-shopping"></i> CART IS EMPTY
+                                <i class="fa-solid fa-face-frown"></i>
+                            </span>
+                        </div>
+
+                    </div>
+                {% else %}
+
+                    <div class="row d-flex justify-content-center ">
+                        <table class="shopping-cart">
+                            <thead>
+                                <tr>
+                                    <th class="image">&nbsp;</th>
+                                    <th>PRODUCT</th>
+                                    <th>PRICE</th>
+                                    <th>QUANTITY</th>
+                                    <th>OFFERS</th>
+                                    <th> GROSS TOTAL</th>
+                                    <th>TOTAL</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cart_item in cart_items %}
+                                    <tr class="cart-item">
+                                        <td class="image">
+                                            <a href="#" class="text-decoration-none">
+                                                <img src="{{ cart_item.product.image.url }}" alt="!"></a>
+                                            </td>
+                                            <td>
+
+
+                                                <!-- ForeignKey used here -->
+
+                                                <a href="{% url 'cate_view' %}{{ cart_item.product.category.category_name }}/{{ cart_item.product.book_name|slugify }}" class="text-decoration-none text-warning">
+                                                    <b>{{ cart_item.product.book_name }}</b>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <input type="number" id="p_price_id{{ cart_item.product.id }}" class="form-control rounded-0 bg-transparent border-0" value="{{ cart_item.product.price }}" disabled>
+                                            </td>
+                                            <td class="qty">
+                                                <div class="input-group-prepend">
+                                                    {% if cart_item.quantity is 1 %}
+                                                    <div  style="display:none;" id="minus_div_id{{ cart_item.product.id }}">
+                                                        <a href="{% url 'remove_cart' cart_item.product.id %}" class="btn text-danger" type="button" id="button-minus">
+                                                            <i class="fa fa-minus"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    {% else %}
+                                                    <div  style="display:flex;" id="minus_div_id{{ cart_item.product.id }}">
+                                                    <a href="{% url 'remove_cart' cart_item.product.id %}" class="btn text-danger" type="button" id="button-minus">
+                                                        <i class="fa fa-minus"></i>
+                                                    </a>
+                                                </div>
+                                                    {% endif %}
+                                                    <input type="text" step="1" min="0" max="3" name="cart"  id="cartqty{{cart_item.product.id}}" value="{{ cart_item.quantity }}" title="Qty" class="form-control qty pe-none" size="4">
+                                                       
+                                                        {% comment %} <a href="{% url 'add_cart' cart_item.product.id %}" class="btn text-warning" type="button" id="button-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                        </a> {% endcomment %}
+                                                        <button class="btn text-warning" id="button-plus" value="{{ cart_item.product.id }}" onclick="addtoCart(this.value)">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+
+
+                                                    </div>
+                                                </td>
+
+                                                <td class="text-center  ">
+
+                                                  
+                                              
+                                                  {% if cart_item.discounttype == "pro" %}
+                                                  <span>Product Offer<span><br>
+                                                    <input type="button" value="{{cart_item.discount}}" class="bg-transparent border-0">
+                                                    <span>%</span>
+                                                  {% elif cart_item.discounttype == "cat" %}
+                                                  Category offer<br>
+                                                  <input type="button" value="{{cart_item.discount}}" class="bg-transparent border-0">
+                                                  <span>%</span>
+                                                  {% else %}
+                                                  No offer Available
+                                                  {% endif %}
+                                                </td>
+                                                <td>
+                                                    <button id="cart_discount{{ cart_item.product.id }}" value={{cart_item.discount}} style="display:none;">{{cart_item.discount}}</button>
+
+
+                      
+                                                    <span id="cart_sub_total{{ cart_item.product.id }}">{{ cart_item.sub_total }}</span>
+                                                  
+                                               
+                                                    
+                                                    </td>
+                                                  
+                                                    <td>
+                                                        <input type="button" class="bg-transparent border-0" id="cart_total{{ cart_item.product.id }}" value="{{cart_item.total_after_discount}}" onchange="grandTotal()">
+                                                    </td>
+                                                <td class="remove">
+                                                    <a href="{% url 'delete_cart' cart_item.product.id %}" class="btn btn-danger-filled x-remove">×</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% csrf_token %}
+                            <div class="row mt-5">
+                                <div class="col-md-4 col-sm-8 col-12 mb-3">
+                                    <div class="row">
+                                        <div class="col-12 cart-total">
+                                            <div class="row h-100 align-items-center">
+                                                <span class=" col-9 carttotalhead">Total Price</span>
+                                                <span class=" col-3 carttotalprice text-warning" id="carttotalprice_id1">
+                                                    {{ total }}
+                                                    &nbsp₹</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 cart-total">
+                                            <div class="row h-100 align-items-center">
+                                                <span class=" col-9 carttotalhead">Shipping Cahrge</span>
+                                                <span class=" col-3 carttotalprice text-warning">
+                                                    0 &nbsp ₹</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if request.session.coupon_discount %}
+                                    <div class="row">
+                                        <div class="col-12 cart-total">
+                                            <div class="row h-100 align-items-center text-warning">
+                                                <span class=" col-9 carttotalhead" id="coupon_code_id">{{request.session.coupon_code}}</span>
+                                                <span class=" col-3 carttotalprice" id="coupon_discount_id">
+                                                    -{{request.session.coupon_discount}}
+                                                    &nbsp₹</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                              
+
+                                    {% else %}
+                                    
+                                    <div class="row">
+                                        <div class="col-12 cart-total">
+                                            <div class="row h-100 align-items-center text-warning">
+                                                <span class=" col-9 carttotalhead" id="coupon_code_id">Coupon :-</span>
+                                                <span class=" col-3 carttotalprice" id="coupon_discount_id">
+                                                    -0
+                                                    &nbsp₹</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% endif  %}
+
+                                    <div class="row">
+                                        <div class="col-12 cart-total">
+                                            <div class="row h-100 align-items-center text-warning">
+                                                <span class=" col-9 carttotalhead">Total Price</span>
+                                                <span class=" col-3 carttotalprice" id="carttotalprice_id">
+                                                   
+                                                    {% if request.session.coupon_discount %}
+                                                    {{total|sub:request.session.coupon_discount}}
+                                                    {% else %}
+                                                   
+                                                    {{ total }}
+                                                    {% endif %}
+                                                    &nbsp₹</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-12 d-flex flex-column justify-content-center align-items-center ">
+
+                                    
+                                        {% if 'first_name' in request.session %}
+
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control rounded-0" placeholder="Coupon Code" id="coupon_code" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                            <div class="input-group-append">
+                                              <button class="btn btn-outline-secondary bg-secondary text-warning rounded-0"  type="button" id="button-coupon_id" onclick="couponCheck()" >Apply Coupon</button>
+                                            </div>
+                                          </div>
+                                        <a href="{% url 'checkout' %}" class="text-decoration-none ">
+                                            <button class="btn pbtn rounded-0">Buy Now
+                                                <span class="">
+                                                    <i class="fa-solid fa-bag-shopping"></i>
+                                                </span>
+                                            </button>
+                                        </a>
+                                        {% else %}
+                                                <a href="{% url 'login' %}" class="text-decoration-none ">
+                                                    <button class="btn pbtn rounded-0">CheckOut <span class="">
+                                                     <i class="fa-solid fa-bag-shopping"></i>
+                                                 </span></button>
+                                                 </a>
+                                                 {% endif %}
+                                                
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script>
+                        var Grandtotal="{{ total }}"
+                        
+                        var di="{{request.session.coupon_discount}}"
+                        var di=parseInt(di)
+                        
+                        var coupon_code
+                        var coupon_discount
+                        console.log("254")
+                        console.log(di)
+                        function addtoCart(pid){
+                            // pid -product id
+                            console.log("257"+di)
+                            console.log(pid)
+                            xhttp.onload = function () {
+                    document.getElementById("cartqty"+pid).value= this.responseText;
+                    document.getElementById("minus_div_id"+pid).style.display="flex";
+                    p_price= document.getElementById("p_price_id"+pid).value;
+                    p_discount = document.getElementById("cart_discount"+pid).value;
+                    p_price=parseInt(p_price);
+                    sub_total=p_price*this.responseText;
+                    total=sub_total-(p_discount/100)*sub_total
+                    discount=document.getElementById("")
+                    document.getElementById("cart_sub_total"+pid).innerHTML=sub_total;
+                    
+                    document.getElementById("cart_total"+pid).value=total
+                    var re = this.responseText
+                    console.log(re)
+                    setTimeout(grandtotal, 200);
+
+                    function grandtotal(){
+                        console.log("grandTotal")
+                        xhttp.onload = function () {
+                        var Grandtotal=this.responseText;
+                        console.log("******")
+                        console.log(di)
+                        console.log(Grandtotal)
+                        
+                        document.getElementById("carttotalprice_id").innerHTML=Grandtotal-di
+                        document.getElementById("carttotalprice_id1").innerHTML=Grandtotal
+                        }
+
+                        xhttp.open("GET", "cart_total_finder/{{cart_id}}",);
+                        xhttp.send(); 
+                    }
+                }
+
+                xhttp.open("GET", "add_cart_from_cart/" + pid);
+                xhttp.send();
+
+
+                        }
+                        const xhttp = new XMLHttpRequest();
+
+                
+                                
+
+
+                        function handleChange(src) {
+                            discount_value=src.value;
+
+                            total= document.getElementById()
+
+
+
+                        }
+                     
+                        $("button-plus").on("click",function(){
+                            // action goes here!!
+                            console.log("eventlist")
+                            setTimeout(grandtotal, 200);
+                           
+
+
+
+                          });
+                    
+                  function couponCheck(){
+                    console.log(Grandtotal)
+                    var coupon_code=document.getElementById("coupon_code").value;
+                    console.log(coupon_code)
+
+                    if(coupon_code.length==0){
+                        document.getElementById("coupon_code").style.borderColor="red";
+                    }
+                    else{
+                        document.getElementById("coupon_code").style.borderColor="#dee2e6";
+                        senddata()
+                    }
+
+
+
+                    function senddata(){
+                        
+                    xhttp.onload = function () {
+                        var discount=this.responseText;
+                        var di=discount
+                        console.log("##")
+                        console.log(di)
+                        console.log(Grandtotal)
+                        
+                        if(discount==0){
+                            swal("Invalid Coupon Code" , {
+              icon: "error",
+            })
+                        }
+                        else{
+                            swal("Hurray You'll get a Discount of " + discount, {
+              icon: "success",
+              button:false,
+              timer: 2000,
+            })
+                document.getElementById("coupon_code_id").innerHTML=coupon_code
+                document.getElementById("coupon_discount_id").innerHTML="-"+discount+"&nbsp₹"
+                document.getElementById("carttotalprice_id").innerHTML=Grandtotal-discount+"&nbsp₹"
+
+            console.log(Grandtotal-discount)
+            setTimeout(function(){
+                            location.reload();
+                   
+                
+
+                },2000)
+
+
+                        }
+
+                   
+
+                        }
+
+                        xhttp.open("GET", "couponCheck/"+coupon_code);
+                        xhttp.send(); 
+                    
+                
+                    }
+            
+
+
+                  }
+
+                
+
+                    </script>
+
+                    {% endblock %}

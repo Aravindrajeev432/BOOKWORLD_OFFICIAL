@@ -1,0 +1,175 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block script %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10  ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">ORDER RETURN</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+    {% block content %}
+
+<section>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-sm-12 col-12 border mt-3">
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-12 col-sm-12" >
+                            <img class="img-fluid" src="{{order_details.product.image.url}}" >
+                        </div>
+                        <div class="col-md-6 col-12 col-sm-12">
+                            <div class="row">
+                                <div class="col-md-12 col-12 col-sm-12 d-flex justify-content-center mt-3">
+                                
+                               Product Name : {{order_details.product.book_name}}
+                                </div>
+
+                                <div class="col-md-12 col-12 col-sm-12 d-flex justify-content-center mt-3">
+                                   Price : {{order_details.product.price}}
+                                </div>
+                                <div class="col-md-12 col-12 col-sm-12 d-flex justify-content-center">
+                                    Deliverd Date : {{ order_details.updated_at }}
+                                </div>
+                                <div class="col-md-12 col-12 col-sm-12 d-flex justify-content-center">
+                                    <div class="row w-100 mt-3">  
+                                       
+                                            {% if   is_in_return %}
+                                            <div class="col-md-12 col-12 col-sm-12">
+                                               Your Return Request Status is:
+
+                                            </div>
+                                            <div class="col-md-12 col-12 col-sm-12 d-flex justify-content-center mt-3">
+                                               
+                                               <b> {{return_details.returnstatus}}</b>
+                                             </div>
+                                             <div class="col-md-12 col-12 col-sm-12 d-flex justify-content-center mt-3">
+                                               
+                                                Reson:
+                                              </div>
+                                              <div class="col-md-12 col-12 col-sm-12 d-flex justify-content-center mt-3">
+                                               
+                                                <b> {{return_details.reson}}</b>
+                                              </div>
+
+
+                                        
+                                     
+                                        {% else %}
+                                        <div class="col-md-12 col-12 col-sm-12">
+                                        Why Returning this :
+                                    </div>
+                                   {% csrf_token %}
+                                    <div class="col-md-12 col-12 col-sm-12">
+                                    <select class="form-select" id="return_select_id">
+                                        <option value="1">Damaged Product</option>
+                                        <option value="2">Didn't meet my expectations</option>
+                                        <option value="3">Changed my Mind</option>
+                                    </select>
+                                 </div>
+
+                                    <div class="col-md-12 col-12 col-sm-12">
+
+                                    <div class="form-group">
+                                        <label for="comment">Say something:</label>
+                                        <textarea class="form-control" rows="5" id="comments_id"></textarea>
+                                        <sub><sup>*</sup>Min 6 letters needed</sub>
+                                      </div>
+
+                                    </div>
+                                      <div class="col-md-12 col-12 col-sm-12">
+
+                                        <input type="button" id="retsub" value="Request for Return" class="form-control bg-secondary text-warning" >
+
+                                    </div>
+                                        
+
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+              
+                        </div>
+<br>
+<br>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            </div>
+            <div class="row">
+            </div>
+        </div>
+    </div>
+</div>
+
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+
+   
+    $(document).on('click','#retsub',function(e){
+        e.preventDefault();
+        var returnreson= $('#return_select_id').val()
+        var comments = $('#comments_id').val()
+        console.log(comments)
+           //Code 
+           $.ajax({
+            type:'POST',
+            dataType: 'json',
+           url: '',
+           data: {
+            'reson':returnreson,
+            'comments':comments,
+             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+           },
+           
+           success: (response) => {
+             if (response) {
+                swal("Return Requested successfully", {
+           icon: "success",
+           button:false,
+           timer: 2000,
+         })
+            //    location.reload();
+             setTimeout(function(){
+                location.reload();
+       
+    
+
+    },2000)
+             }
+             console.log(response)
+           },
+         }); 
+
+
+
+        });
+
+    
+</script>
+
+    {% endblock %}

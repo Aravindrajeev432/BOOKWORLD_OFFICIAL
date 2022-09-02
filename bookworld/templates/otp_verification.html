@@ -1,0 +1,103 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid box1">
+        <div class="row">
+            <div class="col-md-12 logbigbox">
+                <div class="col-md-5  logbox">
+                    <div class="col-md-11 sublogbox d-flex align-items-center">
+                        <div class="row d-flex justify-content-center">
+
+                            <div class="row d-flex justify-content-center">
+                                <span class="adminpanelsubhead">OTP Verfication</span>
+                            </div>
+                            
+                            <div class="row d-flex justify-content-center mt-3">
+                                <span class="adminhead fs-6 text-center">an OTP has been send to your number
+                                    <br>{{Phone_number}}
+                                </span>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="otpboxcheck" id="otpverificationboxcheck"  >
+                                <form class="d-flex" action="{% url 'otp_verification_check' Phone_number %}" method='POST'>
+                                    {% csrf_token %}
+                                    <input type="number" name="otp" class="form-control rounded-0"  >
+                                                    <button class="btn btn-outline-sucsess bg-secondary text-warning rounded-0" type="submit" id="button-addon2">Verify</button>
+                                            
+                            
+                                </form>
+                            </div>
+                        </div>
+                                      
+                                        
+
+                                       
+
+                                      
+                                   
+                                        
+                                
+                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script>
+                        $(document).on('submit', '#logform', function (e) {
+                            e.preventDefault();
+                            var email = $('#email_id').val()
+                            var pass = $('#password_id').val()
+                            console.log(email, pass)
+
+                            $.ajax({
+                                type: 'POST',
+                                url: '',
+                                dataType: 'json',
+                                data: {
+                                    'email': email,
+                                    'pass': pass,
+                                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                                },
+                                success: function (responce) {
+                                    console.log(responce)
+                                    document.getElementById("warning").style.display = "none";
+                                    if (responce.success == true) {
+                                        window.location.replace('/home')
+                                    } 
+                                    
+                                    else {
+                                        document.getElementById("warning").style.display = "block";
+                                    }
+                                }
+                            })
+
+                        })
+
+                        function showOtpbox(){
+                            // document.getElementsByClassName("otpbox").style.opacity = "1";
+                            // document.getElementById("otpbox").style.opacity= "1";
+                            document.getElementById("login_submit").disabled = true;
+                        
+                        O=.1
+                        function myLoop(){
+                setTimeout(function(){
+                    document.getElementById("otpbox").style.opacity = O;
+                    O = O+.1;
+                if(O<10.1){ myLoop(); }
+
+                },20)
+
+            }
+            myLoop();
+
+        }
+
+
+
+                    </script>
+
+
+                {% endblock %}

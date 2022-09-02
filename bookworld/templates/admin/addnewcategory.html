@@ -1,0 +1,76 @@
+{% extends 'admin/adminindex.html' %}
+
+{% block status %}
+
+
+    <div class="col-md-9 col-sm-12">
+      
+      <div class="row">
+        <div class="col-md-12">
+          <span class="adminheadstatus fs-1 text-secondary">Category Management</span>
+        </div>
+      </div>
+        {% for msg in messages %}
+
+            <div style="color:red;">{{ msg }}</div>
+
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-8">
+                <div
+                    class="row">
+                    <!-- <form action=" " method="POST" class="col-lg-6 uniForm" style="padding:2rem;margin:auto; ">
+                                {% csrf_token %}
+                                <label for="category_name">
+                                    <span class="adminheadstatus">Add new Category</span>
+                                </label>
+                                <input type="text" id="category_name" class="form-control" name="category_name" onclick="categoryValidator()" placeholder="New category " required>
+                                    <button class='btn btn-secondary' type="submit">Add</button>
+                    
+                                </div>
+                            </form> -->
+
+                    <form action=" " method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="text" name="category_name" class="form-control" placeholder="Add new Category" aria-label="search" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-sucsess bg-secondary text-warning rounded-0" type="submit" id="button-addon2">Add</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">No:</th>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Actions</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for ct in category %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ct.category_name}}</td>
+                    <td>
+                      <a href="delete_cat/{{ct.id}}">
+                      <button class="btn btn-danger rounded-0">Delete</button>
+                    </a>
+                    </td>
+                    
+                  </tr>
+               {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>{% endblock %}

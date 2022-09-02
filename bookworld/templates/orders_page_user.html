@@ -1,0 +1,189 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block script %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12  ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">ORDER DETAILS</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+    {% block content %}
+
+<section>
+<div class="container-fluid">
+    <div class="row w-100 d-flex justify-content-center">
+        <div class="col-md-10 col-sm-12 col-12 d-flex  flex-column">
+        <div class="row mb-3 border mt-5">
+            <div class="col-12 col-sm col-md-12">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 d-flex justify-content-center align-items-center">
+                        <span class="text-muted">Billing Address</span>
+                    </div>
+                    <div class="col-md-8 col-sm-6 d-flex border justify-content-center align-items-center">
+                        <span class="lh-lg fs-4 text">
+                            {{ order_details.first_name|title }}
+                            &nbsp;
+                            {{ order_details.last_name|title }},
+                            <br>
+                                {{ order_details.address_line_1|title }}
+                                &nbsp;
+                                {{ order_details.address_line_2|title }},
+
+                                <br>
+                                    {{ order_details.city|title }}&nbsp;-
+                                                            &nbsp;
+                                    {{ order_details.zipcode }},
+                                    <br>
+                                        {{ order_details.country|title }}
+                                        &nbsp;
+                                        {{ order_details.state|title }}
+
+                                    </span>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 border">
+                        <div class="col-12 col-sm col-md-12">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 d-flex justify-content-center align-items-center">
+
+                                    <span class="text-muted">
+                                        Order - Details
+                                    </span>
+
+                                </div>
+                                <div class="col-md-8 col-sm-6 d-flex  align-items-center">
+   
+                                    <div class="row w-100 ">
+                                        <div class="col-4 col-md-4 col-sm-4 text-center border-left">
+                                            <span>Created Date</span>
+                                            <br>
+                                            <br>
+                                            <span>Order Number</span>
+                                            <br>
+                                            <br>
+                                            <span>Payment Method</span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                Total Amount Paid
+                                            </span>
+
+                                        </div>
+                                        <div class="col-8 col-sm-8 sol-md-8 text-center ">
+                                           <span>{{order_details.created_at}}</span>
+                                           <br>
+                                           <br>
+                                            <span>
+                                                {{order_details.order_number}}
+                                            </span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                {{order_details.payment.payment_method}}
+                                            </span>
+                                            <br>
+                                            <br>
+                                            <span>
+                                                {{order_details.order_total}}
+                                                
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm col-md-12">
+                            <div class="row">
+                                 
+                                 <div class="col-md-12 col-sm-12 col-12">
+
+                                    <table class="table table-bordered table-hover" >
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">No</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Quantity</th>
+                                           <th scope="col">Discount</th>
+                                           <th scope="col">Total</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody class=" table-group-divider">
+                                            {% for ordered_product in order_product_details %}
+
+                                          <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{ ordered_product.product.book_name }}</td>
+                                            <td>{{ ordered_product.product_price }}</td>
+                                            <td>{{ ordered_product.quantity }}</td>
+                                           <td>{{ ordered_product.discount}}%</td>
+                                           <td>{{ ordered_product.total_after_discount }}</td>
+                                          </tr>
+                                      {% endfor %}
+                                    
+                                        </tbody>
+                                      </table>
+                                 </div>
+
+
+                                </div>
+                                </div>
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm col-md-12">
+                            <div class="row">
+                                <a href="{% url 'invoice_admin'  order_details.order_number %} " class="text-decoration-none">
+                                <span class="text-warning">
+                                    Download Pdf
+                                </span>
+                            </a>
+                                </div>
+                                </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+    </div>
+</div>
+
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+    {% endblock %}

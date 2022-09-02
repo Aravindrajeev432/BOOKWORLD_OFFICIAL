@@ -1,0 +1,65 @@
+{% extends 'admin/adminindex.html' %}
+
+
+{% block status %}
+    <div class="col-md-9 col-sm-12 col-sm-12">
+        <div class="row">
+            <div class="col-md-12">
+              <span class="adminheadstatus fs-1 text-secondary">Edit Book</span>
+              {% for msg in messages %}
+              <span class="adminheadstatus fs-4 text-center">{{msg}}</span>
+                {% endfor %}
+            </div>
+        
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6  border border-secondary p-4">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-8    ">
+                <form method="POST" action=" " enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <span class="authorhead">Book Name</span>
+                    <input type="text" name="book_name" value="{{book_details.book_name}}" class="form-control mt-3" placeholder="First Name">
+                    <span class="authorhead">Author's  Name</span>
+                    <input type="text" name="author_name" value="{{book_details.author}}" class="form-control" placeholder="Second Name">
+                    <span class="authorhead">Description</span><br>
+                   <textarea name="description" value="{{book_details.description}}" placeholder="Description" class="form-controls w-100" rows="6" >{{book_details.description}}</textarea>
+                   <br>
+                    <span class="authorhead">Price</span>
+                    <input type ="number" name="price" value="{{book_details.price}}" class="form-control" placeholder="Price">
+                    <span class="authorhead">Cover image</span><sub class="text-secondary">(If you don't want update cover image then leave this filed empty)</sub>
+                    <input type="file" class="form-control" placeholder=" Cover Image" name="image" value="{{book_details.image}}">
+                    <span class="authorhead">Category</span>
+                    
+                        <select class="form-select" name="category" >
+                          {% for cat in category %}
+                          {% if book_details.category_id == cat.id %}
+                          <option value="{{cat.id}}" selected>{{cat.category_name}}</option>
+                          {% else %}
+                          <option value="{{cat.id}}">{{cat.category_name}}</option>
+                          {% endif %}
+                         
+                          {% endfor %}
+                      
+                          
+                        </select>
+                      
+                      
+                    <span class="authorhead">Update Stock</span>
+                   <input type="number" name="stock" class="form-control" value="{{book_details.book_count}}">
+                </div>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-4 d-flex justify-content-center">
+                    <input type="submit" value="submit" class="btn btn-outline-sucsess bg-secondary text-warning mt-3">
+                    </div>
+                    </div>
+                </form>
+
+
+
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

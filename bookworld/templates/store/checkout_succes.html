@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block meta %}
+<script>
+    setTimeout(function(){
+       window.location.href = " {% url 'home' %}";
+    }, 5000);
+ </script>
+{% endblock %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10  ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">CHECKOUT</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+   
+    {% block content %}
+    <div class="container  mt-5">
+        
+        <div class="container  mt-5">
+            <div class=" row d-flex justify-content-center ">
+                <div class="col-12 text-center">
+                    <span class="adminhead">Hurray Order Placed
+                        <i class="fa-solid fa-face-smile"></i>
+                        <br>
+                        <sub>Your Order  Status is : Processing</sub>
+                    </span>
+                    
+                </div>
+                <div class="col-12 "><sub>You Will be redirected to home page in 3 seconds</sub></div>
+
+            </div>
+            {% endblock %}
