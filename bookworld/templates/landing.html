@@ -107,9 +107,18 @@
 
                                                 <div class="col-8">
                                                     <div class="row h-25 align-content-center">
-                                                        <div class="col-8">
+                                                        <div class="col-7">
                                                             <span class="authorhead lh-sm fs-6">
                                                                 {{ product.author }}</span>
+                                                        </div>
+                                                        <div class="col-1 m-0 p-0 text-muted">
+                                                        
+                                                            {% if product.id in wishlist %}
+                                                            <i onclick="mytoggle(this)" class="fa-solid fa-heart" id="{{product.id}}" style="color:red;"></i>
+                                                            {% else %}
+                                                            <i onclick="mytoggle(this)" class="fa-solid fa-heart" id="{{product.id}}"></i>
+                                                            {% endif %}
+                                                        
                                                         </div>
                                                         <div class="col-4">
                       
@@ -307,6 +316,41 @@
 
                         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                         <script>
+
+
+                        function mytoggle(x) {
+                            
+                            wcolor=x.style.color
+                            if(wcolor=="red"){
+                                x.style.color="#6c757d";
+                                console.log(x.id)
+                                xhttp.onload = function () {
+                                    {% comment %} document.getElementById("buttontext"+pid).innerHTML = "Already in Cart";
+                                    var re = this.responseText {% endcomment %}
+                                    
+                                }
+                                xhttp.open("GET", "removewishlist/" + x.id);
+                                xhttp.send();
+
+                            }
+                            else{
+                                x.style.color="red";
+                                console.log(x.id);
+
+                                xhttp.onload = function () {
+                                    {% comment %} document.getElementById("buttontext"+pid).innerHTML = "Already in Cart";
+                                    var re = this.responseText {% endcomment %}
+                                    
+                                }
+                                xhttp.open("GET", "addwishlist/" + x.id);
+                                xhttp.send();
+
+                            }
+
+                            console.log("likedown")
+                          }
+
+
                             function addtoCart(pid){
                                 // pid -product id
 

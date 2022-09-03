@@ -1,9 +1,11 @@
 from binascii import rledecode_hqx
 import email
 from itertools import product
+from multiprocessing import context
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from accounts.models import Account,Address
+from store.models import WishlistItem
 from carts.models import CartItem
 from orders.models import OrderProduct,Order
 from store.models import Product,Product_Offer,Category_Offer
@@ -49,16 +51,26 @@ def index(request):
     categoryoffers=Category_Offer.objects.filter(active=True)
     for catoffers in categoryoffers:
         category_offer_details.update({catoffers.category_id:catoffers.discount})
-    
+    wish=WishlistItem.objects.filter(user=uid)
+    wishlist=[]
+    for w in wish:
+        wishlist.append(w.product.id)
     pro = Product.objects.filter(is_active=True).all()
     paginator = Paginator(pro,6)
     page = request.GET.get('page')
     paged_products =paginator.get_page(page)
     
+    context={
+        'category':cat,
+        'pro':paged_products,
+        'user_cart_product_ids':user_cart_product_ids,
+        'product_offer_details':product_offer_details,
+        'category_offer_details':category_offer_details,
+        'wishlist':wishlist,
+    }
     
     
-    return render(request, 'landing.html',{'category':cat,'pro':paged_products,'user_cart_product_ids':user_cart_product_ids,'product_offer_details':product_offer_details,'category_offer_details':category_offer_details})
-
+    return render(request, 'landing.html',context)
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -211,3 +223,23 @@ def editprofile(request,id):
     
 
 
+def wishlist(request):
+    return render(request,'wishlist.html')
+
+def addwishlist(request,pid):
+    print(pid)
+    uid=request.session['uid']
+    user=Account.objects.get(id=uid)
+    product=Product.objects.get(id=pid)
+    wish=WishlistItem(user=user,product=product)
+    wish.save()
+    
+    return HttpResponse(pid)
+def removewishlist(request,pid):
+    print(pid)
+    uid=request.session['uid']
+    user=Account.objects.get(id=uid)
+    product=Product.objects.get(id=pid)
+    wish=WishlistItem.objects.get(user=user,product=product)
+    wish.delete()
+    return HttpResponse(pid)

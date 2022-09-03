@@ -34,6 +34,9 @@ urlpatterns = [
     path('editprofile/<int:id>',views.editprofile,name='editprofile'),
     path('add_address/<int:id>',views.add_address,name='add_address'),
     path('sales_report/',include('salesreport.urls')),
+    path('wishlist',views.wishlist,name="wishlist"),
+    path('addwishlist/<int:pid>',views.addwishlist,name="addwishlist"),
+    path('removewishlist/<int:pid>',views.removewishlist,name="removewishlist")
     
 
 ]+static(settings.MEDIA_URL,document_root=MEDIA_ROOT)

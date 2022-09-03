@@ -1,5 +1,6 @@
 from django.db import models
 from django.forms import IntegerField
+from accounts.models import Account
 from category . models import Category
 from django.urls import reverse
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -48,4 +49,10 @@ class Coupon(models.Model):
         return self.coupon_code
 
 
-        
+class WishlistItem(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return self.product.book_name
