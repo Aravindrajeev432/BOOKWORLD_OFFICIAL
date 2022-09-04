@@ -1,0 +1,276 @@
+{% extends 'index.html' %}
+{% load mathfilters %}
+{% load static %}
+{% block banner %}
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center">
+            <div class=" ">
+                <div class="row">
+                    <div class="col-md-12  col-12">
+                        <div class="row">
+                            <img src="{% static 'cart-header.jpeg' %}" class="img-fluid ratio ratio-21x9">
+                                <div class=" col position-absolute h-100  d-flex justify-content-center align-items-center ">
+                                    <span class="text-light fs-3 robotothin ls-4">WISHLIST &nbsp;<i class="fa-solid fa-heart"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+    {% block content %}
+
+        <div class="container  mt-5">
+            {% if not wishlistitems %}
+                <div class="container  mt-5">
+                    <div class=" row d-flex justify-content-center ">
+                        <div class="col-12 text-center">
+                            <span class="adminhead">WISHLIST
+                                <i class="fa-solid fa-heart"></i>
+                                IS EMPTY
+                                <i class="fa-solid fa-face-frown"></i>
+                            </span>
+
+                        </div>
+
+                    </div>
+                {% else %}
+                    <div class=" row d-flex justify-content-center ">
+
+                        <div class="col-md-12 col-sm-12 col-12">
+
+                            {% for category in category %}
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-12 border-bottom mb-4 mt-2">
+                                        <span class="text-muted fs-3">
+                                            {{ category.category_name }}</span>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-12 ">
+                                        <div class="row">
+                                            {% for wishlist in wishlistitems %}
+                                                {% ifequal category.id wishlist.product.category.id %}
+
+                                                <div class="col-md-4 col-sm-12 col-12 d-flex justify-content-center">
+
+
+                                                    <div class="row">
+                                                   
+                                                       <div class="col-sm-12 onecard">
+
+                                                        <div class="row onecardrow">
+                                                            <div class="col-4 align-content-center">
+                    
+                                                                <div class="row overflow-hidden d-flex
+                                                                                                    justify-content-center align-content-center">
+                    
+                                                                    {% if wishlist.product.book_count == 0 %}
+                                                                        <img class="productimg outofstock" src="{{ wishlist.product.image.url }}" alt="image not found">
+                                                                            <div class="position-absolute col-12 h-100 d-flex
+                                                                                                                justify-content-center align-items-center
+                                                                                                                text-light text-center">Out of Stock</div>
+                                                                        {% else %}
+                                                                            <img class="productimg" src="{{ wishlist.product.image.url }}" alt="image not found">
+                                                                            {% endif %}
+                                                                        </div>
+                    
+                                                                    </div>
+                    
+                                                                    <div class="col-8">
+                                                                        <div class="row h-25 ">
+                                                                            <div class="col-7">
+                                                                                <span class="authorhead lh-sm fs-6">
+                                                                                    {{ wishlist.product.author }}</span>
+                                                                            </div>
+                                                                            <div class="col-1 m-0 p-0 text-muted">
+                                                                            
+                                                                            
+                                                                            </div>
+                                                                            <div class="col-4">
+                                          
+                    
+                                                                                        <span class="text-warning">
+                                                                                            <sub>
+                    
+                                                                                                <a href="{% url 'cate_view' %}{{ wishlist.product.category.category_name }}" class="text-decoration-none
+                                                                                                                                                    text-warning">
+                                 
+                    
+                                                                                                    {{ wishlist.product.category.category_name }}
+                                                                                                </a>
+                    
+                                                                                            </sub>
+                                                                                            <sub class="text-muted">
+                                                                                            {% if wishlist.product.category.id in category_offer_details %}
+                                                                                  
+                                                                                            {% for key,value in category_offer_details.items %}
+                                                                                            {% ifequal key wishlist.product.category.id  %}
+                                                                                            {{value}}*%OFF 
+                                                                                            {% endifequal %}
+                                                                                            {% endfor %}
+                                                                                            
+                                                                                            {% else %}
+                                                                                            <sub>*0%OFF</sub>
+                                                                                            {% endif %}
+                                                                                            <sub>
+                                                                                        </span>
+                                                                                    
+                    
+                    
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row h-25 align-content-center">
+                                                                            <div class="col-12">
+                                                      
+                                                                                        <!-- <a href="product/category/{{ i.category_name }}/{{ product.book_name|slugify }}" class="text-decoration-none"> -->
+                                                                                        <a href="{% url 'cate_view' %}{{ wishlist.product.category.category_name }}/{{ wishlist.product.book_name|slugify }}" class="text-decoration-none">
+                    
+                                                                                 
+                                                                                    <span class="producthead lh-sm fs-5">{{ wishlist.product.book_name }}</span>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row h-25 align-content-center">
+                    
+                                                                            <div class="col-12 d-flex justify-content-center
+                                                                                                                    align-content-center">
+                                                                                <span class="productprice">₹{{wishlist.product.price }}</span>&nbsp<span class="text-secondary">
+                                                                                    <sub>
+                    
+                                                                                        {% if wishlist.product.id in product_offer_details %}
+                                                                                  
+                                                                                        {% for key,value in product_offer_details.items %}
+                                                                                        {% ifequal key wishlist.product.id %}
+                                                                                        {{value}}%*OFF On this product
+                                                                                        {% endifequal %}
+                                                                                        {% endfor %}
+                                                                                     
+                                                                                        {% else %}
+                                                                                        <sub>*No product offer</sub>
+                                                                                        {% endif %}
+                    
+                    
+                    
+                                                                                    </sub>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row col-12 h-25 position-absolute bottom-0
+                                                                                                            start-50 translate-middle-x">
+                                                                            <div class="col-12">
+                                                                                <div class="row d-flex flex-wrap">
+                    
+                                                                                    {% if wishlist.product.book_count <= 0 %}
+                    
+                                                                                        <div
+                                                                                            class="col-12 col-sm-12 col-md-12
+                                                                                                                                        d-flex justify-content-center">
+                                                                                            <!-- <span class="productsvgs">
+                                                                                                                                                                                                                                <i class="fa-solid fa-cart-plus"></i>
+                                                                                                                                                                                                                            </span> -->
+                                                                                            
+                                                                                                <button class="btn pbtn border
+                                                                                                                                                    bg-transparent border-warning
+                                                                                                                                                    disabled rounded-0">Out Of 
+                                                                                                                                                    Stock<span class="">
+                                                                                                        <i class="fa-solid
+                                                                                                                                                                    fa-cart-plus"></i>
+                                                                                                    </span>
+                                                                                                </button>
+                                                                                            
+                                                                                        </div>
+                                                                                    {% else %}
+                                                                                        <div
+                                                                                            class="col-12 col-sm-12 col-md-12 d-flex justify-content-center">
+                    
+                    
+                                                                                            {% if wishlist.product.id in user_cart_product_ids%}
+                                                                                            <a class="text-decoration-none" href="{% url 'cart' %}">
+                                                                                            <button class="btn pbtn border bg-transparent border-warning rounded-0" >
+                                                                                                <span >Already in Cart</span><span class="">
+                                                                                                    <i class="fa-solid fa-cart-plus"></i>
+                                                                                                </span>
+                                                                                            </button>
+                                                                                        </a>
+                                                                                        {% else %}
+                                                                                          {% comment %} <a class="text-decoration-none" href="{% url 'add_cart' wishlist.product.id %}"> {% endcomment %}
+                                                                                            <button class="btn pbtn border bg-transparent border-warning rounded-0" value="{{wishlist.product.id}}" onclick="addtoCart(this.value)">
+                                                                                                <span id="buttontext{{wishlist.product.id}}">Add to Cart</span><span class="">
+                                                                                                    <i class="fa-solid fa-cart-plus"></i>
+                                                                                                </span>
+                                                                                            </button>
+                                                                                        {% comment %} </a> {% endcomment %}
+                                                                                            {% endif %}
+                    
+                    
+                                                                                            
+                                                                                          
+                                                                                        </div>
+                                                                                    {% endif %}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                    </div>
+                                                    </div>
+                                                </div>
+
+
+                                                {% endifequal %}
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+
+
+                                {% endfor %}
+
+                                {% comment %}
+                                    category
+                                {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+  
+function addtoCart(pid){
+                                // pid -product id
+
+                                xhttp.onload = function () {
+                        document.getElementById("buttontext"+pid).innerHTML = "Already in Cart";
+                        var re = this.responseText
+
+                    }
+                   
+                    xhttp.open("GET", "cart/add_cart/" + pid);
+                    xhttp.send();
+
+
+                            }
+                            const xhttp = new XMLHttpRequest();
+                        </script>
+
+
+
+</script>{% endblock %}
