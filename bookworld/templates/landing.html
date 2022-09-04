@@ -134,6 +134,7 @@
                                                                             </a>
 
                                                                         </sub>
+                                                                       
                                                                         <sub class="text-muted">
                                                                         {% if product.category.id in category_offer_details %}
                                                               
@@ -144,7 +145,7 @@
                                                                         {% endfor %}
                                                                         
                                                                         {% else %}
-                                                                        <sub>*No Category offer</sub>
+                                                                        <sub>*No offers</sub>
                                                                         {% endif %}
                                                                         <sub>
                                                                     </span>
@@ -155,15 +156,12 @@
                                                     </div>
                                                     <div class="row h-25 align-content-center">
                                                         <div class="col-12">
-                                                            {% for i in category %}
-                                                                {% if product.category_id == i.id %}
-
+                                                          
 
                                                                     <!-- <a href="product/category/{{ i.category_name }}/{{ product.book_name|slugify }}" class="text-decoration-none"> -->
-                                                                    <a href="{% url 'cate_view' %}{{ i.category_name }}/{{ product.book_name|slugify }}" class="text-decoration-none">
+                                                                    <a href="{% url 'cate_view' %}{{ product.category.category_name }}/{{ product.book_name|slugify }}" class="text-decoration-none">
 
-                                                                    {% endif %}
-                                                                {% endfor %}
+                                                                
                                                                 <span class="producthead lh-sm fs-5">{{ product.book_name }}</span>
                                                             </a>
                                                         </div>
@@ -250,6 +248,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                                
+
+
                                         </div>
                                     </div>
                                 {% endfor %}

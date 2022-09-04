@@ -1,5 +1,8 @@
 {% extends 'admin/adminindex.html' %}
+{% block script %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+{% endblock %}
 
 {% block status %}
 
@@ -8,9 +11,7 @@
         <div class="row">
             <div class="col-md-12">
               <span class="adminheadstatus fs-1 text-secondary">Add new Book</span>
-              {% for msg in messages %}
-              <span clas="adminheadstatus fs-4">{{msg}}</span>
-                {% endfor %}
+              
             </div>
         <div class="row d-flex justify-content-center">
         <div class="col-md-8 col-sm-10 bg-light d-flex justify-content-center">
@@ -95,6 +96,26 @@
             return false
         }
     }
+
+    {% comment %} {% for msg in messages %}
+
+    swal("Successfully added", {
+      icon: "success",
+      timer: 2000,
+      button:false,
+    })
+    console.log("swal104")
+      {% endfor %} {% endcomment %}
+
+{% for msg in messages %}
+Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Your work has been saved',
+  showConfirmButton: false,
+  timer: 1500
+})
+{% endfor %}
 
 </script>
 {% endblock %}

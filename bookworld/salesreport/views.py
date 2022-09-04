@@ -5,7 +5,7 @@ from unicodedata import category
 from django.shortcuts import render,redirect
 from orders.models import Payment
 from orders.models import Order
-from store.models import Product
+from store.models import Product,Coupon
 from orders .models import OrderProduct
 from django.db.models import Sum,Count
 from datetime import datetime
@@ -98,9 +98,22 @@ def salespage(request,*args, **kwargs):
         grandtotalfind=OrderProduct.objects.filter(created_at__date=dates[-1]).all()
         print(grandtotalfind)
         total_without_discount=0
+        print("discount")
+        total_after_coupon_discount=0
+        total_after_coupon=Order.objects.filter(created_at__date=dates[-1]).all()
+        for t_a_c in total_after_coupon:
+                
+                try:
+                    total_after_coupon_discount+=t_a_c.coupon.discount
+                    
+                except:
+                    pass
+        print(total_after_coupon)
         for t in grandtotalfind:
             total_without_discount+=(t.product.price)*(t.quantity)
             print(t.product.price)
+     
+            
     except:
         sales=[]
     # get total money earned in day qty*productprice
@@ -129,6 +142,16 @@ def salespage(request,*args, **kwargs):
             grandtotalfind=OrderProduct.objects.filter(created_at__date=salesdate).all()
             print(grandtotalfind)
             total_without_discount=0
+            total_after_coupon_discount=0
+            total_after_coupon=Order.objects.filter(created_at__date=salesdate).all()
+            for t_a_c in total_after_coupon:
+                
+                try:
+                    total_after_coupon_discount+=t_a_c.coupon.discount
+                    
+                except:
+                    pass
+            print(total_after_coupon)
             for t in grandtotalfind:
                 total_without_discount+=(t.product.price)*(t.quantity)
                 print(t.product.price)
@@ -160,6 +183,7 @@ def salespage(request,*args, **kwargs):
         'salesdate':salesdate,
         'total':total,
         'total_without_discount':total_without_discount,
+        'total_after_coupon_discount':total_after_coupon_discount,
 
     }
     return render(request,'admin/sales_report.html',context)

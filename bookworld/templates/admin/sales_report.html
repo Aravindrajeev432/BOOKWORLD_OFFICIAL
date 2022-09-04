@@ -1,12 +1,12 @@
 {% extends 'admin/adminindex.html' %}
-
+{% load mathfilters %}
 {% block status %}
     <div class="col-md-9 col-sm-12 col-sm-12 border">
         <div class="row mb-3">
             <div class="col-md-12 d-flex justify-content-center border-0
                                                     border-bottom ">
                 <span class="adminheadstatus fs-1 text-secondary">Sales
-                                                        Report</span>
+                                                        Report {{total_after_coupon_discount}}</span>
             </div>
 
         </div>

@@ -224,7 +224,51 @@ def editprofile(request,id):
 
 
 def wishlist(request):
-    return render(request,'wishlist.html')
+    try :
+        uid = request.session['uid']
+        is_user_blocked=Account.objects.get(id=uid)
+        if is_user_blocked.is_blocked == True:
+            return render(request,'userblocked.html')
+    except : pass
+    try:
+        user_cart= CartItem.objects.filter(user=uid).all()
+        print(user_cart)
+        user_cart_product_ids=[]
+        for uc in user_cart:
+            print(uc.product.id)
+            user_cart_product_ids.append(uc.product.id)
+            print("********")
+        print(user_cart_product_ids)
+    except:
+        user_cart_product_ids=[]
+    product_offer_details={}
+    category_offer_details={}
+    productoffers=Product_Offer.objects.filter(active=True)
+    print(productoffers)
+    for poffer in productoffers:
+        print(poffer.id)
+        print(poffer.discount)
+        product_offer_details.update({poffer.product_id:poffer.discount})
+    categoryoffers=Category_Offer.objects.filter(active=True)
+    for catoffers in categoryoffers:
+        category_offer_details.update({catoffers.category_id:catoffers.discount})
+    wish=WishlistItem.objects.filter(user=uid)
+    wishlist=[]
+    for w in wish:
+        wishlist.append(w.product.id)
+    uid=request.session['uid']
+    wish=WishlistItem.objects.filter(user_id=uid)
+
+    category=Category.objects.all()
+    print(product_offer_details)
+    context={
+        'wishlistitems':wish,
+        'category':category,
+        'user_cart_product_ids':user_cart_product_ids,
+        'product_offer_details':product_offer_details,
+        'category_offer_details':category_offer_details,
+    }
+    return render(request,'wishlist.html',context)
 
 def addwishlist(request,pid):
     print(pid)
