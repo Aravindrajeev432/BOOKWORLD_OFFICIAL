@@ -73,7 +73,8 @@
                           <p class="text-muted mb-0 small">Qty: {{order_history.quantity}}</p>
                         </div>
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                          <p class="text-muted mb-0 small">₹&nbsp{% widthratio order_history.product_price 1 order_history.quantity %}</p>
+                          <p class="text-muted mb-0 small">₹&nbsp{{order_history.total_after_discount}}</p>
+                   
                         </div>
                       </div>
                       <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
@@ -206,9 +207,9 @@
                     {% else %}
 
                     <div class="col-6 col-sm-8 col-md-8">
-                      <a href="{% url 'invoice_admin'  order_history.order.order_number  %} ">
+                      <a href="{% url 'invoice_admin'  order_history.order.order_number  %} " class="text-decoration-none" >
                         <span class="text-warning">
-                            Download Pdf
+                            Download Invoice
                      
                         
                         </span>

@@ -75,18 +75,29 @@
                                             <td class="qty">
                                                 <div class="input-group-prepend">
                                                     {% if cart_item.quantity is 1 %}
-                                                    <div  style="display:none;" id="minus_div_id{{ cart_item.product.id }}">
+                                                    {% comment %} <div  style="display:none;" id="minus_div_id{{ cart_item.product.id }}">
                                                         <a href="{% url 'remove_cart' cart_item.product.id %}" class="btn text-danger" type="button" id="button-minus">
                                                             <i class="fa fa-minus"></i>
                                                         </a>
-                                                    </div>
+                                                    </div> {% endcomment %}
 
+                                                    <button class="btn text-warning " id="button-minus{{ cart_item.product.id }}" style="display:none;" value="{{ cart_item.product.id }}" onclick="removeCart(this.value)">
+                                                        <i class="fa fa-minus"></i>
+                                                    </button>
+    
                                                     {% else %}
-                                                    <div  style="display:flex;" id="minus_div_id{{ cart_item.product.id }}">
+                                                    {% comment %} <div  style="display:flex;" id="minus_div_id{{ cart_item.product.id }}">
                                                     <a href="{% url 'remove_cart' cart_item.product.id %}" class="btn text-danger" type="button" id="button-minus">
                                                         <i class="fa fa-minus"></i>
                                                     </a>
-                                                </div>
+                                                </div> {% endcomment %}
+
+                                                <button class="btn text-warning" id="button-minus{{ cart_item.product.id }}" value="{{ cart_item.product.id }}" onclick="removeCart(this.value)">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+
+
+
                                                     {% endif %}
                                                     <input type="text" step="1" min="0" max="3" name="cart"  id="cartqty{{cart_item.product.id}}" value="{{ cart_item.quantity }}" title="Qty" class="form-control qty pe-none" size="4">
                                                        
@@ -253,13 +264,61 @@
                         var coupon_discount
                         console.log("254")
                         console.log(di)
+
+                        function removeCart(pid){
+
+                            xhttp.onload = function () {
+                                res=this.responseText
+                                if(res==1){
+                                    document.getElementById("button-minus"+pid).style.display="none";
+                                }
+                                document.getElementById("cartqty"+pid).value= this.responseText;
+                                p_price= document.getElementById("p_price_id"+pid).value;
+                                p_discount = document.getElementById("cart_discount"+pid).value;
+                                p_price=parseInt(p_price);
+                                sub_total=p_price*this.responseText;
+                                total=sub_total-(p_discount/100)*sub_total
+                                discount=document.getElementById("")
+                                document.getElementById("cart_sub_total"+pid).innerHTML=sub_total;
+                                
+                                document.getElementById("cart_total"+pid).value=total
+                                var re = this.responseText
+                                console.log(re)
+                                setTimeout(grandtotal, 200);
+            
+                                function grandtotal(){
+                                    console.log("grandTotal")
+                                    xhttp.onload = function () {
+                                    var Grandtotal=this.responseText;
+                                    console.log("******")
+                                    console.log(di)
+                                    console.log(Grandtotal)
+                                    
+                                    document.getElementById("carttotalprice_id").innerHTML=Grandtotal-di
+                                    document.getElementById("carttotalprice_id1").innerHTML=Grandtotal
+                                    }
+            
+                                    xhttp.open("GET", "cart_total_finder/{{cart_id}}",);
+                                    xhttp.send(); 
+
+
+
+                            }
+                            
+
+                        }
+                        xhttp.open("GET", "remove_cart_from_cart/" + pid);
+                            xhttp.send();
+                    }
+
+
                         function addtoCart(pid){
                             // pid -product id
                             console.log("257"+di)
                             console.log(pid)
                             xhttp.onload = function () {
                     document.getElementById("cartqty"+pid).value= this.responseText;
-                    document.getElementById("minus_div_id"+pid).style.display="flex";
+                    document.getElementById("button-minus"+pid).style.display="block";
                     p_price= document.getElementById("p_price_id"+pid).value;
                     p_discount = document.getElementById("cart_discount"+pid).value;
                     p_price=parseInt(p_price);

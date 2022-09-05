@@ -34,7 +34,7 @@ SERVICE=config("service_sid")
 #Razorpay
 RAZOR_KEY_ID=config("key_id")
 RAZOR_KEY_SECRET=config("key_secret")
-
+OPENEXCHANGEKEY=config("openexchangekey")
 
 # Application definition
 

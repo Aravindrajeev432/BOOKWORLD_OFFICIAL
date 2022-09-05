@@ -1,0 +1,51 @@
+Metadata-Version: 2.1
+Name: openexchangerate
+Version: 1.5.5
+Summary: OpenExchangeRates API client for Python 3.7+.
+Home-page: https://github.com/juancarlospaco/openexchangerate#openexchangerate
+Author: Juan Carlos
+Author-email: juancarlospaco@gmail.com
+Maintainer: Juan Carlos
+Maintainer-email: juancarlospaco@gmail.com
+License: GPL-3 LGPL-3
+Download-URL: https://github.com/juancarlospaco/openexchangerate#openexchangerate
+Project-URL: Docs, https://github.com/juancarlospaco/openexchangerate/README.md
+Project-URL: Bugs, https://github.com/juancarlospaco/openexchangerate/issues
+Project-URL: C.I., https://travis-ci.org/juancarlospaco/openexchangerate
+Project-URL: Chat, https://t.me/juancarlospaco
+Keywords: minimalism,python3,money,Bitcoin,openexchangerate,currencies
+Platform: Linux
+Platform: Darwin
+Platform: Windows
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Development Status :: 6 - Mature
+Classifier: Environment :: Console
+Classifier: Environment :: No Input/Output (Daemon)
+Classifier: Environment :: Other Environment
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Intended Audience :: Other Audience
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: OS Independent
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides: openexchangerate
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+UNKNOWN
+
+

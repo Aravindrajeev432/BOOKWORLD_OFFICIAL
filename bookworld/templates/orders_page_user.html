@@ -152,7 +152,29 @@
                                            <td>{{ ordered_product.total_after_discount }}</td>
                                           </tr>
                                       {% endfor %}
-                                    
+                                      <tr>
+                                        <td colspan="4"></td>
+                                        <td>Sub Total</td>
+                                        <td>{{order_details.order_total}}
+                                        </td>
+                                      </tr>
+                                          <tr>
+                                            <td colspan="4"></td>
+                                            <td>Coupon Discount</td>
+<td>
+    {% if order_details.coupon == None%}
+    -0
+    {% else %}
+    -{{order_details.coupon.discount}}
+    {% endif %}
+</td>
+
+                                          </tr>
+                                          <tr>
+                                            <td colspan="4"></td>
+                                            <td>Grand Total</td>
+                                            <td>{{order_details.payment.amount_paid}}</td>
+                                          </tr>
                                         </tbody>
                                       </table>
                                  </div>

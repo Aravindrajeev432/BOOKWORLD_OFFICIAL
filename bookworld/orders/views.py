@@ -24,7 +24,8 @@ from django.conf import settings
 from django.http import HttpResponseBadRequest
 from datetime import date,timedelta
 from django.db.models import Q,F
-
+import requests
+from openexchangerate import OpenExchangeRates
 # Create your views here.
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)   
@@ -114,6 +115,16 @@ def place_order(request,total = 0 ,quantity= 0, cart_items = None):
                 data.save()
                 order = Order.objects.get(user_id=uid,is_ordered=False,order_number=order_number)
                 
+               
+                client = OpenExchangeRates(api_key=settings.OPENEXCHANGEKEY)
+                openx = list(client.latest())
+                openx = openx[0]
+                openxrupee = openx['INR']
+                grand_dollar = round(total_after_coupon / openxrupee,2)
+                    
+                    
+                
+                
                 # is_orderd is is_ordered because of its in model by mistake
                 context = {
                     'order' : order,
@@ -124,7 +135,8 @@ def place_order(request,total = 0 ,quantity= 0, cart_items = None):
                     'order_number':order_number,
                     'payment_method':payment_method,
                     
-                    'total_after_coupon':total_after_coupon
+                    'total_after_coupon':total_after_coupon,
+                    'grand_dollar':grand_dollar,
                 }
                 
                 
@@ -341,6 +353,7 @@ def payment(request,order_number,order_id,total):
     }
     return render(request,'store/checkout_succes.html',context)
 
+#PAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPAL
 def payment_paypal(request):
     uid = request.session['uid']
     body = json.loads(request.body)
@@ -701,6 +714,8 @@ def order_history(request):
             else:
                 returndate.update({o.id:True})
             print(returndate)
+            
+   
         context={'order_history':order_history,
                  'current_date' : current_date,
                  'returndate' : returndate
@@ -776,7 +791,7 @@ def return_order(request,oid):
         return redirect(order_history)
     
 def orders_page(request,order_number):
-    order_details=Order.objects.get(order_number=order_number)
+    order_details=Order.objects.get(order_number=order_number,is_ordered=True)
     print(order_details.id)
     order_id = order_details.id
     order_product_details=OrderProduct.objects.filter(order_id=order_id)

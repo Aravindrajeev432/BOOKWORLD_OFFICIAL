@@ -274,6 +274,27 @@ def remove_cart(request,product_id):
         cart_item.delete()
     return redirect('cart')
 
+def remove_cart_from_cart(request,product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if 'uid' in request.session:
+         uid=request.session['uid']
+         cart_item = CartItem.objects.get(product=product,user_id=uid)
+    else :
+        
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+        cart_item = CartItem.objects.get(product=product,cart=cart)
+    if cart_item.quantity >1:
+        cart_item.quantity -= 1
+        qty=cart_item.quantity
+        cart_item.total_after_discount=(qty * product.price) - ((cart_item.discount/100)*(qty * product.price))
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return HttpResponse(qty)   
+    
+
+
+
 def delete_cart(request,product_id):
     if 'uid' in request.session:
         uid= request.session['uid']
