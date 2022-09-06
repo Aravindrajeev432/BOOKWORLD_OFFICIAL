@@ -2,12 +2,14 @@ from binascii import rledecode_hqx
 import email
 from itertools import product
 from multiprocessing import context
+import re
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from accounts.models import Account,Address
+
 from store.models import WishlistItem
 from carts.models import CartItem
-from orders.models import OrderProduct,Order
+from orders.models import OrderProduct,Order,banner
 from store.models import Product,Product_Offer,Category_Offer
 from category.models import Category
 from django.views.decorators.cache import cache_control
@@ -51,7 +53,10 @@ def index(request):
     categoryoffers=Category_Offer.objects.filter(active=True)
     for catoffers in categoryoffers:
         category_offer_details.update({catoffers.category_id:catoffers.discount})
-    wish=WishlistItem.objects.filter(user=uid)
+    try:
+        wish=WishlistItem.objects.filter(user=uid)
+    except:
+        wish=[]
     wishlist=[]
     for w in wish:
         wishlist.append(w.product.id)
@@ -59,7 +64,12 @@ def index(request):
     paginator = Paginator(pro,6)
     page = request.GET.get('page')
     paged_products =paginator.get_page(page)
+    #banner Section
     
+    try:
+        bannerimg=banner.objects.get(is_selected=True)
+    except:
+        bannerimg=""
     context={
         'category':cat,
         'pro':paged_products,
@@ -67,6 +77,8 @@ def index(request):
         'product_offer_details':product_offer_details,
         'category_offer_details':category_offer_details,
         'wishlist':wishlist,
+        'bannerimg':bannerimg,
+        
     }
     
     
@@ -88,7 +100,10 @@ def homepage(request):
         return redirect('/')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def profile(request,id):
-    uid= request.session['uid']
+    try:
+        uid= request.session['uid']
+    except:
+        return redirect('login')
     if uid != id:
         return redirect('profile',uid)
     user_details = Account.objects.get(id=id)
@@ -229,7 +244,8 @@ def wishlist(request):
         is_user_blocked=Account.objects.get(id=uid)
         if is_user_blocked.is_blocked == True:
             return render(request,'userblocked.html')
-    except : pass
+    except : 
+        return redirect('login')
     try:
         user_cart= CartItem.objects.filter(user=uid).all()
         print(user_cart)

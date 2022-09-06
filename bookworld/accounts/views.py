@@ -17,7 +17,7 @@ from django.contrib.auth import authenticate
 def user_login(request):
 
     if 'email' in request.session:
-        return redirect('/homepage')
+        return redirect('/')
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['pass']

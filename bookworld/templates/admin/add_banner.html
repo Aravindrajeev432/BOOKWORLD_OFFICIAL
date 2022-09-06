@@ -1,0 +1,160 @@
+{% extends 'admin/adminindex.html' %}
+{% load mathfilters %}
+{% block script %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+{% block status %}
+    <div class="col-md-9 col-sm-12 col-sm-12 border">
+        <div class="row mb-3">
+            <div class="col-md-12 d-flex justify-content-center border-0
+                                                                                        border-bottom ">
+                <span class="adminheadstatus fs-1 text-secondary">Banner Manamgement
+                    {{ total_after_coupon_discount }}</span>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12 col-sm-12 col-12 ">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center align-items-center border">
+
+                        <form action="{% url 'add_banner' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form }}
+                                <button class='btn bg-secondary text-warning mt-3' type="submit">Add New Banner</button>
+
+
+                            </form>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12 col-sm-12 col-12 ">
+                    <div class="row">
+                        <div class="col-12 d-flex flex-column  justify-content-center align-items-center border">
+                            {% for img in bannr %}
+                                <div class="row mt-3 mb-1 border ">
+                                    <div class=" col-md-12 col-12 col-sm-12 ">
+
+                                        <img src="{{ img.banner_image.url }}" height="300px">
+                                        <div class="border" style="width:100%;height:80px;">
+                                            <table class="border-0">
+                                                <tbody>
+                                                    <tr><td class="border-0">Make This Active</td>
+
+                                                       
+                                                        {% if img.is_selected  %}
+                                                        <td class="border-0"><input type="radio" name="imgselect" value="{{img.id}}" onchange="radioFunc(this)" checked></td>
+                                                        {% else %}
+                                                        <td class="border-0"><input type="radio" name="imgselect" value="{{img.id}}" onchange="radioFunc(this)"></td>
+                                                        {% endif %}
+                                                      <td class="border-0">Delete This image</td>
+                                                            <td class="border-0"><button class="btn" value="{{img.id}}" onclick="bannerDel(this.value)">x</button></td>
+                                                    </tr>
+                                                
+                                                    
+                                        
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    </div>
+                         
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <script defer src="https://cdn.crop.guide/loader/l.js?c=ZZVCFL"></script>
+    <script>
+
+const xhttp = new XMLHttpRequest();
+        function radioFunc(src){
+            
+            bid=src.value
+            xhttp.onload = function () {
+                Swal.fire({
+  position: 'center',
+  icon: 'success',
+  title: 'Banner Selected Succesfully',
+  showConfirmButton: false,
+  timer: 1500
+})
+            }
+
+            xhttp.open("GET", "banner_select/" + bid);
+                xhttp.send();
+
+        }
+
+
+        function bannerDel(bid){
+
+            Swal.fire({
+                title: 'Are you sure want to delete ?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+
+                    xhttp.onload = function () {
+
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Your work has been saved',
+                            showConfirmButton: false,
+                            timer: 1500
+                          })
+                          setTimeout(function(){
+                            window.location.reload();
+                         }, 1500);
+
+                    }
+
+
+
+
+                    xhttp.open("GET", "remove_banner/" + bid);
+                    xhttp.send();
+
+                 
+                }
+              })
+
+
+        }
+
+        {% for msg in messages %}
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'New Banner Image Added',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        {% endfor %}
+
+    </script>
+
+{% endblock %}

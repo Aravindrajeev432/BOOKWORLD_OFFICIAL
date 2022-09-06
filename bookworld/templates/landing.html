@@ -8,8 +8,12 @@
 
 
     <div class="container-fluid banner">
-        <div class="row">
-        <img src="{% static 'Blog-Banner-Image-1000x300-Arapahoe-Libraries-3.png' %}" class="img-fluid img_banner" alt="...">
+        <div class="row row d-flex justify-content-center align-items-center">
+        <img src="{{ bannerimg.banner_image.url }}" class="img-fluid img_banner" alt="...">
+
+        <div class=" col-12 col-sm-12 col-md-12 text-white position-absolute d-flex justify-content-center align-items-center robotothin fs-1 ">
+           <div ><span> 20% OFF On Sci-Fi Category</span></div>
+        </div>
     </div>
         </div>
 
@@ -112,13 +116,14 @@
                                                                 {{ product.author }}</span>
                                                         </div>
                                                         <div class="col-1 m-0 p-0 text-muted">
-                                                        
+                                                        {% if request.session.uid %}
                                                             {% if product.id in wishlist %}
                                                             <i onclick="mytoggle(this)" class="fa-solid fa-heart" id="{{product.id}}" style="color:red;"></i>
                                                             {% else %}
                                                             <i onclick="mytoggle(this)" class="fa-solid fa-heart" id="{{product.id}}"></i>
                                                             {% endif %}
-                                                        
+                                                            {% else %}
+                                                            {%endif %}
                                                         </div>
                                                         <div class="col-4">
                       

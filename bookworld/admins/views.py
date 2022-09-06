@@ -8,13 +8,14 @@ from turtle import update
 from unicodedata import category
 from django.forms import PasswordInput
 from django.http import HttpResponse,JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.shortcuts import render,redirect
 from django.views.decorators.cache import cache_control
-from accounts.models import Account
 
+from accounts.models import Account
 from orders.models import Payment
-from orders.models import Order,OrderProduct,Return_Products
+from orders.models import Order,OrderProduct,Return_Products,banner
 from store.models import Product,Product_Offer,Category_Offer,Coupon
 from category.models import Category
 from store.forms import ProductForm
@@ -31,6 +32,9 @@ from xhtml2pdf import pisa
 import csv
 import xlwt
 import datetime
+
+from .forms import BannerForm
+
 # Create your views here.
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def adminlogin(request):
@@ -46,7 +50,7 @@ def adminlogin(request):
         if user.is_admin == True:
                 print("l succes")
                 request.session['admin'] = True
-                
+                auth.login(request,user)
                 return JsonResponse(
                     {
                         'success':True},
@@ -56,7 +60,7 @@ def adminlogin(request):
                             )
         else:
                 return JsonResponse(
-                {'success':True
+                {'success':False
                 },
                 safe=False
             )           
@@ -73,6 +77,10 @@ def logout(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def dashboard(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     usercount= Account.objects.filter(~Q(is_admin=True)).count()
@@ -165,9 +173,13 @@ def dashboard(request):
              }
     return render(request, 'admin/dashboard.html',context)
 
-
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def products(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('login')
     book_selled_count = OrderProduct.objects.filter(status='Deliverd').count()
@@ -186,10 +198,13 @@ def products(request):
     cat = Category.objects.all()
     return render(request,'admin/productmanagement.html',{'product':product,'cat':cat,'p_count':p_count,'outofstock':outofstock,'pro':pro,'book_selled_count':book_selled_count,'new_orders':new_orders})
 
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def edit_book(request, id):
-    if 'admin' not in request.session:
-        return redirect('adminlogin')
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if request.method == 'POST':
         bookedit = Product.objects.get(id=id)
         bookedit.book_name = request.POST.get('book_name')
@@ -210,9 +225,13 @@ def edit_book(request, id):
 
 
 
-
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def unblock_book(request, id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     bookun = Product.objects.get(id=id)
@@ -220,8 +239,13 @@ def unblock_book(request, id):
     bookun.is_active=True
     bookun.save()
     return redirect(products)
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def block_book(request, id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     bookbl = Product.objects.get(id=id)
@@ -230,17 +254,26 @@ def block_book(request, id):
     bookbl.is_active=False
     bookbl.save()
     return redirect(products)
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def delete_book(request, id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     bookdel= Product.objects.get(id=id)
     bookdel.delete()
     return redirect(products)
 
-
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def addnewbook(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     form = ProductForm()
@@ -259,9 +292,13 @@ def addnewbook(request):
     cat = Category.objects.only('category_name')
     return render(request,'admin/addnewbook.html',{'cat':cat,'form':form})
 
-
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def addnewbooktest(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     form = ProductForm()
@@ -290,8 +327,14 @@ def deletebook(request):
     pass
 def editbook(request):
     pass
+
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def category_management(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     category = Category.objects.all()
@@ -306,8 +349,14 @@ def category_management(request):
             messages.error(request,'This category already exists')
     
     return render(request,'admin/addnewcategory.html',{'category':category})
+
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def delete_cat(request,id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     pass
@@ -315,8 +364,13 @@ def delete_cat(request,id):
     del_cat.delete()
     return redirect(category_management)
 
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def users(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     
@@ -349,8 +403,15 @@ def users(request):
         return render(request,'admin/usersview.html',{'account':accounts,'usercount':usercount,'blocked_users_count':blocked_users_count,'active_users_count':active_users_count,'no_books_buyed':no_books_buyed,'total_money_spent':total_money_spent})
     
     return render(request,'admin/usersview.html',{'account':accounts,'usercount':usercount,'blocked_users_count':blocked_users_count,'active_users_count':active_users_count,'no_books_buyed':no_books_buyed,'total_money_spent':total_money_spent})
+
+
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def edit_user(request, id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     if request.method == 'POST':
@@ -366,8 +427,14 @@ def edit_user(request, id):
 
     user = Account.objects.get(id=id)   
     return render(request,'admin/edituser.html',{'user':user})
+
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def block_user(request, id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     print("***************")
@@ -384,16 +451,28 @@ def block_user(request, id):
                             
                             )
     return redirect(users)
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def unblock_user(request, id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     ub_user = Account.objects.get(id=id)
     ub_user.is_blocked=False
     ub_user.save()
     return redirect(users)
+
+
+@login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def delete_user(request, id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if 'admin' not in request.session:
         return redirect('adminlogin')
     del_user = Account.objects.get(id=id)
@@ -409,7 +488,13 @@ def delete_user(request, id):
 # def sortbyfname(request):
     
 #     return redirect(users)
+@login_required(login_url='adminlogin')
 def order_management(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
+        
     request.session['ordernumber_search'] =""
     new_orders=Return_Products.objects.filter(returnstatus="Waiting").count()
     print(new_orders)
@@ -504,7 +589,13 @@ def order_management(request):
         }
         return render(request,'admin/ordermanagement.html',context)
     
+    
+@login_required(login_url='adminlogin')
 def change_order_status(request,order_number,status):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     print(order_number)
     print(status)
     if status == "Delivered":
@@ -532,8 +623,12 @@ def change_order_status(request,order_number,status):
 
     return redirect(orders_page, order_number)
     
-    
+@login_required(login_url='adminlogin')
 def orders_page(request,order_number):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     order_details=Order.objects.get(order_number=order_number)
     print(order_details.id)
     order_id = order_details.id
@@ -551,28 +646,13 @@ def orders_page(request,order_number):
 
 
 
-# def invoice(request):
-#     template_path = 'pdf/invoice.html'
 
-#     context = {'products': products}
-
-#     response = HttpResponse(content_type='application/pdf')
-
-#     response['Content-Disposition'] = 'filename="products_report.pdf"'
-
-#     template = get_template(template_path)
-
-#     html = template.render(context)
-
-#     # create a pdf
-#     pisa_status = pisa.CreatePDF(
-#        html, dest=response)
-#     # if error then show some funy view
-#     if pisa_status.err:
-#        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-#     return response
-
+@login_required(login_url='adminlogin')
 def invoice(request,order_number):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     print(order_number)
     order_details=Order.objects.get(order_number=order_number)
     print(order_details.id)
@@ -730,7 +810,7 @@ def pdf_report_create(request):
 
 
 
-
+@login_required(login_url='adminlogin')
 def export_excel(request):
     if request.method=='POST':
         salesdate=request.POST['salesdate_excel']
@@ -866,11 +946,21 @@ def pdf_check(request):
     
     return render(request,'pdf/sales_report.html',context)
 
-
+@login_required(login_url='adminlogin')
 def offer_management(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     return render(request,'admin/offer_management.html')
 
+@login_required(login_url='adminlogin')
 def offer_management_productsview(request):
+    user=request.user
+    print(880)
+    print(user)
+    if not user.is_admin==True:
+        return redirect('index')
     offerset=Product.objects.raw('select * from store_product LEFT JOIN store_product_offer on store_product.id=store_product_offer.product_id;')
     print(offerset)
     for of in offerset:
@@ -906,7 +996,12 @@ def offer_management_productsview(request):
     
     return render(request,'admin/offers/offer_management_productsview.html',context)
 
+@login_required(login_url='adminlogin')
 def offer_management_product(request,bid):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     print(bid)
     book_details=Product.objects.get(id=bid)
     # if Product_Offer.objects.get(product=bid).exists():
@@ -964,8 +1059,13 @@ def offer_management_product(request,bid):
             'offer_details':offer_details,
         }
     return render(request,'admin/offers/offer_management_product.html',context)
-    
+
+@login_required(login_url='adminlogin')
 def offer_management_categoryview(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     offerset=Category.objects.raw('SELECT * from category_category LEFT join store_category_offer ON store_category_offer.category_id = category_category.id')
     category=Category.objects.all()
     context={
@@ -973,8 +1073,12 @@ def offer_management_categoryview(request):
     }
     return render(request,'admin/offers/offer_management_categoryview.html',context)
 
-
+@login_required(login_url='adminlogin')
 def offer_management_category(request,cid):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     cat_details=Category.objects.get(id=cid)
     try:
         offer_details=Category_Offer.objects.get(category=cid)
@@ -1015,7 +1119,12 @@ def offer_management_category(request,cid):
     }
     return render(request,'admin/offers/offer_management_category.html',context)
 
+@login_required(login_url='adminlogin')
 def returns(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     #offerset=Category.objects.raw('SELECT * from category_category LEFT join store_category_offer ON store_category_offer.category_id = category_category.id')
     returnproduct=OrderProduct.objects.raw('SELECT *,orders_return_products.id AS returnid FROM orders_orderproduct  join orders_return_products ON orders_return_products.return_product_id = orders_orderproduct.id')
     print(returnproduct)
@@ -1030,7 +1139,12 @@ def returns(request):
     }
     return render(request,'admin/returns.html',context)
 
+@login_required(login_url='adminlogin')
 def return_order_admin(request,opid):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     return_product_details=Return_Products.objects.get(id=opid)
     print(return_product_details.return_product.order.first_name)
     
@@ -1062,7 +1176,14 @@ def offer_management_couponview(request):
         'coupons':coupons
     }
     return render(request,'admin/offers/offer_management_couponview.html',context)
+
+
+@login_required(login_url='adminlogin')
 def addnew_coupon(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     if request.method=="POST":
         coupon_code=request.POST['coupon_code']
         discount=request.POST['discount']
@@ -1112,9 +1233,75 @@ def addnew_coupon(request):
                                         )
     return render(request,'admin/offers/offer_management_coupon.html')
 
+
+@login_required(login_url='adminlogin')
 def coupon_view(request,id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
     coupons_details=Coupon.objects.get(id=id)
     context={
         'coupons_details':coupons_details,
     }
     return render(request,'admin/offers/offer_management_coupon_details.html',context)
+
+@login_required(login_url='adminlogin')
+def banners(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
+    bannr = banner.objects.all()
+    return render(request,'admin/add_banner.html',{'bannr':bannr})
+
+
+@login_required(login_url='adminlogin')
+def banner_select(request,id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
+    bannr = banner.objects.all()
+    bannr.update(is_selected = False )
+    banners = banner.objects.filter(id = id)
+    banners.update(is_selected = True)
+    return HttpResponse(True)
+
+
+
+
+@login_required(login_url='adminlogin')
+def add_banner(request):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
+    form = BannerForm(request.POST, request.FILES)
+    bannr = banner.objects.all().order_by('id')
+    if request.method == "POST":
+        if form.is_valid():
+
+            form.save()
+            messages.success(request, 'New Banner added')
+            context = {'form':form,
+                       'bannr':bannr
+                       }
+            return render(request,'admin/add_banner.html',context)
+    
+    context = {'form':form,
+                   'bannr':bannr
+                   }
+    return render(request,'admin/add_banner.html',context)
+
+
+
+@login_required(login_url='adminlogin')
+def remove_banner(request , id):
+    user=request.user
+    if user.is_active==True:
+        if not user.is_admin==True:
+            return redirect('/')
+    bannr = banner.objects.filter(id= id)
+    bannr.delete()
+    return redirect(banners)

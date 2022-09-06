@@ -86,3 +86,10 @@ class Return_Products(models.Model):
     reson=models.CharField(max_length=200)
     comment= models.CharField(max_length=200)
     returnstatus=models.CharField(max_length=200,choices=STATUS, default='Processing')
+    
+    
+class banner(models.Model):
+    
+    banner_image =models.ImageField( upload_to='photos/banner', height_field=None, width_field=None, max_length=None,blank=True)
+    
+    is_selected = models.BooleanField(default=False)

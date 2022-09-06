@@ -9,6 +9,7 @@ from carts.models import CartItem
 from .models import Product
 from category.models import Category
 from store.forms import ProductForm
+from orders.models import banner
 # from category.forms import category_form
 from django.contrib import auth,messages
 # from slugify import slugify
@@ -20,16 +21,22 @@ from django.views.decorators.cache import cache_control
 # Create your views here.
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)  
 def product_view(request,st,bname):
-    
+    user=request.user
+    print(user.id)
     bookname=bname.replace('-',' ')
     cat =Category.objects.all()
     product_detail = Product.objects.filter(book_name__iexact=bookname).all()
     for i in product_detail:
         p_id =i.id
+    
     in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request),product_id =p_id).exists()
     if not in_cart:
-        in_cart = CartItem.objects.filter(product_id=p_id).exists()
+        try:
+            in_cart = CartItem.objects.filter(Q(product_id=p_id)&Q(user=user)).exists()
+        except:
+            in_cart=False
     print(in_cart)
+    print("34")
     # print(p_detail)
     # for i in p_detail:
     #     p_id=i.id
@@ -50,7 +57,11 @@ def cat_view(request,slug):
     paginator = Paginator(product,6)
     page = request.GET.get('page')
     paged_products =paginator.get_page(page)
-    return render(request,'landing.html',{'category':cat,'pro':paged_products,'cat_active':cat_active})
+    try:
+        bannerimg=banner.objects.get(is_selected=True)
+    except:
+        bannerimg=""
+    return render(request,'landing.html',{'category':cat,'pro':paged_products,'cat_active':cat_active,'bannerimg':bannerimg,})
 def cate(request):
     pass
 def search(request):

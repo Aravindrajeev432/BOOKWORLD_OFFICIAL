@@ -316,6 +316,8 @@ def delete_cart(request,product_id):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)    
 def checkout(request,total = 0 ,quantity= 0, cart_items = None):
     print("checkout")
+    
+        
     try :
         if 'uid' in request.session:
             uid = request.session['uid']
@@ -337,6 +339,8 @@ def checkout(request,total = 0 ,quantity= 0, cart_items = None):
             quantity += cart_item.quantity
             
             print("total multi")
+        if total==0:
+            return redirect('index')
         try:
             coupon_discount=request.session['coupon_discount']
             print(coupon_discount)
