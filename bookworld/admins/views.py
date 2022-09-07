@@ -1,12 +1,5 @@
-from cgi import print_directory
-from dis import dis, disco
-from genericpath import exists
-import imp
-from multiprocessing import context
-import re
-from turtle import update
-from unicodedata import category
-from django.forms import PasswordInput
+
+
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
@@ -22,14 +15,12 @@ from store.forms import ProductForm
 # from category.forms import category_form
 from django.contrib import auth,messages
 # from slugify import slugify
-from django.utils.text import slugify
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db.models import Sum,Count
 from django.template.loader import get_template
 
 from xhtml2pdf import pisa
-import csv
 import xlwt
 import datetime
 
@@ -102,36 +93,23 @@ def dashboard(request):
         pcat=Product.objects.get(id=id)
         cat_count.append(pcat.category.category_name)
         
-        # for k in products:
-        #     c=k.id
-        #     print(k.c)
-            # print(id.k.category_name)
+ 
     cat_dict={}
     c= Category.objects.all()   
         
     for c_count in c:
-        # print(c_count.category_name)
-        # print(cat_count.count(c_count.category_name))  
+    
         cat_dict[c_count.category_name] = cat_count.count(c_count.category_name)
     print(cat_dict)
     # print(order_cat_graph)
 
     print("-------")
-    # print(order_graph)
-    # for i in order_graph:
-    #     print(i['sum'])   
-    #-----------------
-    #total books in Stocks 
+
     no_books = Product.objects.aggregate(Sum('book_count'))
     
     no_books = no_books['book_count__sum']
     
-    # books_buyed = OrderProduct.objects.filter(user=id).values('user').annotate(count=Count('quantity'))
     
-    #-------------------
-    #total sales amount paidtotal from payment
-    # total_sales = Payment.objects.aggregate(Sum('amount_paid'))
-    # total_sales= total_sales['total_sales__sum']
     pay = Payment.objects.values('amount_paid').all()
     print(pay)
     total_sales=0
@@ -141,8 +119,7 @@ def dashboard(request):
         total_sales=total_sales+t
         print(t)
     print(total_sales)
-    #Amount through paypal Cod
-    #pgate=payemnt gateway
+
     pgate = Payment.objects.all()
     amount_cod=0
     amount_paypal=0
@@ -282,10 +259,7 @@ def addnewbook(request):
     if request.method == "POST":
         form = ProductForm(request.POST,request.FILES)
         if form.is_valid():
-            # print(form.cleaned_data['book_name'])
-            
-            # sl= slugify(form.cleaned_data['book_name']) 
-            # print(sl)
+          
             form.save() 
             form = ProductForm() 
             messages.error(request,'Successfuly Added')
@@ -307,10 +281,7 @@ def addnewbooktest(request):
     if request.method == "POST":
         form = ProductForm(request.POST,request.FILES)
         if form.is_valid():
-            # print(form.cleaned_data['book_name'])
-            
-            # sl= slugify(form.cleaned_data['book_name']) 
-            # print(sl)
+
             form.save() 
             form = ProductForm() 
             messages.error(request,'Successfuly Added')
@@ -615,11 +586,7 @@ def change_order_status(request,order_number,status):
     #Entry.objects.filter(pub_date__year=2007).update(headline='Everything is the same')
     OrderProduct.objects.filter(order_id=order_product_details.id).update(status=status,updated_at=x)
    
-    # order_product_details=Order.objects.all().order_by('-created_at')
-    # orders_pending = OrderProduct.objects.filter(status__contains='Processing').count()
-    # context={
-    #     'order_details':order_details
-    # }
+
 
     return redirect(orders_page, order_number)
     
@@ -696,7 +663,6 @@ def pdf_report_create(request):
     products = Product.objects.all()
     
 
-        #order_cat_graph = OrderProduct.objects.filter().values('product_id').order_by('quantity').annotate(count=Count('product_id'))
     dates_date =OrderProduct.objects.values('created_at__date').distinct().order_by('created_at__date')
     
    
@@ -718,9 +684,7 @@ def pdf_report_create(request):
     print("********")
     dates_len-=dates_len
     print(dates_len)
-    # last_date_day = OrderProduct.objects.latest('created_at')
-    # d=last_date_day.created_at
-    # print(d.year)
+
     print("dddddddd")
     try:
         sales = OrderProduct.objects.filter(created_at__date=dates[-1]).values('product_id').annotate(qty=Sum('quantity'))
@@ -873,9 +837,7 @@ def pdf_check(request):
     print("********")
     dates_len-=dates_len
     print(dates_len)
-    # last_date_day = OrderProduct.objects.latest('created_at')
-    # d=last_date_day.created_at
-    # print(d.year)
+
     print("dddddddd")
     try:
         sales = OrderProduct.objects.filter(created_at__date=dates[-1]).values('product_id').annotate(qty=Sum('quantity'))
@@ -967,10 +929,7 @@ def offer_management_productsview(request):
         print(of.book_name)
         print(of.discount)
     
-    # protest=Product.objects.get(id=5)
-    # offerpro = protest.offerof.filter(id=5)
-    # offerpro=Product.product_offer.filter()
-    # print(offerpro)
+
     if 'page' in request.GET:
         keyword = request.GET['page']
         print(keyword)
@@ -980,14 +939,7 @@ def offer_management_productsview(request):
     p = Paginator(offerset,6)
     page = request.GET.get('page',1)
     pro = p.get_page(page)
-    # offerset=Product.objects.filter(product_offer__product__isnull=True)
-    
-    # offer_details=Product_Offer.objects.select_related('product').all()
-    # print(offer_details)
-    # for od in offer_details:
-    #     print(od.discount)
-    #     print(od.product.book_name)
-    #     print("**")
+
   
     context={
         'products':pro,
@@ -1004,10 +956,7 @@ def offer_management_product(request,bid):
             return redirect('/')
     print(bid)
     book_details=Product.objects.get(id=bid)
-    # if Product_Offer.objects.get(product=bid).exists():
-    #     offer_details=Product_Offer.objects.get(product=bid)
-    # else:
-    #     offer_details=[]
+
     try:
         offer_details=Product_Offer.objects.get(product=bid)
     except:
