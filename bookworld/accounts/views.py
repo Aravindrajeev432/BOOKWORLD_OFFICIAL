@@ -1,3 +1,4 @@
+
 from multiprocessing import context
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render,redirect
@@ -33,13 +34,25 @@ def user_login(request):
             
                 print("user is not admin and not none ")
                 try :
+                    already_in_cart=[]
+                    user_cart=CartItem.objects.filter(user=user)
+                    for user_c in user_cart:
+                        already_in_cart.append(user_c.product_id)
+                        
+                    print("42")
+                    print(already_in_cart)
                     cart=Cart.objects.get(cart_id=_cart_id(request))
                     is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
                     if is_cart_item_exists:
                         cart_item =CartItem.objects.filter(cart=cart)
                         for item in cart_item:
-                            item.user_id= user.id
-                            item.save()
+                            if item.product_id not in already_in_cart:
+                                
+                                item.user_id= user.id
+                                item.save()
+                            else:
+                                item.delete()
+                    
                 except :
                     pass
                 print("l succes")
@@ -123,7 +136,7 @@ def otp_verfication_send(request):
             return render(request,'otp_verification.html',{'Phone_number':otp_number,'user':user,})
         else:
             print("fail")
-        
+            
         
         
     messages.info(request,'invalid mobile number ! !')
@@ -144,12 +157,12 @@ def otp_verification_check(request,Phone_number):
                 account_sid = settings.ACCOUNT_SID
                 auth_token = settings.AUTH_TOKEN
                 client = Client(account_sid, auth_token)
-            
+                print("147")
                 verification_check = client.verify \
                                     .services(settings.SERVICE) \
                                     .verification_checks \
                                     .create(to= phone_no, code= otp_input)
-        
+                print("152")
                 if verification_check.status == "approved":
                     auth.login(request, user)
                     request.session['email'] = user.email
@@ -164,13 +177,13 @@ def otp_verification_check(request,Phone_number):
             else:
                 messages.error(request,'Invalid OTP')
                 
-                return redirect('otp_verfication_check',Phone_number)
+                return redirect('otp_verification_check',Phone_number)
 
         else:
 
                 messages.error(request,'Invalid Phone number')
                 
                 return redirect('otp_verification_check',Phone_number)
-
+    messages.error(request,'Invalid OTP')
     # return render(request, 'accounts/otp_verification_check.html',{'Phone_number':Phone_number})
-    return render(request, 'accounts/otp_verification_check.html',{'Phone_number':Phone_number})
+    return render(request, 'otp_verification.html',{'Phone_number':Phone_number})

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-xwsv3hg1_eviwt!3x5*h6=bjimwb&7-hbj75(44u7+)g&ield@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 #Paypal
 ACCOUNT_SID=config("account_sid") 
 AUTH_TOKEN=config("auth_token")
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'salesreport',
+    'notfoundhandler',
     
 ]
 

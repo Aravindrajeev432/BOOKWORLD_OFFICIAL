@@ -26,6 +26,9 @@ from datetime import date,timedelta
 from django.db.models import Q,F
 import requests
 from openexchangerate import OpenExchangeRates
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)   
@@ -295,13 +298,19 @@ def review_checkout(request):
 
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)  
 def payment(request,order_number,order_id,total):
     #COD payment method
     uid = request.session['uid']
     # body = json.loads(request.body)
     print("payment")
     print(type(order_id))
-    order = Order.objects.get(user_id=uid, is_ordered=False, order_number=order_number)
+    try:
+        
+        order = Order.objects.get(user_id=uid, is_ordered=False, order_number=order_number)
+        total=order.order_total
+    except:
+        return render(request,'store/checkout_fail.html')
     try:
         discount = order.coupon.discount,
     except:
@@ -351,6 +360,8 @@ def payment(request,order_number,order_id,total):
     context={
         'order_status':"Succes",
     }
+    status="Success"
+    return HttpResponse(status)
     return render(request,'store/checkout_succes.html',context)
 
 #PAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPALPAYPAL
@@ -805,3 +816,47 @@ def orders_page(request,order_number):
    
     }
     return render(request,'orders_page_user.html',context)
+
+@login_required(login_url='login')
+def invoice(request,order_number):
+    
+    print(order_number)
+    order_details=Order.objects.get(order_number=order_number)
+    print(order_details.id)
+    order_id = order_details.id
+    order_product_details=OrderProduct.objects.filter(order_id=order_id)
+    net_qty= OrderProduct.objects.filter(order_id=order_id).aggregate(Sum('quantity'))
+    print(net_qty)
+    print(order_product_details)
+    
+    context={
+        'order_id':order_number,
+        'order_details':order_details,
+        'order_product_details':order_product_details,
+        'net_qty':net_qty,
+    }
+    template_path = 'pdf/invoice.html'
+
+
+
+    response = HttpResponse(content_type='application/pdf')
+
+    response['Content-Disposition'] = 'filename="invoice.pdf"'
+
+    template = get_template(template_path)
+
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def checkout_success(request):
+    return render(request,'store/checkout_succes.html')
+def checkout_fail(request):
+    return render(request,'store/checkout_fail.html')

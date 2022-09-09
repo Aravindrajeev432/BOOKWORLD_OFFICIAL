@@ -14,12 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from cgitb import handler
 from django.contrib import admin
 from django.urls import path,include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from bookworld.settings import MEDIA_ROOT
+from django.conf.urls import handler404
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index,name='index'),
@@ -40,3 +42,5 @@ urlpatterns = [
     
 
 ]+static(settings.MEDIA_URL,document_root=MEDIA_ROOT)
+
+handler404='notfoundhandler.views.error_404'

@@ -22,6 +22,7 @@ from django.db.models import Q
 def cart(request,total = 0 ,quantity= 0, cart_items = None):
     
     if 'first_name' in request.session:
+        print("25")
         product_offer_details=Product_Offer.objects.all()
         p_o_d={}
         c_o_d={}
@@ -29,7 +30,9 @@ def cart(request,total = 0 ,quantity= 0, cart_items = None):
         try :
             uid=request.session['uid']
             print("23")
-            cart_items = CartItem.objects.filter(user_id=uid, is_active=True).order_by('id')
+            user=request.user
+            # cart_items=CartItem.objects.filter(user=user,is_active=True)
+            cart_items = CartItem.objects.filter(Q(user_id=uid)& Q(is_active=True) ).order_by('id')
             for cart_item in cart_items:
                 total +=(cart_item.total_after_discount )
                 quantity += cart_item.quantity
@@ -67,11 +70,15 @@ def cart(request,total = 0 ,quantity= 0, cart_items = None):
             cart =Cart.objects.get(cart_id = _cart_id(request))
             cart_id=cart.id
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+            print("70")
+            print(cart_items)
             for cart_item in cart_items:
                 total +=(cart_item.product.price * cart_item.quantity)
                 quantity += cart_item.quantity
         except ObjectDoesNotExist:
+            print("74")
             pass
+        cart_id=""
         context = {
             'total' : total,
             'quantity' :quantity,
@@ -402,7 +409,9 @@ def couponCheck(request,coupon):
         request.session['coupon_discount']=discount
         request.session['coupon_code']=coupon
         request.session['coupon_id']=coupon_details.id
+        print("412 try succes")
     except:
+        print("413 with exception")
         discount=0
         request.session['coupon_discount']=0
         request.session['coupon_code']=""
@@ -414,7 +423,10 @@ def couponCheck(request,coupon):
         coupon_details=Coupon.objects.get(coupon_code=coupon)
         print(coupon_details)
         current_date=date.today()
-        if current_date<=coupon_details.valid_to.date() and current_date>= coupon_details.valid_to.date():
+        print(current_date)
+        print(coupon_details.valid_to.date())
+        print(coupon_details.valid_from.date())
+        if current_date<=coupon_details.valid_to.date() and current_date>= coupon_details.valid_from.date():
             print("393")
             uid=request.session['uid']
             if Order.objects.filter(Q(user_id=uid) & Q(coupon_id=coupon_details.id) & Q(is_ordered=True)).exists():
@@ -422,13 +434,16 @@ def couponCheck(request,coupon):
                 print("396")
                 return HttpResponse(discount)
             else:
-                
+                print("437")
+                print(discount)
                 print(coupon_details.valid_to)
-                print(coupon_details.validfrom)
+                print(coupon_details.valid_from)
                 return HttpResponse(discount)
         else:
+            print("439")
             discount=0
             return HttpResponse(discount)
     else:
+        print("443")
         discount=0
         return HttpResponse(discount)

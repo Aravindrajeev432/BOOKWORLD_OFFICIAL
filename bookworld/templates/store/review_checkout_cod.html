@@ -152,13 +152,13 @@
     
     
                             <div id="paypal-button-container">
-                                <a href="{% url 'payment' order_number  order.id  total_after_coupon  %}" class="text-decoration-none ">
-                                    <button class="btn pbtn ">Buy Now
+                                
+                                    <button class="btn pbtn " onclick="codSubmit()">Buy Now
                                         <span class="">
                                             <i class="fa-solid fa-bag-shopping"></i>
                                         </span>
                                     </button>
-                                </a>
+                                
                             </div>
     
                         </div> <!-- card-body.// -->
@@ -172,4 +172,28 @@
             <!-- ============================ COMPONENT 1 END .// ================================= -->
     
         </div> <!-- container .//  -->
+        <script>
+            const xhttp = new XMLHttpRequest();
+function codSubmit(){
+    xhttp.onload = function () {
+        status=this.responceText
+        if(status="Success"){
+            window.location.href = " {% url 'checkout_success' %}";
+        }
+        else{
+            window.location.href = " {% url 'checkout_fail' %}";
+
+        }
+       
+
+    
+    }
+
+
+
+    xhttp.open("GET","{% url 'payment' order_number  order.id total_after_coupon %}" );
+                xhttp.send();
+}
+
+        </script>
     {% endblock %}
