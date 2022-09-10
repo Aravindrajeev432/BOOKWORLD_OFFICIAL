@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xwsv3hg1_eviwt!3x5*h6=bjimwb&7-hbj75(44u7+)g&ield@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['bookworld-env.eba-vtw2bqgb.us-west-2.elasticbeanstalk.com']
 #Paypal
 ACCOUNT_SID=config("account_sid") 
 AUTH_TOKEN=config("auth_token")
