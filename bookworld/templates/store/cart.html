@@ -409,6 +409,9 @@
                             swal("Invalid Coupon Code" , {
               icon: "error",
             })
+            document.getElementById("coupon_code_id").innerHTML="Coupon"
+            document.getElementById("coupon_discount_id").innerHTML="-"+"0"
+            document.getElementById("carttotalprice_id").innerHTML=Grandtotal-discount+"&nbsp₹"
                         }
                         else{
                             swal("Hurray You'll get a Discount of " + discount, {

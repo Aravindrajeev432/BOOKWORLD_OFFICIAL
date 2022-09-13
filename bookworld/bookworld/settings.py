@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xwsv3hg1_eviwt!3x5*h6=bjimwb&7-hbj75(44u7+)g&ield@'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['bookworld-env.eba-vtw2bqgb.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['*']
 #Paypal
 ACCOUNT_SID=config("account_sid") 
 AUTH_TOKEN=config("auth_token")

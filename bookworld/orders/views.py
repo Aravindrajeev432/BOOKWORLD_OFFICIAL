@@ -371,7 +371,7 @@ def payment_paypal(request):
     order = Order.objects.get(user_id = uid, is_ordered = False, order_number = body['orderID'])
     print(body)
     try:
-        discount = order.coupon.discount,
+        discount = order.coupon.discount
     except:
         discount=0
     payment = Payment(
@@ -757,6 +757,7 @@ def return_order(request,oid):
     uid=request.session['uid']
     if OrderProduct.objects.filter(Q(id=oid) & Q(user=uid)).exists():
         order_details=OrderProduct.objects.get(id=oid)
+        return_details=''
         if Return_Products.objects.filter(return_product=order_details.id).exists():
             print("redirect")
             is_in_return=True
@@ -857,6 +858,9 @@ def invoice(request,order_number):
 
 
 def checkout_success(request):
+    request.session['coupon_code']=""
+    request.session['coupon_id']=""
+    request.session['coupon_discount']=0
     return render(request,'store/checkout_succes.html')
 def checkout_fail(request):
     return render(request,'store/checkout_fail.html')

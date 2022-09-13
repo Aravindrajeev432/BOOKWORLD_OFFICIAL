@@ -1,10 +1,11 @@
 {% extends 'index.html' %}
 {% load static %}
 {% load mathfilters %}
+
 {% block banner %}
     <div class="container-fluid ">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-10  ">
+            <div class="col-md-12  ">
                 <div class="row">
                     <div class="col-md-12  col-12">
                         <div class="row">
@@ -194,18 +195,19 @@
 
                         {% if order_history.status == 'Returned'%}
                         {% else %}
-                            <a class="text-decoration-none" href="cancel_order/{{order_history.id}}">
+                            {% comment %} <a class="text-decoration-none" href="cancel_order/{{order_history.id}}"> {% endcomment %}
                         <!-- <button class="btn   text-warning" onclick="ChangeStatus(Number(this.value))" value={{order_history.id}}>Cancell This Order</button>
                          -->
-                        <button class="btn   text-warning" onclick="ChangeStatus(Number(this.value))" value={{order_history.id}}>Cancell This Order</button>
+                        <button class="btn   text-warning" onclick="ChangeStatus(Number(this.value))" value="{{order_history.id}}">Cancell This Order</button>
                         
-                        </a>
+                        {% comment %} </a> {% endcomment %}
                         {% endif %}
                         {% endif %}
                     </div>
                     {% if order_history.status == 'Returned'%}
                     {% else %}
-
+                    {% if order_history.status == 'Cancelled' %}
+                    {% else %}
                     <div class="col-6 col-sm-8 col-md-8">
                       <a href="{% url 'invoice_user'  order_history.order.order_number  %} " class="text-decoration-none" >
                         <span class="text-warning">
@@ -215,6 +217,7 @@
                         </span>
                     </a>
                       </div>
+                      {% endif %}
                       {% endif %}
 
                     </div>
@@ -235,60 +238,85 @@
           </div>
         </div>
       </section>
+      <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script>
-        function ChangeStatus(str) {
-            const xhttp = new XMLHttpRequest();
-            console.log(typeof(str))
-        
+       
+       
+        // function ChangeStatus(str) {
+
+
+
+        //   swal({
+        //     title: "Are you sure?",
+        //     text: "Do you Cancell This Order " ,
+        //     icon: "warning",
+        //     buttons: true,
+        //     dangerMode: true,
+        //   }).then((willDelete) => {
+        //     if (willDelete) {
            
 
-            xhttp.onload = function () {
-                    document.getElementById("pbar/").style.display = "none";
-                    document.getElementById("pdet1").style.display = "none";
-                    document.getElementById("pdet2").style.display = "none";
-                    document.getElementById("pdet3").style.display = "none";
-                    document.getElementById("pshow").style.display="block";
-                    document.getElementById("progressbarcan").style.display="block";
+              
 
-                    console.log("onload")
+        //       xhttp.onload = function () {
+        //         swal("Book Deleted successfully", {
+        //           icon: "success",
+        //          })
+        //         document.getElementById("pbar/").style.display = "none";
+        //         document.getElementById("pdet1").style.display = "none";
+        //         document.getElementById("pdet2").style.display = "none";
+        //         document.getElementById("pdet3").style.display = "none";
+        //         document.getElementById("pshow").style.display="block";
+        //         document.getElementById("progressbarcan").style.display="block";
+
+               
+
+        //         }
+        //         xhttp.open("GET", "cancel_order/"+str);
+        //         xhttp.send();
+              
+        //                                    }
+
+        //                                    else{
+
+        //                                    }
+                                    
+                                          
+        //                                   };
+        //                                 }
+                                      
+                                
+        // const xhttp = new XMLHttpRequest();         
+          
+        function ChangeStatus(str){
+          Swal.fire({
+  title: 'Do you want to save the changes?',
+
+  showCancelButton: true,
+  confirmButtonText: 'Save',
+  denyButtonText: `Don't save`,
+}).then((result) => {
+  /* Read more about isConfirmed, isDenied below */
+  if (result.isConfirmed) {
+
+              xhttp.onload = function () {
+              
+                location.reload()
+
+               
 
                 }
-                xhttp.open("GET", "cancel_order/"+str);
+
+    xhttp.open("GET", "cancel_order/"+str);
                 xhttp.send();
-           
-            }
-        //     if (st[0] == "Shipped") {
 
-        //         console.log(st[0])
+  } else if (result.isDenied) {
+    Swal.fire('Operation Cancelled', '', 'info')
+  }
+})
 
-        //         xhttp.onload = function () {
-        //             document.getElementById("orders_pending").innerHTML = this.responseText;
-        //             var re = this.responseText
 
-        //         }
-        //         xhttp.open("GET", "change_order_status/" + str);
-        //         xhttp.send();
-        //     }
-        //     else if(st[0]=="Deliverd"){
-        //         xhttp.onload = function () {
-        //             document.getElementById("orders_pending").innerHTML = this.responseText;
-        //             var op = parseInt("{{orders_deliverd}}")+1
-        //             document.getElementById('orders_deliverd').innerHTML = op
-        //             var re = this.responseText
-
-        //         }
-        //         xhttp.open("GET", "change_order_status/" + str);
-        //         xhttp.send();
-        //     }
-        //     else if(st[0]=="Cancelled"){
-               
-        //         xhttp.open("GET", "change_order_status/" + str);
-        //         xhttp.send();
-        //     }
-        // }
-        // const xhttp = new XMLHttpRequest();
-        // // xhttp.onload = function() {
-        // //     document.getElementById("txtHint").innerHTML = this.responseText;
-        // // }
-    </script>
+        }
+         const xhttp = new XMLHttpRequest(); 
+      </script>
                     {% endblock %}

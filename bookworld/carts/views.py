@@ -78,7 +78,7 @@ def cart(request,total = 0 ,quantity= 0, cart_items = None):
         except ObjectDoesNotExist:
             print("74")
             pass
-        cart_id=""
+            cart_id=""
         context = {
             'total' : total,
             'quantity' :quantity,
