@@ -41,7 +41,7 @@
                 <div class="col-md-6">
                   
                     {% if 'search' in request.GET %}
-                    {% ifequal  request.GET.search  'COD' %}
+                    {% if  request.GET.search == 'COD' %}
                     <div class="input-group mb-3" >
                         <select class="form-control" aria-describedby="button-addon2" id="drop_id">
                             <option value="SelectAll">Select All</option>
@@ -54,9 +54,9 @@
                         </select>
                         <button class="btn text-warning bg-secondary " id="button-addon2" onclick="DropSubmit()">Search</button>
                         </div>
-                    {% endifequal %}
+                    {% endif %}
 
-                    {% ifequal  request.GET.search  'Paypal' %}
+                    {% if  request.GET.search == 'Paypal' %}
                     <div class="input-group mb-3" >
                         <select class="form-control" aria-describedby="button-addon2" id="drop_id">
                             <option value="SelectAll">Select All</option>
@@ -69,8 +69,8 @@
                         </select>
                         <button class="btn text-warning bg-secondary " id="button-addon2" onclick="DropSubmit()">Search</button>
                         </div>
-                    {% endifequal %}
-                    {% ifequal  request.GET.search  'Razorpay' %}
+                    {% endif %}
+                    {% if request.GET.search == 'Razorpay' %}
                     <div class="input-group mb-3" >
                         <select class="form-control" aria-describedby="button-addon2" id="drop_id">
                             <option value="SelectAll" >Select All</option>
@@ -83,8 +83,8 @@
                         </select>
                         <button class="btn text-warning bg-secondary " id="button-addon2" onclick="DropSubmit()">Search</button>
                         </div>
-                    {% endifequal %}
-                    {% ifequal  request.GET.search  'SelectAll' %}
+                    {% endif %}
+                    {% if  request.GET.search == 'SelectAll' %}
                     <div class="input-group mb-3" >
                         <select class="form-control" aria-describedby="button-addon2" id="drop_id">
                             <option value="SelectAll" selected>Select All</option>
@@ -97,7 +97,7 @@
                         </select>
                         <button class="btn text-warning bg-secondary " id="button-addon2" onclick="DropSubmit()">Search</button>
                         </div>
-                    {% endifequal %}
+                    {% endif %}
                     {% else %}
                     <div class="input-group mb-3" >
                         <select class="form-control" aria-describedby="button-addon2" id="drop_id">
