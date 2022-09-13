@@ -39,7 +39,7 @@ def user_login(request):
                     for user_c in user_cart:
                         already_in_cart.append(user_c.product_id)
                         
-                    print("42")
+                  
                     print(already_in_cart)
                     cart=Cart.objects.get(cart_id=_cart_id(request))
                     is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
