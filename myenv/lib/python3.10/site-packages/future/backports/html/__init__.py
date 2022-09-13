@@ -25,3 +25,4 @@ def escape(s, quote=True):
     if quote:
         return s.translate(_escape_map_full)
     return s.translate(_escape_map)
+

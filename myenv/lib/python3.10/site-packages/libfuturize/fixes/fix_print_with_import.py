@@ -20,3 +20,4 @@ class FixPrintWithImport(FixPrint):
         future_import(u'print_function', node)
         n_stmt = super(FixPrintWithImport, self).transform(node, results)
         return n_stmt
+

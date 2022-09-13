@@ -2512,3 +2512,4 @@ for (name, codepoint) in name2codepoint.items():
     entitydefs[name] = chr(codepoint)
 
 del name, codepoint
+

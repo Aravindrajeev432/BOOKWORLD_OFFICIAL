@@ -89,3 +89,4 @@ class FixAbsoluteImport(FixImport):
             if exists(base_path + ext):
                 return True
         return False
+

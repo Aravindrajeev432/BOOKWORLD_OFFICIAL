@@ -1,6 +1,6 @@
 """
 Adds this import:
-
+    
     from __future__ import unicode_literals
 
 """
@@ -16,3 +16,4 @@ class FixUnicodeLiteralsImport(fixer_base.BaseFix):
 
     def transform(self, node, results):
         future_import(u"unicode_literals", node)
+

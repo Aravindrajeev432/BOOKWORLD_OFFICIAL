@@ -30,3 +30,4 @@ class newopen(object):
 
     def __exit__(self, etype, value, traceback):
         self.f.close()
+

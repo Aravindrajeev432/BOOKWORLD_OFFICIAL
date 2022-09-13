@@ -110,3 +110,4 @@ class FixImports(fixer_base.BaseFix):
 
     def transform(self, node, results):
         touch_import_top(u'future', u'standard_library', node)
+

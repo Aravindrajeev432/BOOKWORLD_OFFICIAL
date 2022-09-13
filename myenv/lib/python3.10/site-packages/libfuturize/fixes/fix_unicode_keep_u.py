@@ -22,3 +22,4 @@ class FixUnicodeKeepU(fixer_base.BaseFix):
             new = node.clone()
             new.value = _mapping[node.value]
             return new
+
