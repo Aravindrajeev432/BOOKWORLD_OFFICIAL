@@ -1229,14 +1229,12 @@ def add_banner(request):
     form = BannerForm(request.POST, request.FILES)
     bannr = banner.objects.all().order_by('id')
     if request.method == "POST":
+        
         if form.is_valid():
 
             form.save()
             messages.success(request, 'New Banner added')
-            context = {'form':form,
-                       'bannr':bannr
-                       }
-            return render(request,'admin/add_banner.html',context)
+            
     
     context = {'form':form,
                    'bannr':bannr

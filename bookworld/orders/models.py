@@ -3,7 +3,6 @@ from tkinter import CASCADE
 from django.db import models
 from accounts.models import Account
 from store.models import Product,Coupon
-from image_cropping import ImageRatioField
 # Create your models here.
 class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -92,5 +91,5 @@ class Return_Products(models.Model):
 class banner(models.Model):
     
     banner_image =models.ImageField( upload_to='photos/banner', height_field=None, width_field=None, max_length=None,blank=True)
-    cropping = ImageRatioField('image', '430x360')
+    
     is_selected = models.BooleanField(default=False)
