@@ -57,7 +57,7 @@
           </div>
             <div class="row">
                 <div class="col-md-8 mb-4">
-                  <div class="card mb-4">
+                  <div class="card mb-4 rounded-0">
                     <div class="card-header py-3">
                       <h5 class="mb-0">Biling details</h5>
                     </div>
@@ -81,10 +81,7 @@
                         </div>
               
                         <!-- Text input -->
-                        <div class="form-outline mb-4">
-                          <input type="number"  name="phone" id="form7Example3" class="form-control" value="{{user_details.Phone_number}}"  required/>
-                          <label class="form-label" for="form7Example3">Phone</label>
-                        </div>
+                  
               
                         <!-- Text input -->
                         <div class="form-outline mb-4">
@@ -95,30 +92,62 @@
                           <input type="text" name="address_line_2" id="add_line_2_id" class="form-control" value="{{user_address.address_line_2}}"  required/>
                           <label class="form-label" for="form7Example4">Address Line 2</label>
                         </div>
-              
-                        <!-- Email input -->
-                        <div class="form-outline mb-4">
-                          <input type="email" name="email" id="form7Example5" class="form-control" value="{{user_details.email}}"  required/>
-                          <label class="form-label" for="form7Example5">Email</label>
+
+
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <div class="form-outline mb-4">
+                              <input type="number"  name="phone" id="form7Example3" class="form-control" value="{{user_details.Phone_number}}"  required/>
+                              <label class="form-label" for="form7Example3">Phone</label>
+                            </div>
+                            <!-- Email input -->
+
+                          </div>
+                          <div class="form-group col-md-6">
+                            <div class="form-outline mb-4">
+                              <input type="email" name="email" id="form7Example5" class="form-control" value="{{user_details.email}}"  required/>
+                              <label class="form-label" for="form7Example5">Email</label>
+                            </div>
+                          </div>
                         </div>
+                      
+                        
               
                         <!-- Number input -->
-                        <div class="form-outline mb-4">
-                          <input type="text" name="country" id="country_id" class="form-control" value="{{user_address.country}}"  required/>
-                          <label class="form-label" for="form7Example6">Country</label>
+
+
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <div class="form-outline mb-4">
+                              <input type="text" name="country" id="country_id" class="form-control" value="{{user_address.country}}"  required/>
+                              <label class="form-label" for="form7Example6">Country</label>
+                            </div>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <div class="form-outline mb-4">
+                              <input type="text" name="state" id="state_id" class="form-control" value="{{user_address.state}}"  required/>
+                              <label class="form-label" for="form7Example6">State</label>
+                            </div>
+                          </div>
                         </div>
-                        <div class="form-outline mb-4">
-                          <input type="text" name="state" id="state_id" class="form-control" value="{{user_address.state}}"  required/>
-                          <label class="form-label" for="form7Example6">State</label>
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <div class="form-outline mb-4">
+                              <input type="text" name="city" id="city_id" class="form-control" value="{{user_address.city}}"  required/>
+                              <label class="form-label" for="form7Example6">City</label>
+                            </div>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <div class="form-outline mb-4">
+                              <input type="number" name="zipcode" id="zipcode_id" class="form-control" value="{{user_address.zipcode}}"  required/>
+                              <label class="form-label" for="form7Example6">Zipcode</label>
+                            </div>
+                          </div>
                         </div>
-                        <div class="form-outline mb-4">
-                          <input type="text" name="city" id="city_id" class="form-control" value="{{user_address.city}}"  required/>
-                          <label class="form-label" for="form7Example6">City</label>
-                        </div>
-                        <div class="form-outline mb-4">
-                          <input type="number" name="zipcode" id="zipcode_id" class="form-control" value="{{user_address.zipcode}}"  required/>
-                          <label class="form-label" for="form7Example6">Zipcode</label>
-                        </div>
+
+                        
+                       
+                        
 
                         
                         <!-- Message input -->
@@ -132,7 +161,7 @@
                 </div>
               
                 <div class="col-md-4 mb-4">
-                  <div class="card mb-4">
+                  <div class="card rounded-0 mb-4">
                     <div class="card-header py-3">
                       <h5 class="mb-0">Summary</h5>
                     </div>
@@ -147,11 +176,7 @@
                             </div>
                             <span><strong>{{total}}&nbsp ₹</strong></span>
                           </li>
-                        <li class="list-group-item w-100 d-flex justify-content-between align-items-center px-0">
-                          
-                          <span>Shipping Charge</span>
-                          <span class="mb-0"> 0 ₹</span>
-                        </li>
+                     
                         <li class="list-group-item w-100 d-flex justify-content-between align-items-center px-0">
                           
                           <span>Coupon Discount</span>
@@ -194,7 +219,7 @@
               <div class="col-12 mt-3 d-flex justify-content-center">
 
                 <button type="submit" class="btn pbtn rounded-0">
-                  CheckOut
+                  Continue
                 </button>
               </div>
                      

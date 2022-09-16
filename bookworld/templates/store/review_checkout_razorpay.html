@@ -138,10 +138,7 @@
                                 <dt>Total price:</dt>
                                 <dd class="text-right">₹ {{total}}</dd>
                             </dl>
-                            <dl class="dlist-align">
-                                <dt>Shipping Charge:</dt>
-                                <dd class="text-right"> ₹ {{shipping_charge}}</dd>
-                            </dl>
+                           
                             <dl class="dlist-align">
                                 <dt>Coupon Discount:</dt>
                                 <dd class="text-right text-dark b"><strong>{{total_after_coupon|sub:total}}</strong></dd>
@@ -154,7 +151,7 @@
                             
     
     
-                            <div class="btn_container">
+                            <div class="btn_container d-flex justify-content-center">
                                 <!-- Payment Button -->
                                 <button class="btn rounded-0 bg-secondary text-warning" id="pay-btn">RazorPay</button>
                               </div>

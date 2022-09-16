@@ -2,7 +2,7 @@
 {% load static %}
 {% load mathfilters %}
 {% block script %}
-<script src="https://www.paypal.com/sdk/js?client-id=AfD8gXRAdk4qHWJhsY4iHqXM6AEbUB_q7Xg2eNOGShI_CZxw2qXp__GZUIG3q9mOCWg0p-sLmgo3aoOH&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AfD8gXRAdk4qHWJhsY4iHqXM6AEbUB_q7Xg2eNOGShI_CZxw2qXp__GZUIG3q9mOCWg0p-sLmgo3aoOH&currency=USD&disable-funding=credit,card""></script>
 {% endblock %}
 {% block banner %}
     <div class="container-fluid ">
@@ -137,10 +137,7 @@
                                 <dt>Total price:</dt>
                                 <dd class="text-right">₹ {{total}}</dd>
                             </dl>
-                            <dl class="dlist-align">
-                                <dt>Shipping Charge:</dt>
-                                <dd class="text-right"> ₹ {{shipping_charge}}</dd>
-                            </dl>
+                           
                             <dl class="dlist-align">
                                 <dt>Coupon Discount:</dt>
                                 <dd class="text-right text-dark b"><strong>{{total_after_coupon|sub:total}}</strong></dd>

@@ -166,15 +166,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-12 cart-total">
-                                            <div class="row h-100 align-items-center">
-                                                <span class=" col-9 carttotalhead">Shipping Cahrge</span>
-                                                <span class=" col-3 carttotalprice text-warning">
-                                                    0 &nbsp ₹</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                               
 
                                     {% if request.session.coupon_discount %}
                                     <div class="row">
@@ -236,7 +228,7 @@
                                             </div>
                                           </div>
                                         <a href="{% url 'checkout' %}" class="text-decoration-none ">
-                                            <button class="btn pbtn rounded-0">Buy Now
+                                            <button class="btn pbtn rounded-0">Place Order
                                                 <span class="">
                                                     <i class="fa-solid fa-bag-shopping"></i>
                                                 </span>
