@@ -571,3 +571,6 @@ span.h6 span{
   .offerbox:hover {
     background: #3034377a;
   }
+  .cartadrebutton:hover i{
+    color:#cfa00f;
+  }

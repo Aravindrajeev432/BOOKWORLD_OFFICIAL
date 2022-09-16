@@ -100,6 +100,7 @@ def homepage(request):
         return redirect('/')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def profile(request,id):
+    print(request.user)
     try:
         uid= request.session['uid']
     except:

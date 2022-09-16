@@ -114,8 +114,11 @@ def logout(request):
     request.session.flush()
     return redirect("/")
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def otp_verfication_send(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+    print(request.user.is_authenticated)
     if request.method == 'POST':
         otp_number = request.POST['otp_phone']
         
@@ -140,10 +143,11 @@ def otp_verfication_send(request):
         
         
     messages.info(request,'invalid mobile number ! !')
-    return render(request, 'login.html')
-
+    return redirect('login')
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def otp_verification_check(request,Phone_number):
-
+    if request.user.is_authenticated:
+        redirect('/')
     if request.method=='POST':
         if Account.objects.filter(Phone_number= Phone_number).exists():
             user = Account.objects.get(Phone_number= Phone_number)

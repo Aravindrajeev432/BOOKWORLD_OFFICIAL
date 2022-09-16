@@ -10,6 +10,25 @@ function validateFName(){
     var name = document.getElementById('firstname_id').value;
 
     if(name.length == 0){
+        var lname = document.getElementById('lastname_id').value;
+
+        if(lname.length == 0){
+            lnameError.innerHTML = 'Name required';
+            
+        }
+
+        var mobile = document.getElementById('phone_id').value;
+        
+        if(mobile.length==0){
+            phoneError.innerHTML = 'Mobile no required'
+            
+        }
+        var email =  document.getElementById('email_id').value;
+        if(email.length==0){
+            emailError.innerHTML = 'Email required'
+           
+        }
+
         fnameError.innerHTML = 'Name required';
         return false;
     }
@@ -23,10 +42,26 @@ function validateFName(){
     return true;
 }
 function validateLName(){
+   
+
+
     var name = document.getElementById('lastname_id').value;
 
     if(name.length == 0){
         lnameError.innerHTML = 'Name required';
+
+        var mobile = document.getElementById('phone_id').value;
+        
+        if(mobile.length==0){
+            phoneError.innerHTML = 'Mobile no required'
+            
+        }
+        var email =  document.getElementById('email_id').value;
+        if(email.length==0){
+            emailError.innerHTML = 'Email required'
+           
+        }
+
         return false;
     }
     if(!name.match(/^[a-zA-Z ]+$/)){
@@ -43,6 +78,12 @@ function validatePhone(){
     var mobile = document.getElementById('phone_id').value;
     console.log(mobile)
     if(mobile.length==0){
+
+        var email =  document.getElementById('email_id').value;
+        if(email.length==0){
+            emailError.innerHTML = 'Email required'
+           
+        }
         phoneError.innerHTML = 'Mobile no required'
         return false;
     }

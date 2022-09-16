@@ -82,7 +82,7 @@
                                                         </a>
                                                     </div> {% endcomment %}
 
-                                                    <button class="btn text-warning " id="button-minus{{ cart_item.product.id }}" style="display:none;" value="{{ cart_item.product.id }}" onclick="removeCart(this.value)">
+                                                    <button class="btn text-warning  rounded-0 border-0 cartadrebutton" id="button-minus{{ cart_item.product.id }}" data-toggle="button" aria-pressed="true" value="{{ cart_item.product.id }}" onclick="removeCart(this.value)" disabled>
                                                         <i class="fa fa-minus"></i>
                                                     </button>
     
@@ -93,19 +93,19 @@
                                                     </a>
                                                 </div> {% endcomment %}
 
-                                                <button class="btn text-warning" id="button-minus{{ cart_item.product.id }}" value="{{ cart_item.product.id }}" onclick="removeCart(this.value)">
+                                                <button class="btn text-warning rounded-0 border-0 cartadrebutton" id="button-minus{{ cart_item.product.id }}" value="{{ cart_item.product.id }}" onclick="removeCart(this.value)">
                                                     <i class="fa fa-minus"></i>
                                                 </button>
 
 
 
                                                     {% endif %}
-                                                    <input type="text" step="1" min="0" max="3" name="cart"  id="cartqty{{cart_item.product.id}}" value="{{ cart_item.quantity }}" title="Qty" class="form-control qty pe-none" size="4">
+                                                    <input type="text" step="1" min="0" max="3" name="cart"  id="cartqty{{cart_item.product.id}}" value="{{ cart_item.quantity }}" title="Qty" class="form-control qty pe-none rounded-0" size="4">
                                                        
                                                         {% comment %} <a href="{% url 'add_cart' cart_item.product.id %}" class="btn text-warning" type="button" id="button-plus">
                                                             <i class="fa fa-plus"></i>
                                                         </a> {% endcomment %}
-                                                        <button class="btn text-warning" id="button-plus" value="{{ cart_item.product.id }}" onclick="addtoCart(this.value)">
+                                                        <button class="btn text-warning rounded-0 border-0 cartadrebutton" id="button-plus" value="{{ cart_item.product.id }}" onclick="addtoCart(this.value)">
                                                             <i class="fa fa-plus"></i>
                                                         </button>
 
@@ -272,7 +272,7 @@
                             xhttp.onload = function () {
                                 res=this.responseText
                                 if(res==1){
-                                    document.getElementById("button-minus"+pid).style.display="none";
+                                    document.getElementById("button-minus"+pid).disabled=true;
                                 }
                                 document.getElementById("cartqty"+pid).value= this.responseText;
                                 p_price= document.getElementById("p_price_id"+pid).value;
@@ -321,6 +321,7 @@
                             xhttp.onload = function () {
                     document.getElementById("cartqty"+pid).value= this.responseText;
                     document.getElementById("button-minus"+pid).style.display="block";
+                    document.getElementById("button-minus"+pid).disabled=false;
                     p_price= document.getElementById("p_price_id"+pid).value;
                     p_discount = document.getElementById("cart_discount"+pid).value;
                     p_price=parseInt(p_price);
