@@ -1,10 +1,5 @@
-from ast import Return
 import json
 from logging import exception
-from multiprocessing import context
-import re
-from traceback import print_tb
-from turtle import update
 from django.shortcuts import render,redirect
 from store.models import Coupon
 from carts.models import Cart, CartItem
@@ -16,15 +11,14 @@ from .forms import OrderForm
 from .models import Order,Payment,OrderProduct,Return_Products
 import datetime
 import json
-from django.db.models import Sum,Count
+from django.db.models import Sum
 from django.http import HttpResponse, JsonResponse
 import razorpay
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.http import HttpResponseBadRequest
-from datetime import date,timedelta
+from datetime import date
 from django.db.models import Q,F
-import requests
 from openexchangerate import OpenExchangeRates
 from django.template.loader import get_template
 from xhtml2pdf import pisa

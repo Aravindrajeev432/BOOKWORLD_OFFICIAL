@@ -1,26 +1,17 @@
-from binascii import rledecode_hqx
-import email
-from itertools import product
-from multiprocessing import context
-import re
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from accounts.models import Account,Address
 
 from store.models import WishlistItem
 from carts.models import CartItem
-from orders.models import OrderProduct,Order,banner
+from orders.models import OrderProduct,banner
 from store.models import Product,Product_Offer,Category_Offer
 from category.models import Category
 from django.views.decorators.cache import cache_control
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from .forms import ProfileForm
+from django.core.paginator import Paginator
 from collections import Counter
-from django.db.models import Sum,Count
-from django.views.generic import View
-from django.template.loader import get_template
+from django.db.models import Count
 
-from xhtml2pdf import pisa
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
     try :
