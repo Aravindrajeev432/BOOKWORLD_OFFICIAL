@@ -145,6 +145,9 @@
                                                     </td>
                                                 <td class="remove">
                                                     <a href="{% url 'delete_cart' cart_item.product.id %}" class="btn btn-danger-filled x-remove">×</a>
+                                                    <button class="btn text-warning rounded-0 border-0 cartadrebutton border" value="{{ cart_item.product.id }}" onclick="deleteCart(this.value)">
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -248,6 +251,7 @@
                         </div>
                     </div>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     <script>
                         var Grandtotal="{{ total }}"
                         
@@ -441,7 +445,39 @@
 
                   }
 
-                
+                function deleteCart(src){
+                    value=src
+                    console.log(value)
+               
+                    Swal.fire({
+            title: 'Do you want Remove',
+          
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: `No`,
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+          
+                        xhttp.onload = function () {
+                        
+                          location.reload()
+          
+                         
+          
+                          }
+                     
+          
+              xhttp.open("GET", "delete_cart/"+src);
+                          xhttp.send();
+          
+            } else if (result.isDenied) {
+              Swal.fire('Operation Cancelled', '', 'info')
+            }
+          })
+          
+          
+                  }
 
                     </script>
 
