@@ -144,7 +144,7 @@
                                                         <input type="button" class="bg-transparent border-0" id="cart_total{{ cart_item.product.id }}" value="{{cart_item.total_after_discount}}" onchange="grandTotal()">
                                                     </td>
                                                 <td class="remove">
-                                                    <a href="{% url 'delete_cart' cart_item.product.id %}" class="btn btn-danger-filled x-remove">×</a>
+                                                    
                                                     <button class="btn text-warning rounded-0 border-0 cartadrebutton border" value="{{ cart_item.product.id }}" onclick="deleteCart(this.value)">
                                                         <i class="fa-solid fa-xmark"></i>
                                                     </button>
