@@ -6,7 +6,7 @@ from django.views.decorators.cache import cache_control
 from accounts.models import Account
 from carts.models import Cart
 from carts.models import CartItem
-from .models import Product
+from .models import Product, WishlistItem
 from category.models import Category
 from store.forms import ProductForm
 from orders.models import banner
@@ -36,14 +36,12 @@ def product_view(request,st,bname):
         except:
             in_cart=False
     print(in_cart)
-    print("34")
-    # print(p_detail)
-    # for i in p_detail:
-    #     p_id=i.id
-    # product_detail =Product.objects.get(id=p_id)
-    # print("productdetail",end= ' ')
-    # print(product_detail)
-    return render(request,'store/productview.html',{'product_detail': product_detail,'cat':cat,'in_cart':in_cart})
+    if WishlistItem.objects.filter(user=request.user,product_id=p_id).exists():
+        wish = True
+    else:
+        wish = False
+    
+    return render(request,'store/productview.html',{'product_detail': product_detail,'cat':cat,'in_cart':in_cart,'wish':wish,'pid':p_id})
 def cat_view(request,slug):
   
     # cat =Category.objects.raw('SELECT id FROM category_category where category_name= %s',[slug])

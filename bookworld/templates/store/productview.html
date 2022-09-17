@@ -146,9 +146,26 @@
                                                
                                               
                                                 {% endif %}
-                                                   <button class="btn pbtn rounded-0">Add to Wishlist <span class="">
-                                                    <i class="fa-solid fa-heart"></i>
+                                                 <br><br>
+                                                {% if request.session.uid %}
+                                                {% if wish %}
+                                                <button class="btn pbtn rounded-0" value=true id="wishlisbtn_id" onclick="wishlistCheck(this.value)">Remove from Wishlist<span class="">
+                                            
                                                     </span></button>
+                                                    {% else %}
+                                                    <button class="btn pbtn rounded-0" value=false id="wishlisbtn_id" onclick="wishlistCheck(this.value)">Add to Wishlist <span class="">
+                                                       
+                                                        </span></button>
+                                                {% endif %}
+                                                {% else %}
+                                                <a href="{% url 'login'%} ">
+                                                    <button class="btn pbtn rounded-0" >Add to Wishlist <span class="">
+                                                      
+                                                        </span></button>
+                                                    </a>
+                                                {%endif %}
+                                                   
+                                                
                                                 </div>
                                             </div>               
                                                 </span>
@@ -163,8 +180,12 @@
 <script type="text/javascript" src="{% static 'scriptzoom.js' %}">
 
 </script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
+    {% for pro in product_detail %}
+    var pid={{pro.id}}
+    {% endfor %}
     function addtoCart(pid){
         // pid -product id
 
@@ -183,7 +204,100 @@ xhttp.send();
 
 
     }
+
+function wishlistCheck(val){
+    if(val=="false"){
+        console.log("add")
+        addtoWishlist()
+    }
+    else{
+        console.log("remove")
+        removefromWishlist()
+    }
     const xhttp = new XMLHttpRequest();
+}
+ 
+function addtoWishlist(){
+    xhttp.onload = function () {
+    document.getElementById("wishlisbtn_id").innerHTML="Remove from Wishlist";
+    document.getElementById("wishlisbtn_id").value=true;
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+          
+          })
+          
+          Toast.fire({
+            icon: 'success',
+            title: 'Added to Wishlist'
+          })
+
+    }
+
+    xhttp.open("GET", "{% url 'addwishlist' pid %}");
+    xhttp.send();
+
+    }
+function removefromWishlist(){
+
+    xhttp.onload = function () {
+        document.getElementById("wishlisbtn_id").innerHTML="Add to Wishlist";
+        document.getElementById("wishlisbtn_id").value=false;
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+          
+          })
+          
+          Toast.fire({
+            icon: 'warning',
+            title: 'Removed from Wishlist'
+          })
+    
+    
+    
+    }
+
+    xhttp.open("GET", "{% url 'removewishlist' pid %}" );
+    xhttp.send();
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ const xhttp = new XMLHttpRequest();
+
+
+
+
+
+
+
+
+
+
 </script>
 
 {% endfor %}
