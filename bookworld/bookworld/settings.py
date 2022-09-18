@@ -97,7 +97,7 @@ DATABASES = {
         'NAME': 'bookworld2',
         'USER': 'postgres',
         'PASSWORD':'arvi9895',
-        'HOST':'localhost'
+        'HOST':'awseb-e-c9dgzg6fru-stack-awsebrdsdatabase-5jlucff67da9.cth4om7nct5b.us-west-2.rds.amazonaws.com'
     }
 }
 
