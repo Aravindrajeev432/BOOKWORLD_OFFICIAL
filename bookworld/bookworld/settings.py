@@ -100,7 +100,7 @@ DATABASES = {
         'HOST':'awseb-e-c9dgzg6fru-stack-awsebrdsdatabase-5jlucff67da9.cth4om7nct5b.us-west-2.rds.amazonaws.com'
     }
 }
-
+#  'HOST':'awseb-e-c9dgzg6fru-stack-awsebrdsdatabase-5jlucff67da9.cth4om7nct5b.us-west-2.rds.amazonaws.com'
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 

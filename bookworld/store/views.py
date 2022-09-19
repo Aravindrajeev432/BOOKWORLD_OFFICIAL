@@ -36,11 +36,13 @@ def product_view(request,st,bname):
         except:
             in_cart=False
     print(in_cart)
-    if WishlistItem.objects.filter(user=request.user,product_id=p_id).exists():
-        wish = True
-    else:
+    try:
+        if WishlistItem.objects.filter(user=request.user,product_id=p_id).exists():
+            wish = True
+        else:
+            wish = False
+    except:
         wish = False
-    
     return render(request,'store/productview.html',{'product_detail': product_detail,'cat':cat,'in_cart':in_cart,'wish':wish,'pid':p_id})
 def cat_view(request,slug):
   
