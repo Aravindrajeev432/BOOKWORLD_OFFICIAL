@@ -403,19 +403,21 @@
                         console.log(Grandtotal)
                         
                         if(discount==0){
-                            swal("Invalid Coupon Code" , {
-              icon: "error",
-            })
+                   
+            Swal.fire('Invalid Coupon code', '', 'error')
             document.getElementById("coupon_code_id").innerHTML="Coupon"
             document.getElementById("coupon_discount_id").innerHTML="-"+"0"
             document.getElementById("carttotalprice_id").innerHTML=Grandtotal-discount+"&nbsp₹"
                         }
                         else{
-                            swal("Hurray You'll get a Discount of " + discount, {
-              icon: "success",
-              button:false,
-              timer: 2000,
-            })
+                  
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Hurray You will get a Discount of ' + discount,
+                showConfirmButton: false,
+                timer: 1500
+              })
                 document.getElementById("coupon_code_id").innerHTML=coupon_code
                 document.getElementById("coupon_discount_id").innerHTML="-"+discount+"&nbsp₹"
                 document.getElementById("carttotalprice_id").innerHTML=Grandtotal-discount+"&nbsp₹"
