@@ -75,7 +75,10 @@ def search(request):
         keyword = request.GET['search']
         print("paged")
         if keyword:
-            
+            try:
+                bannerimg=banner.objects.get(is_selected=True)
+            except:
+                bannerimg=""
             pro = Product.objects.order_by('book_name').filter(Q(book_name__icontains=keyword) |Q(author__icontains=keyword))
             """Quer splitted for use OR if you you , it is AND"""
             """{% if 'search in request.path %}"""
@@ -83,5 +86,5 @@ def search(request):
             page = request.GET.get('page')
             paged_products =paginator.get_page(page)
             
-    return render(request,'landing.html',{'pro':paged_products,'category':cat})
+    return render(request,'landing.html',{'pro':paged_products,'category':cat,'bannerimg':bannerimg,})
 
