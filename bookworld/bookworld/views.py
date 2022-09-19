@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
+from carts.models import Cart
 from accounts.models import Account,Address
 
 from store.models import WishlistItem
@@ -11,7 +12,7 @@ from django.views.decorators.cache import cache_control
 from django.core.paginator import Paginator
 from collections import Counter
 from django.db.models import Count
-
+from carts.views import _cart_id
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
     try :
@@ -19,7 +20,22 @@ def index(request):
         is_user_blocked=Account.objects.get(id=uid)
         if is_user_blocked.is_blocked == True:
             return render(request,'userblocked.html')
-    except : pass
+    except : 
+        uid=_cart_id(request)
+
+        try:
+            cart_id=Cart.objects.get(cart_id=uid)
+            nonuser_cart= CartItem.objects.filter(cart=cart_id.id).all()
+            
+            nonuser_cart_product_ids=[]
+            for uc in nonuser_cart:
+                print(uc.product.id)
+                nonuser_cart_product_ids.append(uc.product.id)
+       
+            print(nonuser_cart_product_ids)
+        except:
+            
+            nonuser_cart_product_ids=[]        
     try:
         user_cart= CartItem.objects.filter(user=uid).all()
         print(user_cart)
@@ -29,9 +45,22 @@ def index(request):
             user_cart_product_ids.append(uc.product.id)
             print("********")
         print(user_cart_product_ids)
+        nonuser_cart_product_ids=[]
     except:
+        print("33")
         user_cart_product_ids=[]
-        
+        try:
+           
+            if nonuser_cart_product_ids==[]:
+                
+                nonuser_cart_product_ids=[]
+        except:
+            
+            nonuser_cart_product_ids=[]
+    #testannonimususer cart checking in landing
+
+    
+    ###
     cat = Category.objects.all()
     product_offer_details={}
     category_offer_details={}
@@ -65,6 +94,7 @@ def index(request):
         'category':cat,
         'pro':paged_products,
         'user_cart_product_ids':user_cart_product_ids,
+        'nonuser_cart_product_ids':nonuser_cart_product_ids,
         'product_offer_details':product_offer_details,
         'category_offer_details':category_offer_details,
         'wishlist':wishlist,

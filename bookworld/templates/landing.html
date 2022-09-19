@@ -225,6 +225,8 @@
                                                                         class="col-12 col-sm-12 col-md-12 d-flex justify-content-center">
 
 
+
+                                                                        {% if request.user.is_authenticated %}
                                                                         {% if product.id in user_cart_product_ids%}
                                                                         <a class="text-decoration-none" href="{% url 'cart' %}">
                                                                         <button class="btn pbtn border bg-transparent border-warning rounded-0" >
@@ -242,6 +244,29 @@
                                                                         </button>
                                                                     {% comment %} </a> {% endcomment %}
                                                                         {% endif %}
+                                                                        {% else %}
+
+                                                                        {% if product.id in nonuser_cart_product_ids %}
+                                                                        <a class="text-decoration-none" href="{% url 'cart' %}">
+                                                                        <button class="btn pbtn border bg-transparent border-warning rounded-0" >
+                                                                            <span >Already in Cart</span><span class="">
+                                                                                <i class="fa-solid fa-cart-plus"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    </a>
+                                                                    {% else %}
+                                                                      {% comment %} <a class="text-decoration-none" href="{% url 'add_cart' product.id %}"> {% endcomment %}
+                                                                        <button class="btn pbtn border bg-transparent border-warning rounded-0" value="{{product.id}}" onclick="addtoCart(this.value)">
+                                                                            <span id="buttontext{{product.id}}">Add to Cart</span><span class="">
+                                                                                <i class="fa-solid fa-cart-plus"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    {% comment %} </a> {% endcomment %}
+                                                                        {% endif %}
+
+                                                                        {% endif %}
+
+                                                                       
 
 
                                                                         
