@@ -103,6 +103,13 @@ def register(request):
         email = request.POST['email']
         password = request.POST['password1'] 
         user_name=""
+        if Account.objects.filter(Phone_number=phone).exists():
+            print("107")
+            messages.error(request,'This Phone number already in use')
+            return render(request,'register.html')
+        if Account.objects.filter(email=email).exists():
+            messages.error(request,'This Email already in use')
+            return render(request,'register.html')
         user = Account.objects.create_user(first_name = first_name, last_name = last_name, email = email, password = password)
         user.Phone_number = phone
         user.save()

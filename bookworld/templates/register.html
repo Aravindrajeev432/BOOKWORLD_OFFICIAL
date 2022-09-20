@@ -49,4 +49,10 @@
 </div>
 </div>
 <script src="{% static 'script.js' %}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    {% for msg in messages%}
+    Swal.fire('{{msg}}', '', 'error')
+    {% endfor  %}
+</script>
 {% endblock %}
