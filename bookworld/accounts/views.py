@@ -103,6 +103,10 @@ def register(request):
         email = request.POST['email']
         password = request.POST['password1'] 
         user_name=""
+        if len(first_name.replace(' ','')) == 0 or len(last_name.replace(' ','')) == 0 or len(phone.replace('-',' ')) != 10 or len(email.replace('-',' ')) == 0 or len(password.replace('-',' ')) <5 :
+            messages.error(request,'Error siging in Try again later')
+            return render(request,'register.html')
+            
         if Account.objects.filter(Phone_number=phone).exists():
             print("107")
             messages.error(request,'This Phone number already in use')

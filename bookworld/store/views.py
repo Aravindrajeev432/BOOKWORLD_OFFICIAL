@@ -1,5 +1,5 @@
 
-from unicodedata import category
+
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.views.decorators.cache import cache_control
@@ -18,6 +18,7 @@ from django.core.paginator import Paginator
 from carts.views import _cart_id
 from django.db.models import Q 
 from django.views.decorators.cache import cache_control
+from django.http import Http404
 # Create your views here.
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)  
 def product_view(request,st,bname):
@@ -29,7 +30,10 @@ def product_view(request,st,bname):
     for i in product_detail:
         p_id =i.id
     
-    in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request),product_id =p_id).exists()
+    try:
+        in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request),product_id =p_id).exists()
+    except:
+        raise Http404()
     if not in_cart:
         try:
             in_cart = CartItem.objects.filter(Q(product_id=p_id)&Q(user=user)).exists()
@@ -74,17 +78,20 @@ def search(request):
     if 'search' in request.GET:
         keyword = request.GET['search']
         print("paged")
+        if not keyword:
+            keyword="xyz"
         if keyword:
             try:
                 bannerimg=banner.objects.get(is_selected=True)
             except:
                 bannerimg=""
-            pro = Product.objects.order_by('book_name').filter(Q(book_name__icontains=keyword) |Q(author__icontains=keyword))
+            pro = Product.objects.order_by('book_name').filter(Q(book_name__icontains=keyword) |Q(author__icontains=keyword)).order_by('id')
             """Quer splitted for use OR if you you , it is AND"""
             """{% if 'search in request.path %}"""
             paginator = Paginator(pro,6)
             page = request.GET.get('page')
             paged_products =paginator.get_page(page)
+            messages.add_message(request, messages.INFO, 'searched')
             
     return render(request,'landing.html',{'pro':paged_products,'category':cat,'bannerimg':bannerimg,})
 

@@ -10,11 +10,7 @@
           <span class="adminheadstatus fs-1 text-secondary">Category Management</span>
         </div>
       </div>
-        {% for msg in messages %}
-
-            <div style="color:red;">{{ msg }}</div>
-
-        {% endfor %}
+   
         <div class="row">
             <div class="col-md-8">
                 <div
@@ -47,9 +43,9 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">No:</th>
-                    <th scope="col">Category Name</th>
-                    <th scope="col">Actions</th>
+                    <td><b>No:</b></th>
+                    <td><b>Category Name</b></th>
+                    <td><b>Actions</b></th>
                     
                   </tr>
                 </thead>
@@ -59,9 +55,9 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ct.category_name}}</td>
                     <td>
-                      <a href="delete_cat/{{ct.id}}">
-                      <button class="btn btn-danger rounded-0">Delete</button>
-                    </a>
+                      {% comment %} <a href="delete_cat/{{ct.id}}"> {% endcomment %}
+                      <button class="btn btn-danger rounded-0" value={{ct.id}} onclick="deleteCat(this.value)">Delete</button>
+                    {% comment %} </a> {% endcomment %}
                     </td>
                     
                   </tr>
@@ -73,4 +69,55 @@
 
         </div>
     </div>
-</div>{% endblock %}
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  {% for msg in messages %}
+  Swal.fire({
+    position: 'center',
+    icon: 'error',
+    title: 'This Category Already Exists ',
+    showConfirmButton: false,
+    timer: 1500
+  })
+  
+
+{% endfor %}
+
+function deleteCat(val){
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ffc107',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+   
+      xhttp.onload = function () {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Your work has been saved',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        window.location.reload()
+      
+      }
+
+      xhttp.open("GET", "delete_cat/" + val);
+      xhttp.send();
+
+
+    }
+  })
+
+
+        const xhttp = new XMLHttpRequest();
+}
+
+</script>
+{% endblock %}

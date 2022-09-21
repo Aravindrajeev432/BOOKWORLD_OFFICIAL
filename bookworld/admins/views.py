@@ -1,11 +1,12 @@
 
 
+import re
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.shortcuts import render,redirect
 from django.views.decorators.cache import cache_control
-
+from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import Account
 from orders.models import Payment
 from orders.models import Order,OrderProduct,Return_Products,banner
@@ -19,7 +20,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db.models import Sum,Count
 from django.template.loader import get_template
-
+from django.http import Http404
 from xhtml2pdf import pisa
 import xlwt
 import datetime
@@ -29,6 +30,9 @@ from .forms import BannerForm
 # Create your views here.
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def adminlogin(request):
+    user=request.user
+    if user.is_admin == True:
+        return redirect(dashboard)
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['pass']
@@ -79,7 +83,7 @@ def dashboard(request):
     products = Product.objects.all()
     # order_graph=Order.objects.aggregate(Sum('order_total'))
     # order_graph = OrderProduct.objects.all()
-    order_graph =Order.objects.filter(is_ordered=True).values('created_at__date').order_by('created_at__date')[2:].annotate(sum=Sum('order_total'))
+    order_graph =Order.objects.filter(is_ordered=True).values('created_at__date').order_by('created_at__date')[:7].annotate(sum=Sum('order_total'))
     order_status_graph =OrderProduct.objects.filter().values('status').annotate(count=Count('status'))
     order_product_count_graph = OrderProduct.objects.filter().values('quantity').order_by('created_at__date')[:7].annotate(count=Count('quantity'))
     order_cat_graph = OrderProduct.objects.filter().values('product_id').annotate(count=Count('product_id'))
@@ -309,10 +313,11 @@ def category_management(request):
     if 'admin' not in request.session:
         return redirect('adminlogin')
     category = Category.objects.all()
+    print(category)
     if request.method == 'POST':
         
         category_name = request.POST['category_name']
-        if not Category.objects.filter(category_name=category_name).exists():
+        if not Category.objects.filter(category_name__iexact=category_name).exists():
         
             cat = Category(category_name=category_name)
             cat.save()
@@ -324,6 +329,7 @@ def category_management(request):
 @login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def delete_cat(request,id):
+    print(id)
     user=request.user
     if user.is_active==True:
         if not user.is_admin==True:
@@ -333,7 +339,7 @@ def delete_cat(request,id):
     pass
     del_cat = Category.objects.get(id=id)
     del_cat.delete()
-    return redirect(category_management)
+    return HttpResponse()
 
 @login_required(login_url='adminlogin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -596,7 +602,11 @@ def orders_page(request,order_number):
     if user.is_active==True:
         if not user.is_admin==True:
             return redirect('/')
-    order_details=Order.objects.get(order_number=order_number)
+    try:
+        order_details=Order.objects.get(order_number=order_number)
+    except:
+        return redirect(order_management)
+        
     print(order_details.id)
     order_id = order_details.id
     order_product_details=OrderProduct.objects.filter(order_id=order_id)

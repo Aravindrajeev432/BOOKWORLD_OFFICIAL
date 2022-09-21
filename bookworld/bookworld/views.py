@@ -80,7 +80,7 @@ def index(request):
     wishlist=[]
     for w in wish:
         wishlist.append(w.product.id)
-    pro = Product.objects.filter(is_active=True).all()
+    pro = Product.objects.filter(is_active=True).all().order_by('id')
     paginator = Paginator(pro,6)
     page = request.GET.get('page')
     paged_products =paginator.get_page(page)
