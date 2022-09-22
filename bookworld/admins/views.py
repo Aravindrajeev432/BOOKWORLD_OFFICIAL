@@ -622,8 +622,6 @@ def orders_page(request,order_number):
     return render(request,'admin/orders_page.html',context)
 
 
-
-
 @login_required(login_url='adminlogin')
 def invoice(request,order_number):
     user=request.user
