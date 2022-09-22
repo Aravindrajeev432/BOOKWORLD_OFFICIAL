@@ -157,7 +157,7 @@
                             </div>
                             </div>
                             {% csrf_token %}
-                            <div class="row mt-5">
+                            <div class="row mt-5 d-flex justify-content-between">
                                 <div class="col-md-4 col-sm-8 col-12 mb-3">
                                     <div class="row">
                                         <div class="col-12 cart-total">
@@ -257,7 +257,10 @@
                         
                         var di="{{request.session.coupon_discount}}"
                         var di=parseInt(di)
-                        
+                        if(di==NaN){
+                            di=0
+                        }
+
                         var coupon_code
                         var coupon_discount
                         console.log("254")

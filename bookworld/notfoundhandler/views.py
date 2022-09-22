@@ -5,6 +5,9 @@ from admins.views import adminlogin
 # Create your views here.
 def error_404(request,exception):
     user=request.user
-    if user.is_admin == True:
-        return redirect(adminlogin)
+    try:
+        if user.is_admin == True:
+            return redirect(adminlogin)
+    except AttributeError:
+        pass
     return render(request,'404.html')
