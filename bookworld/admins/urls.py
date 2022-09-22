@@ -31,6 +31,7 @@ urlpatterns = [
     path('orders_page/<int:order_number>',views.orders_page,name='orders_page'),
     path('create-pdf', views.pdf_report_create, name='create-pdf'),
     path('export_excel',views.export_excel,name='export_excel'),
+    path('export_excel_year',views.export_excel_year,name='export_excel_year'),    
     path('check-pdf',views.pdf_check,name="pdfcheck"),
     path('invoice/<int:order_number>',views.invoice,name="invoice_admin"),
     #offer management

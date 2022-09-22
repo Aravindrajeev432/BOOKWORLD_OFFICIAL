@@ -1,19 +1,21 @@
 
-from multiprocessing import context
-from django.http import HttpResponse,JsonResponse
-from django.shortcuts import render,redirect
+
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+
 
 from carts.views import _cart_id
-from carts.models import Cart,CartItem
+from carts.models import Cart, CartItem
 from .models import Account
 from twilio.rest import Client
 from django.conf import settings
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate
 # Create your views here.
+
+
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_login(request):
 
@@ -22,58 +24,44 @@ def user_login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['pass']
-        
-        print(email)
-        print(password)
+
         # user = auth.authenticate(email=email, password=password)
         # if user is not None:
         #     auth.login(request,user)
         #     return HttpResponse('<h1>Logged IN</h1>')
         user = authenticate(email=email, password=password)
         if user is not None and user.is_admin == False:
-            
                 print("user is not admin and not none ")
-                try :
+                try:
                     already_in_cart=[]
                     user_cart=CartItem.objects.filter(user=user)
                     for user_c in user_cart:
                         already_in_cart.append(user_c.product_id)
-                        
-                  
-                    print(already_in_cart)
-                    cart=Cart.objects.get(cart_id=_cart_id(request))
+                    cart = Cart.objects.get(cart_id=_cart_id(request))
                     is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
                     if is_cart_item_exists:
-                        cart_item =CartItem.objects.filter(cart=cart)
+                        cart_item = CartItem.objects.filter(cart=cart)
                         for item in cart_item:
                             if item.product_id not in already_in_cart:
-                                
-                                item.user_id= user.id
+                                item.user_id = user.id
                                 item.save()
                             else:
                                 item.delete()
-                    
-                except :
+                except:
                     pass
                 print("l succes")
-                if user.is_blocked == True:
+                if user.is_blocked is True:
                     auth.login(request, user)
                     request.session['uid'] = user.id
                     return JsonResponse(
-                    {
-                        'success':True},
-
-                                safe=False
-                            
-                            )
+                    {'success' : True}, safe=False
+                                        )
                 else:
                     auth.login(request, user)
                     request.session['email'] = user.email
                     request.session['uid'] = user.id
                     request.session['first_name'] = user.first_name
                     request.session['last_name'] = user.last_name
-                
-               
                     return JsonResponse(
                     {
                         'success':True},
@@ -150,9 +138,6 @@ def otp_verfication_send(request):
             return render(request,'otp_verification.html',{'Phone_number':otp_number,'user':user,})
         else:
             print("fail")
-            
-        
-        
     messages.info(request,'invalid mobile number ! !')
     return redirect('login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)

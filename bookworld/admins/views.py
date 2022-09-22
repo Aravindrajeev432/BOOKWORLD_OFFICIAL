@@ -816,8 +816,44 @@ def export_excel(request):
     return response
 
 
+@login_required(login_url='adminlogin')
+def export_excel_year(request):
+    if request.method=='POST':
+        salesdate=request.POST['salesdate_excel']
+        print(salesdate)
+    else:
+        print("3044")
+    sales_year_month=salesdate.split('/')
+    y=sales_year_month[0]
+    m=sales_year_month[1]
+    print(y)
+    print(m)    
+    response = HttpResponse(content_type = 'application/ms-excel')
+    response['Content-Disposition'] = 'attachement; filename=SalesReport' +str(datetime.datetime.now())+'.xls'
+    wb = xlwt.Workbook(encoding = 'utf-8')
+    ws = wb.add_sheet('SalesReport')
+    row_num = 0
+    font_style =xlwt.XFStyle()
+    font_style.font.bold =True
 
+    columns = ['order number','name ','amount  ','date']
 
+    for col_num in range(len(columns)):
+        ws.write(row_num,col_num, columns[col_num],font_style)
+    
+    font_style= xlwt.XFStyle()
+
+    rows = Order.objects.filter(Q(created_at__year=y) &Q(created_at__month=m) & Q(is_ordered=True)).values_list('order_number','first_name','order_total','created_at__date')
+
+    for row in rows:
+        row_num+=1
+
+        for col_num in range(len(row)):
+            ws.write(row_num,col_num, str(row[col_num]),font_style)
+
+    wb.save(response)
+
+    return response
 
 
 

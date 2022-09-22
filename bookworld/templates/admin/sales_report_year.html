@@ -1,0 +1,177 @@
+{% extends 'admin/adminindex.html' %}
+{% load mathfilters %}
+{% block status %}
+    <div class="col-md-9 col-sm-12 col-sm-12 border">
+        <div class="row mb-3">
+            <div class="col-md-12 d-flex justify-content-center border-0
+                                                    border-bottom ">
+                <span class="adminheadstatus fs-1 text-secondary">Sales
+                                                        Report </span>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12 col-sm-12 col-12 ">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center align-items-center"></div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 col-sm-12 col-md-12">
+                <div class="row d-flex justify-content-center">
+                
+                    <div class="col-md-6 col-8 col-sm-8">
+                        <form action="{% url 'sales_report' %}" method="POST">
+                            {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 col-12 col-sm-4  d-flex justify-content-center align-items-center">
+
+                                <span class="text-muted">By Date</span>
+                           
+                            </div>
+
+                          
+                            <div class="col-md-6 col-12 col-sm-4">
+                                <input type="date" name="salesdate" id="salesdate_id" class="datechk rounded-0 form-control" value="{{current_date}}" min="{{dates.0}}" max="{{dates_max}}">
+                           
+
+                            </div>
+
+                        </div>
+                      
+                    </div>
+                    <div class="col-md-3 col-12 mt-sm-2 mt-3 mt-md-0 col-sm-12  d-flex justify-content-center align-items-center">
+                        <input type="submit" class="btn rounded-0 bg-secondary text-warning" value="Submit">
+                    </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-12 col-sm-4  d-flex justify-content-center align-items-center">
+
+                <span class="text-muted">Year</span>
+                /
+                <span class="text-muted">Month</span>
+   
+            </div>
+
+          
+            <div class="col-md-8 col-12 col-sm-4">
+                <div class="row">
+                <div class="col-md-6 col-12 col-sm-12">
+                <select class="form-control rounded-0" name="year" id="year_id">
+                    {% for year in available_years %}
+            
+                    <option value="{{year.created_at__year}}" > {{year.created_at__year}} </option>
+                    
+                    {% endfor %}
+                </select>
+                <select class="form-control rounded-0" id="month_id">
+                    <option value="0">Select All</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">Setember</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                </div>
+                <div class="col-md-4 col-12 col-sm-12 d-flex justify-content-center align-items-center">
+                    <button class="btn rounded-0 bg-secondary text-warning" style="height:40px ;" onclick="yearmonthSel()">
+                        Submit
+                    </button>
+                </div>
+                </div>
+            </div>
+
+          
+         
+        </div>
+        <div class="row m-3 mt-3 mb-3">
+            {% include 'includes/sales_table_year.html' %}
+
+
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12">
+               
+                <form action="{% url 'create-pdf_year' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" id="salesdate_pdf_id" name="salesdate_pdf_id" style="display: none;" class="datechk form-control" value="{{year}}/{{month}}" >
+                    <button type="submit" class="btn bg-transparent text-warning rounded-0 " >
+                        <span class="text-warning">
+                            Download as Pdf
+        
+                        </span>
+                    </button>
+                    </form>
+          
+
+                    <form action="{% url 'export_excel_year' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="text" id="salesdate_pdf_id" name="salesdate_excel" style="display: none;" class="datechk form-control" value="{{year}}/{{month}}" >
+                        <button type="submit" class="btn bg-transparent text-warning rounded-0 " >
+                            <span class="text-warning">
+                                Download as Excel file
+            
+                            </span>
+                        </button>
+                        </form>
+            
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var dateClass = '.datechk';
+        $(document).ready(function () {
+            if (document.querySelector(dateClass).type !== 'date') {
+                var oCSS = document.createElement('link');
+                oCSS.type = 'text/css';
+                oCSS.rel = 'stylesheet';
+                oCSS.href = '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css';
+                oCSS.onload = function () {
+                    var oJS = document.createElement('script');
+                    oJS.type = 'text/javascript';
+                    oJS.src = '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js';
+                    oJS.onload = function () {
+                        $(dateClass).datepicker();
+                    }
+                    document.body.appendChild(oJS);
+                }
+                document.body.appendChild(oCSS);
+            }
+        });
+
+ function yearmonthSel()
+ {
+    year=document.getElementById("year_id").value
+    month=document.getElementById("month_id").value
+    console.log(year)
+    console.log(month)
+    window.location.replace("salesreportbyyearmonth?year="+year+"&month="+month)
+
+ }
+
+
+        
+    </script>
+
+{% endblock %}

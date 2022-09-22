@@ -27,7 +27,7 @@
                 <div class="row d-flex justify-content-center">
                 
                     <div class="col-md-6 col-8 col-sm-8">
-                        <form action='' method="POST">
+                        <form action="{% url 'sales_report' %}" method="POST">
                             {% csrf_token %}
                         <div class="row">
                             <div class="col-md-6 col-12 col-sm-4  d-flex justify-content-center align-items-center">
@@ -50,6 +50,53 @@
 
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-12 col-sm-4  d-flex justify-content-center align-items-center">
+
+                <span class="text-muted">Year</span>
+                /
+                <span class="text-muted">Month</span>
+   
+            </div>
+
+          
+            <div class="col-md-8 col-12 col-sm-4">
+                <div class="row">
+                <div class="col-md-6 col-12 col-sm-12">
+                <select class="form-control rounded-0" name="year" id="year_id">
+                    {% for year in available_years %}
+            
+                    <option value="{{year.created_at__year}}" > {{year.created_at__year}} </option>
+                    
+                    {% endfor %}
+                </select>
+                <select class="form-control rounded-0" id="month_id">
+                    <option value="0">Select All</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">Setember</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                </div>
+                <div class="col-md-4 col-12 col-sm-12 d-flex justify-content-center align-items-center">
+                    <button class="btn rounded-0 bg-secondary text-warning" style="height:40px ;" onclick="yearmonthSel()">
+                        Submit
+                    </button>
+                </div>
+                </div>
+            </div>
+
+          
+         
         </div>
         <div class="row m-3 mt-3 mb-3">
             {% include 'includes/sales_table.html' %}
@@ -109,7 +156,16 @@
                 document.body.appendChild(oCSS);
             }
         });
-
+        function yearmonthSel()
+        {
+           year=document.getElementById("year_id").value
+           month=document.getElementById("month_id").value
+           console.log(year)
+           console.log(month)
+           window.location.replace("salesreportbyyearmonth?year="+year+"&month="+month)
+       
+        }
+       
 
 
 
