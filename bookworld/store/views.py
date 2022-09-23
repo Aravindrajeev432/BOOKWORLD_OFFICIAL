@@ -85,9 +85,11 @@ def search(request):
                 bannerimg=banner.objects.get(is_selected=True)
             except:
                 bannerimg=""
-            pro = Product.objects.order_by('book_name').filter(Q(book_name__icontains=keyword) |Q(author__icontains=keyword)).order_by('id')
+            pro = Product.objects.order_by('book_name').filter(Q(book_name__icontains=keyword) |Q(author__icontains=keyword) &Q(is_active=True)).order_by('id')
             """Quer splitted for use OR if you you , it is AND"""
             """{% if 'search in request.path %}"""
+            for p in pro:
+                print(p.is_active)
             paginator = Paginator(pro,6)
             page = request.GET.get('page')
             paged_products =paginator.get_page(page)

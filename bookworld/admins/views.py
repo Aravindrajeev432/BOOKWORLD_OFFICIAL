@@ -388,7 +388,10 @@ def users(request):
     if request.method == 'POST':
         s = request.POST['search']
         account = Account.objects.filter(first_name__startswith=s)
-        
+        print(account)
+        paginator = Paginator(account,6)
+        page = request.GET.get('page')
+        accounts =paginator.get_page(page)
         return render(request,'admin/usersview.html',{'account':accounts,'usercount':usercount,'blocked_users_count':blocked_users_count,'active_users_count':active_users_count,'no_books_buyed':no_books_buyed,'total_money_spent':total_money_spent})
     
     return render(request,'admin/usersview.html',{'account':accounts,'usercount':usercount,'blocked_users_count':blocked_users_count,'active_users_count':active_users_count,'no_books_buyed':no_books_buyed,'total_money_spent':total_money_spent})

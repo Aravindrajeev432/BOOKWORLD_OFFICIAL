@@ -414,7 +414,7 @@ def payment_paypal(request):
     
     
     
-    #paypal payment method
+    # paypal payment method
     # uid = request.session['uid']
     # # body = json.loads(request.body)
     # print("payment")
