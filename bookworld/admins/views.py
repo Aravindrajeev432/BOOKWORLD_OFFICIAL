@@ -1,6 +1,5 @@
 
 
-import re
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
@@ -8,6 +7,7 @@ from django.shortcuts import render,redirect
 from django.views.decorators.cache import cache_control
 from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import Account
+from accounts.views import user_login
 from orders.models import Payment
 from orders.models import Order,OrderProduct,Return_Products,banner
 from store.models import Product,Product_Offer,Category_Offer,Coupon
@@ -31,16 +31,24 @@ from .forms import BannerForm
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def adminlogin(request):
     user=request.user
-    if user.is_admin == True:
-        return redirect(dashboard)
+    try:
+        if user.is_admin == True:
+            return redirect(dashboard)
+    except AttributeError :
+        pass
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['pass']
         
         user = authenticate(email=email, password=password,)
         
-        
-            
+        print(user)
+        if user is None:
+            return JsonResponse(
+                {'success':False
+                },
+                safe=False
+            )     
             
         if user.is_admin == True:
                 print("l succes")
@@ -73,11 +81,15 @@ def logout(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def dashboard(request):
     user=request.user
-    if user.is_active==True:
-        if not user.is_admin==True:
-            return redirect('/')
-    if 'admin' not in request.session:
-        return redirect('adminlogin')
+    try:
+        
+        if user.is_active==True:
+            if not user.is_admin==True:
+                return redirect('/')
+        if 'admin' not in request.session:
+            return redirect('adminlogin')
+    except AttributeError:
+        return redirect(user_login)
     usercount= Account.objects.filter(~Q(is_admin=True)).count()
     p_count = Product.objects.count()
     products = Product.objects.all()
