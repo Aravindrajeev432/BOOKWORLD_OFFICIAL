@@ -254,8 +254,12 @@
                     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     <script>
                         var Grandtotal="{{ total }}"
-                        
+                        {% if request.session.coupon_discount %}
                         var di="{{request.session.coupon_discount}}"
+                        {% else %}
+                        var di=0
+                        {% endif %}
+                       
                         var di=parseInt(di)
                         if(di==NaN){
                             di=0
