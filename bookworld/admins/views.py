@@ -95,7 +95,8 @@ def dashboard(request):
     products = Product.objects.all()
     # order_graph=Order.objects.aggregate(Sum('order_total'))
     # order_graph = OrderProduct.objects.all()
-    order_graph =Order.objects.filter(is_ordered=True).values('created_at__date').order_by('created_at__date')[-7:].annotate(sum=Sum('order_total'))
+    order_graph =Order.objects.filter(is_ordered=True).values('created_at__date').order_by('-created_at__date').annotate(sum=Sum('order_total'))[7:]
+    
     order_status_graph =OrderProduct.objects.filter().values('status').annotate(count=Count('status'))
     order_product_count_graph = OrderProduct.objects.filter().values('quantity').order_by('created_at__date')[:7].annotate(count=Count('quantity'))
     order_cat_graph = OrderProduct.objects.filter().values('product_id').annotate(count=Count('product_id'))
