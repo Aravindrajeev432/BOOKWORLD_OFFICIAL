@@ -95,14 +95,12 @@ def dashboard(request):
     products = Product.objects.all()
     # order_graph=Order.objects.aggregate(Sum('order_total'))
     # order_graph = OrderProduct.objects.all()
-    order_graph =Order.objects.filter(is_ordered=True).values('created_at__date').order_by('-created_at__date').annotate(sum=Sum('order_total'))[7:]
+    order_graph =Order.objects.filter(is_ordered=True).values('created_at__date').order_by('-created_at__date').annotate(sum=Sum('order_total'))[9:]
     
     order_status_graph =OrderProduct.objects.filter().values('status').annotate(count=Count('status'))
     order_product_count_graph = OrderProduct.objects.filter().values('quantity').order_by('created_at__date')[:7].annotate(count=Count('quantity'))
     order_cat_graph = OrderProduct.objects.filter().values('product_id').annotate(count=Count('product_id'))
-    print("--**--")
-    print(order_graph)
-    print("--**--")
+
     print("--------")
     cat_count=[]
     for i in order_cat_graph:
@@ -128,14 +126,14 @@ def dashboard(request):
     
     
     pay = Payment.objects.values('amount_paid').all()
-    print(pay)
+
     total_sales=0
     for i in pay:
         t=i['amount_paid']
         t=float(t)
         total_sales=total_sales+t
-        print(t)
-    print(total_sales)
+        
+    
 
     pgate = Payment.objects.all()
     amount_cod=0
@@ -149,10 +147,7 @@ def dashboard(request):
             amount_paypal+=float(p.amount_paid)
         elif p.payment_method=="Razorpay":
             amount_razorpay+=float(p.amount_paid)
-    print("Pppppppp")
-    print(amount_cod)
-    print(amount_paypal)
-    print("pppp")
+   
     
     context={'usercount':usercount,
              'p_count':p_count,
