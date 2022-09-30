@@ -103,7 +103,7 @@ def register(request):
             messages.error(request,'This Email already in use')
             return render(request,'register.html')
         user = Account.objects.create_user(first_name = first_name, last_name = last_name, email = email, password = password)
-        print(str(user.query))
+        
         user.Phone_number = phone
         user.save()
         return redirect(user_login)
