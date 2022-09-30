@@ -56,7 +56,7 @@ def cat_view(request,slug):
     print(cat_active)
     for i in cat_active:
         cat_id=i['id']
-    product = Product.objects.filter(category_id=cat_id).all()
+    product = Product.objects.filter(category_id=cat_id,is_active=True).all()
     cat = Category.objects.all()
     paginator = Paginator(product,6)
     page = request.GET.get('page')
@@ -85,7 +85,7 @@ def search(request):
                 bannerimg=banner.objects.get(is_selected=True)
             except:
                 bannerimg=""
-            pro = Product.objects.order_by('book_name').filter(Q(book_name__icontains=keyword) |Q(author__icontains=keyword) &Q(is_active=True)).order_by('id')
+            pro = Product.objects.order_by('book_name').filter(Q(book_name__icontains=keyword) |Q(author__icontains=keyword) ,is_active=True).order_by('id')
             """Quer splitted for use OR if you you , it is AND"""
             """{% if 'search in request.path %}"""
             for p in pro:
